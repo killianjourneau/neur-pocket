@@ -50,6 +50,42 @@ html,body{margin:0;height:100%;overflow:hidden;background:#d3d0c8;touch-action:n
 #app.gbc #dpad .h,#app.gbc #dpad .v{background:#1f1f24}
 .tb.act{background:#a3214f;color:#fff;box-shadow:0 2px 0 #5e1030}
 #app.gbc .tb.act{background:#a3214f;color:#fff;box-shadow:0 2px 0 #5e1030}
+/* ===== Habillage Game Boy Advance (visuel seulement : zones tactiles inchangées) ===== */
+.adv,#spk{display:none}
+#app.gba .adv{display:inline;font-style:italic;color:#c9c4ff}
+#app.gba #bezel{background:linear-gradient(160deg,#2c2c34,#18181d 60%);border-radius:14px 14px 18px 18px;padding:12px 20px 30px;box-shadow:inset 0 0 0 2px #0e0e12,inset 0 2px 0 rgba(255,255,255,.08),0 3px 0 rgba(0,0,0,.3)}
+#app.gba #bezel::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.10),transparent 35%)}
+#app.gba #led{left:8px;top:16px;width:5px;height:5px}
+#app.gba #led.on{background:#3cff7a;box-shadow:0 0 6px #3cff7a}
+#app.gba #cbrand{font-size:7px;bottom:10px;color:#d9d6e4}
+/* gâchettes L/R grises, arrondies vers l'extérieur */
+#app.gba .sh{background:linear-gradient(#c3c1cc,#9c9aa8);box-shadow:0 4px 0 #6e6c7a,inset 0 2px 0 rgba(255,255,255,.5)}
+#app.gba .sh span{color:#4b4958;top:12px}
+#app.gba #bL{border-radius:30px 10px 8px 8px}#app.gba #bR{border-radius:10px 30px 8px 8px}
+#app.gba .sh::before{content:'';position:absolute;left:14px;right:14px;top:6px;height:2px;border-radius:1px;background:rgba(0,0,0,.12);box-shadow:0 4px 0 rgba(0,0,0,.08)}
+#app.gba .sh.on{box-shadow:0 1px 0 #6e6c7a}
+/* croix et boutons A/B façon GBA (concaves, gris anthracite) */
+#app.gba #dpad .h,#app.gba #dpad .v{background:linear-gradient(#3a3a42,#24242a);box-shadow:0 4px 0 #0d0d10}
+#app.gba .btn{background:radial-gradient(circle at 50% 62%,#3a3942,#25242b 70%);box-shadow:0 5px 0 #0d0d10,inset 0 -3px 6px rgba(255,255,255,.08),inset 0 3px 5px rgba(0,0,0,.45)}
+#app.gba .btn.on{box-shadow:0 1px 0 #0d0d10,inset 0 3px 8px rgba(0,0,0,.6)}
+#app.gba .btn span{color:var(--ink);opacity:.85}
+/* START/SELECT : petits boutons ronds */
+#app.gba .pill i{left:22px;top:6px;width:18px;height:18px;border-radius:50%;transform:none;background:radial-gradient(circle at 50% 60%,#3a3942,#232228);box-shadow:0 2px 0 #0d0d10}
+#app.gba .pill.on i{margin-top:2px;box-shadow:none}
+#app.gba .pill.lock i{background:#e0507f;box-shadow:0 0 6px #e0507f}
+#app.gba .pill span{bottom:0}
+/* haut-parleur */
+#app.gba #spk{display:block;position:absolute;right:7%;bottom:6%;width:46px;height:30px;pointer-events:none;
+ background:radial-gradient(circle,rgba(0,0,0,.38) 2.4px,transparent 3px) 0 0/10px 10px}
+#app.land.gba #spk{right:calc(2% + 40px);bottom:10%}
+/* Ordinateur : vraie silhouette horizontale de GBA */
+html.desk #app.gba{height:auto;aspect-ratio:1.72/1;width:min(calc(100vw - 80px),calc((100vh - 90px)*1.72),1500px);
+ border-radius:16% 16% 30% 30% / 26% 26% 48% 48%;margin-top:10px}
+html.desk #app.gba .sh{top:-16px;height:36px;width:17%;z-index:0}
+html.desk #app.gba #bL{left:9%}html.desk #app.gba #bR{right:9%}
+html.desk #app.gba #dzone{left:5%}html.desk #app.gba #ab{right:4.5%}
+html.desk #app.gba #ss{left:7%;bottom:12%}
+html.desk #app.gba #spk{right:9%;bottom:16%}
 #panel{position:fixed;inset:0;background:rgba(40,40,48,.55);display:none;align-items:center;justify-content:center;z-index:10}
 #panel.show{display:flex}
 #card{width:min(92vw,420px);max-height:86vh;overflow:auto;touch-action:pan-y;background:#e4e1d9;border-radius:12px 12px 30px 12px;box-shadow:0 6px 0 #9c998f;padding:14px;font-size:9px;color:#2b308f;box-sizing:border-box}
@@ -106,7 +142,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#d3d0c8;touch-action:n
 /* Ordinateur : console verticale centrée */
 html.desk,html.desk body{background:#2b2c33;background-image:radial-gradient(circle at 50% 40%,#43454f,#1e1f24)}
 html.desk #app{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);height:min(calc(100vh - 40px),900px);width:calc(min(calc(100vh - 40px),900px)*.6);border-radius:18px 18px 80px 18px;box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 -6px 0 rgba(0,0,0,.08)}
-html.desk #app.gba{width:calc(min(calc(100vh - 40px),900px)*.68)}
 #deskHelp{display:none}
 html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:translateX(-50%);color:#8d8f99;font:8px 'Press Start 2P',monospace;white-space:nowrap}
 </style>
@@ -114,7 +149,7 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
 <body>
 <div id="app">
  <div id="top">
-  <div id="bezel"><div id="led"></div><canvas id="cv" width="160" height="144"></canvas><canvas id="gcv" width="240" height="160"></canvas><div id="cbrand">NEUR POCKET <i style="color:#ff5a6e">●</i><i style="color:#ffd84a">●</i><i style="color:#6fdc6f">●</i><i style="color:#5ab4ff">●</i></div></div>
+  <div id="bezel"><div id="led"></div><canvas id="cv" width="160" height="144"></canvas><canvas id="gcv" width="240" height="160"></canvas><div id="cbrand">NEUR POCKET<b class="adv"> ADVANCE</b> <i style="color:#ff5a6e">●</i><i style="color:#ffd84a">●</i><i style="color:#6fdc6f">●</i><i style="color:#5ab4ff">●</i></div></div>
   <div id="brand">NEUR <b>POCKET</b></div>
   <div id="bar">
    <button class="tb" id="bLib">JEUX</button>
@@ -131,6 +166,7 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
   <div id="dzone"><div id="dpad"><div class="h"></div><div class="v"></div><div class="c"></div><div class="k" id="kU"></div><div class="k" id="kD"></div><div class="k" id="kL"></div><div class="k" id="kR"></div></div></div>
   <div id="ab"><div class="btn" id="bB"><span>B</span></div><div class="btn" id="bA"><span>A</span></div><div id="abmid"></div></div>
   <div class="sh" id="bL"><span>L</span></div><div class="sh" id="bR"><span>R</span></div>
+  <div id="spk"></div>
   <div id="ss"><div class="pill" id="bSe"><i></i><span>SELECT</span></div><div class="pill" id="bSt"><i></i><span>START</span></div></div>
  </div>
 </div>
@@ -939,7 +975,7 @@ function showOpt(){
  pBody.appendChild(el('div','note','Clavier : flèches, X = A, Z = B, A = L, S = R, Entrée = Start, Maj = Select, Retour arrière = retour (maintenir), Tab = vitesse x2.'));
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.0.2';
+const VERSION='2.0.3';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
@@ -956,6 +992,7 @@ function applyShell(){
   st.backgroundImage=c.glass?'repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 5px,transparent 5px 11px),radial-gradient(circle at 30% 20%,rgba(255,255,255,.35),transparent 60%),linear-gradient('+c.s+','+c.s2+')':'';
   document.querySelector('meta[name=theme-color]').content=c.s;}
  else{for(const p of props)st.removeProperty(p);st.backgroundImage='';document.querySelector('meta[name=theme-color]').content='#d3d0c8';}
+ fit();
 }
 document.getElementById('bLib').onclick=showLib;
 document.getElementById('bState').onclick=showStates;
@@ -971,9 +1008,9 @@ addEventListener('keyup',e=>{if(e.code==='Backspace')setRew(false);});
 function fit(){
  const app=document.getElementById('app');const desk=matchMedia('(hover:hover) and (pointer:fine)').matches&&innerHeight>=520&&innerWidth>=560;
  document.documentElement.classList.toggle('desk',desk);
- const land=!desk&&innerWidth>innerHeight;app.classList.toggle('land',land);
+ const land=(desk&&gba&&loaded)||(!desk&&innerWidth>innerHeight);app.classList.toggle('land',land);
  const W=desk?app.clientWidth:innerWidth,H=desk?app.clientHeight:innerHeight;let aw,ah;
- if(land){aw=W-2*180-44;ah=H-34-90;}else{aw=W-44-16;ah=H*0.5-34-30;}
+ if(desk&&land){aw=W*0.54;ah=H*0.6-60;}else if(land){aw=W-2*180-44;ah=H-34-90;}else{aw=W-44-16;ah=H*0.5-34-30;}
  if(gba){let s=Math.max(1,Math.min((aw+20)/240,ah/160));const gc=document.getElementById('gcv');gc.style.width=Math.round(240*s)+'px';gc.style.height=Math.round(160*s)+'px';return;}
  let s=Math.max(1,Math.min(aw/160,ah/144));if(s>=3)s=Math.floor(s);
  cv.style.width=Math.round(160*s)+'px';cv.style.height=Math.round(144*s)+'px';
