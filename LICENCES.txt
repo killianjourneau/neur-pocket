@@ -1,0 +1,15 @@
+Neur Pocket — Games by Neur
+
+Composants tiers :
+
+- Moteur Game Boy Advance : mGBA, par Jeffrey Pfau et les contributeurs de mGBA,
+  version WebAssembly par thenick775.
+  Licence : Mozilla Public License 2.0 (https://mozilla.org/MPL/2.0/)
+  Code source : https://github.com/thenick775/mgba (branche feature/wasm)
+  Fichiers concernés : mgba.js, mgba.wasm (non modifiés)
+
+- Police « Press Start 2P » par CodeMan38 (cody@zone38.net).
+  Licence : SIL Open Font License 1.1 (https://openfontlicense.org)
+
+Les émulateurs Game Boy et Game Boy Color sont écrits pour Neur Pocket.
+Aucune ROM n'est fournie : chaque utilisateur charge ses propres fichiers.
