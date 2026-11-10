@@ -821,16 +821,47 @@ function shKey(n,on){if(gba&&G){try{on?G.buttonPress(n):G.buttonUnpress(n);}catc
 for(const n of['L','R']){const el_=document.getElementById('b'+n);
  el_.addEventListener('pointerdown',e=>{e.preventDefault();shKey(n,true);buzz();});
  for(const ev of['pointerup','pointercancel','pointerleave'])el_.addEventListener(ev,()=>shKey(n,false));}
-addEventListener('keydown',e=>{if(e.repeat)return;if(e.code==='KeyA')shKey('L',true);if(e.code==='KeyS')shKey('R',true);});
-addEventListener('keyup',e=>{if(e.code==='KeyA')shKey('L',false);if(e.code==='KeyS')shKey('R',false);});
 function setKey(id,on){
  const [g,bit]=id;const m=1<<bit;
  if(gba&&G){const was=g==='d'?!(joyDir&m):!(joyBtn&m);if(was!==!!on){try{on?G.buttonPress(GBN[g+bit]):G.buttonUnpress(GBN[g+bit]);}catch(e){}}}
  if(g==='d'){if(on){if(joyDir&m)IF|=0x10;joyDir&=~m;}else joyDir|=m;}
  else{if(on){if(joyBtn&m)IF|=0x10;joyBtn&=~m;}else joyBtn|=m;}
 }
-addEventListener('keydown',e=>{const k=KEYS[e.code];if(k){e.preventDefault();setKey(k,true);}initAudio();showDpad();});
-addEventListener('keyup',e=>{const k=KEYS[e.code];if(k){setKey(k,false);}showDpad();});
+/* ---- Clavier configurable (Réglages > CLAVIER) ---- */
+const KACT=[['up','HAUT',['d',2]],['down','BAS',['d',3]],['left','GAUCHE',['d',1]],['right','DROITE',['d',0]],['a','A',['b',0]],['b','B',['b',1]],['start','START',['b',3]],['select','SELECT',['b',2]],['l','L (GBA)'],['r','R (GBA)'],['fast','VITESSE x2'],['rew','RETOUR (maintenir)']];
+const KDEF={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyX',b:'KeyZ',start:'Enter',select:'ShiftLeft',l:'KeyA',r:'KeyS',fast:'Tab',rew:'Backspace'};
+let kbind={},klabel={},kcap=null,klayout=null;
+try{const j=JSON.parse(localStorage.getItem('np_keys')||'null');if(j){kbind=j.b||{};klabel=j.l||{};}}catch(e){}
+for(const k in KDEF)if(!(k in kbind))kbind[k]=KDEF[k];
+try{navigator.keyboard&&navigator.keyboard.getLayoutMap&&navigator.keyboard.getLayoutMap().then(m=>{klayout=m;updKeyHelp();}).catch(()=>{});}catch(e){}
+const KN={ArrowUp:'FLECHE HAUT',ArrowDown:'FLECHE BAS',ArrowLeft:'FLECHE GAUCHE',ArrowRight:'FLECHE DROITE',Enter:'ENTREE',NumpadEnter:'ENTREE (PAVE)',ShiftLeft:'MAJ GAUCHE',ShiftRight:'MAJ DROITE',ControlLeft:'CTRL GAUCHE',ControlRight:'CTRL DROITE',AltLeft:'ALT',AltRight:'ALT GR',Space:'ESPACE',Tab:'TAB',Backspace:'RETOUR ARR.',Escape:'ECHAP',CapsLock:'VERR. MAJ',Delete:'SUPPR'};
+function keyName(code){if(!code)return '—';if(klabel[code])return klabel[code];if(KN[code])return KN[code];
+ if(klayout&&klayout.get(code))return klayout.get(code).toUpperCase();
+ return code.replace(/^Key/,'').replace(/^Digit/,'').replace(/^Numpad/,'PAVE ').toUpperCase();}
+function saveKeys(){try{localStorage.setItem('np_keys',JSON.stringify({b:kbind,l:klabel}));}catch(e){}updKeyHelp();}
+function actOf(code){for(const k in kbind)if(kbind[k]===code)return k;return null;}
+function doAct(a,on){const d=KACT.find(x=>x[0]===a);if(!d)return;
+ if(d[2]){setKey(d[2],on);showDpad();}
+ else if(a==='l')shKey('L',on);else if(a==='r')shKey('R',on);
+ else if(a==='fast'){if(on)setFast(!fast);}
+ else if(a==='rew')setRew(on);}
+addEventListener('keydown',e=>{
+ if(kcap){e.preventDefault();if(e.code==='Escape'){kcap=null;showKeys();return;}
+  const old=actOf(e.code);if(old&&old!==kcap)kbind[old]=null;kbind[kcap]=e.code;
+  if(e.key&&e.key.length===1&&e.key!==' ')klabel[e.code]=e.key.toUpperCase();
+  kcap=null;saveKeys();showKeys();return;}
+ initAudio();const a=actOf(e.code);if(!a)return;e.preventDefault();if(e.repeat)return;doAct(a,true);});
+addEventListener('keyup',e=>{const a=actOf(e.code);if(a&&!kcap)doAct(a,false);});
+function showKeys(){openPanel('CLAVIER');pBody.innerHTML='';
+ for(const[a,lab]of KACT){const row=el('div','row');const t=el('div','t',lab);t.appendChild(el('small',null,kcap===a?'APPUIE SUR UNE TOUCHE… (ECHAP = ANNULER)':keyName(kbind[a])));
+  const b=el('button','sb'+(kcap===a?' alt':''),kcap===a?'…':'CHANGER');b.onclick=()=>{kcap=a;showKeys();};row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
+ const r=el('div','row');const t=el('div','t','TOUCHES PAR DEFAUT');const b=el('button','sb warn','RETABLIR');b.onclick=()=>{kbind={...KDEF};klabel={};kcap=null;saveKeys();showKeys();};r.appendChild(t);r.appendChild(b);pBody.appendChild(r);
+ const back=el('button','sb alt add','RETOUR AUX REGLAGES');back.onclick=()=>{kcap=null;showOpt();};pBody.appendChild(back);
+ pBody.appendChild(el('div','note','Touche CHANGER puis appuie sur la touche voulue du clavier. Une touche déjà utilisée est retirée de son ancienne action.'));}
+function updKeyHelp(){const h=document.getElementById('deskHelp');if(!h)return;
+ const g=a=>keyName(kbind[a]);
+ const ar=kbind.up==='ArrowUp'&&kbind.down==='ArrowDown'&&kbind.left==='ArrowLeft'&&kbind.right==='ArrowRight';
+ h.textContent='CLAVIER : CROIX='+(ar?'FLECHES':[g('up'),g('down'),g('left'),g('right')].join('/'))+' · A='+g('a')+' · B='+g('b')+' · START='+g('start')+' · SELECT='+g('select')+'  —  REGLAGES > CLAVIER POUR CHANGER';}
 function buzz(){try{navigator.vibrate&&navigator.vibrate(8);}catch(e){}}
 const dEl=document.getElementById('dpad'),kel={U:kU,D:kD,L:kL,R:kR};
 function showDpad(){const st={R:!(joyDir&1),L:!(joyDir&2),U:!(joyDir&4),D:!(joyDir&8)};let t='';for(const k of['U','D','L','R']){kel[k].classList.toggle('on',st[k]);if(st[k]&&!t)t=k;}dEl.className=t?'t'+t:'';}
@@ -966,16 +997,16 @@ function showOpt(){
    :['COULEURS',PALS_N[palI],()=>{setPal((palI+1)%PALS.length);if(loaded)blit();showOpt();}],
   ['SON',sound?'OUI':'NON',()=>{sound=!sound;initAudio();if(G)try{G.setVolume(sound?100:0);}catch(e){}showOpt();}],
   ['PAUSE',paused?'OUI':'NON',()=>{if(loaded)paused=!paused;if(gba&&G)try{paused?G.pauseGame():null;}catch(e){}showOpt();}],
+  ['CLAVIER','PERSONNALISER LES TOUCHES',showKeys],
   ['MODE DIAGNOSTIC',diag?'OUI':'NON',()=>{diag=!diag;try{localStorage.setItem('np_diag',diag?'1':'0');}catch(e){}if(diag&&bugCap)info.textContent='⚠ Anomalie capturée — ETATS > ENVOYER À CLAUDE';showOpt();}],
   ['REDEMARRER LE JEU','',()=>{if(gba&&G){try{G.quickReload();}catch(e){}closePanel();return;}if(loaded){saveRam();reset();rewBuf.clear();closePanel();}}]
  ];
  for(const[a,v,fn]of items){const row=el('div','row');const t=el('div','t',a);if(v)t.appendChild(el('small',null,v));const b=el('button','sb',v?'CHANGER':'OK');b.onclick=fn;row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
  const vr=el('div','row');const vt=el('div','t','VERSION');vt.appendChild(el('small',null,'Neur Pocket '+VERSION));vt.appendChild(el('small',null,'Moteur GBA : mGBA (MPL 2.0) — '+(self.crossOriginIsolated?'disponible':'version installée uniquement')));vr.appendChild(vt);pBody.appendChild(vr);
  pBody.appendChild(el('div','note',(cgb&&loaded?'CHASSIS change la couleur de la console (jeux Game Boy Color). ':'COULEURS change les teintes de l\'écran (jeux Game Boy). ')+'Appuie entre A et B pour presser les deux à la fois.'));
- pBody.appendChild(el('div','note','Clavier : flèches, X = A, Z = B, A = L, S = R, Entrée = Start, Maj = Select, Retour arrière = retour (maintenir), Tab = vitesse x2.'));
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.0.3';
+const VERSION='2.1.0';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
@@ -1003,14 +1034,14 @@ bFast.onclick=()=>setFast(!fast);
 function setRew(v){rewinding=v&&loaded;bRew.classList.toggle('act',rewinding);if(gba&&G)try{G.toggleRewind(!!rewinding);}catch(e){}}
 bRew.addEventListener('pointerdown',e=>{e.preventDefault();try{bRew.setPointerCapture(e.pointerId);}catch(_){}setRew(true);});
 for(const ev of['pointerup','pointercancel','lostpointercapture'])bRew.addEventListener(ev,()=>setRew(false));
-addEventListener('keydown',e=>{if(e.code==='Backspace'){e.preventDefault();setRew(true);}if(e.code==='Tab'){e.preventDefault();setFast(!fast);}});
-addEventListener('keyup',e=>{if(e.code==='Backspace')setRew(false);});
+updKeyHelp();addEventListener('DOMContentLoaded',updKeyHelp);
 function fit(){
- const app=document.getElementById('app');const desk=matchMedia('(hover:hover) and (pointer:fine)').matches&&innerHeight>=520&&innerWidth>=560;
+ const app=document.getElementById('app');const desk=!(gba&&loaded)&&matchMedia('(hover:hover) and (pointer:fine)').matches&&innerHeight>=520&&innerWidth>=560;
  document.documentElement.classList.toggle('desk',desk);
- const land=(desk&&gba&&loaded)||(!desk&&innerWidth>innerHeight);app.classList.toggle('land',land);
+ const land=!desk&&innerWidth>innerHeight;app.classList.toggle('land',land);
  const W=desk?app.clientWidth:innerWidth,H=desk?app.clientHeight:innerHeight;let aw,ah;
- if(desk&&land){aw=W*0.54;ah=H*0.6-60;}else if(land){aw=W-2*180-44;ah=H-34-90;}else{aw=W-44-16;ah=H*0.5-34-30;}
+ const pz=(land&&matchMedia('(hover:hover) and (pointer:fine)').matches)?Math.max(1,Math.min(2.2,H/420)):1;document.getElementById('pad').style.zoom=pz>1?pz:'';for(const id of['bar','info'])document.getElementById(id).style.zoom=pz>1?Math.min(1.6,pz):'';
+ if(land){aw=W-2*180*pz-44;ah=H-34-90*(pz>1?Math.min(1.6,pz):1);}else{aw=W-44-16;ah=H*0.5-34-30;}
  if(gba){let s=Math.max(1,Math.min((aw+20)/240,ah/160));const gc=document.getElementById('gcv');gc.style.width=Math.round(240*s)+'px';gc.style.height=Math.round(160*s)+'px';return;}
  let s=Math.max(1,Math.min(aw/160,ah/144));if(s>=3)s=Math.floor(s);
  cv.style.width=Math.round(160*s)+'px';cv.style.height=Math.round(144*s)+'px';
