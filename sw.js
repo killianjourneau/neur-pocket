@@ -1,5 +1,5 @@
 // Neur Pocket — service worker : hors ligne + isolation cross-origin (requise par le moteur GBA)
-const CACHE='neurpocket-2.1.0';
+const CACHE='neurpocket-2.2.1';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./mgba.js','./mgba.wasm'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).catch(()=>{}));self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n!==CACHE).map(n=>caches.delete(n)))).then(()=>self.clients.claim()));});

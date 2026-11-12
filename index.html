@@ -86,6 +86,23 @@ html.desk #app.gba #bL{left:9%}html.desk #app.gba #bR{right:9%}
 html.desk #app.gba #dzone{left:5%}html.desk #app.gba #ab{right:4.5%}
 html.desk #app.gba #ss{left:7%;bottom:12%}
 html.desk #app.gba #spk{right:9%;bottom:16%}
+/* ===== Habillage Game Gear ===== */
+.btn em,.gear{display:none}
+#app.gg .btn span{display:none}#app.gg .btn em{display:block;position:absolute;left:0;right:0;bottom:-24px;text-align:center;font:bold 14px 'Press Start 2P',monospace;font-style:normal;color:var(--ink)}
+#app.gg .gear{display:inline;font-style:italic;color:#4f8cff}
+#app.gg #bSe{visibility:hidden}
+#app.gg #bezel{background:linear-gradient(160deg,#3a3a40,#202024 60%);border-radius:12px 12px 26px 26px;padding:12px 18px 30px;box-shadow:inset 0 0 0 2px #111,inset 0 2px 0 rgba(255,255,255,.07),0 3px 0 rgba(0,0,0,.35)}
+#app.gg #cbrand{color:#d6d7de;font-size:7px;bottom:10px}
+#app.gg #led.on{background:#ff4d3a;box-shadow:0 0 6px #ff4d3a}
+#app.gg .btn{background:radial-gradient(circle at 50% 60%,#4a4a52,#2c2c32 70%);box-shadow:0 5px 0 #0c0c0e,inset 0 2px 3px rgba(255,255,255,.12)}
+#app.gg .btn.on{box-shadow:0 1px 0 #0c0c0e,inset 0 3px 8px rgba(0,0,0,.6)}
+#app.gg #dpad .h,#app.gg #dpad .v{background:linear-gradient(#3c3c44,#24242a);box-shadow:0 4px 0 #0c0c0e}
+#app.gg #bSt i{left:22px;top:6px;width:20px;height:20px;border-radius:50%;transform:none;background:radial-gradient(circle at 50% 40%,#5a8cff,#2c55c8);box-shadow:0 2px 0 #102050}
+#app.gg #bSt.on i{margin-top:2px;box-shadow:none}
+#app.gg #bSt.lock i{background:#e0507f;box-shadow:0 0 6px #e0507f}
+#app.gg #spk{display:block;position:absolute;right:7%;bottom:6%;width:46px;height:30px;pointer-events:none;background:radial-gradient(circle,rgba(0,0,0,.55) 2.4px,transparent 3px) 0 0/10px 10px}
+#app.land.gg #spk{right:calc(2% + 40px);bottom:10%}
+#app.land.gg #ss{left:max(2%,env(safe-area-inset-left));transform:none;bottom:2px}
 #panel{position:fixed;inset:0;background:rgba(40,40,48,.55);display:none;align-items:center;justify-content:center;z-index:10}
 #panel.show{display:flex}
 #card{width:min(92vw,420px);max-height:86vh;overflow:auto;touch-action:pan-y;background:#e4e1d9;border-radius:12px 12px 30px 12px;box-shadow:0 6px 0 #9c998f;padding:14px;font-size:9px;color:#2b308f;box-sizing:border-box}
@@ -149,7 +166,7 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
 <body>
 <div id="app">
  <div id="top">
-  <div id="bezel"><div id="led"></div><canvas id="cv" width="160" height="144"></canvas><canvas id="gcv" width="240" height="160"></canvas><div id="cbrand">NEUR POCKET<b class="adv"> ADVANCE</b> <i style="color:#ff5a6e">●</i><i style="color:#ffd84a">●</i><i style="color:#6fdc6f">●</i><i style="color:#5ab4ff">●</i></div></div>
+  <div id="bezel"><div id="led"></div><canvas id="cv" width="160" height="144"></canvas><canvas id="gcv" width="240" height="160"></canvas><div id="cbrand">NEUR POCKET<b class="adv"> ADVANCE</b><b class="gear"> GEAR</b> <i style="color:#ff5a6e">●</i><i style="color:#ffd84a">●</i><i style="color:#6fdc6f">●</i><i style="color:#5ab4ff">●</i></div></div>
   <div id="brand">NEUR <b>POCKET</b></div>
   <div id="bar">
    <button class="tb" id="bLib">JEUX</button>
@@ -158,13 +175,13 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
    <button class="tb" id="bFast">x2</button>
    <button class="tb" id="bOpt">REGLAGES</button>
   </div>
-  <input type="file" id="file" accept=".gb,.gbc,.gba,.zip,application/octet-stream">
+  <input type="file" id="file" accept=".gb,.gbc,.gba,.gg,.zip,application/octet-stream">
   <div id="info"></div>
  </div>
  <div id="panel"><div id="card"><h2><span id="pTitle"></span><button class="sb alt" id="pClose">FERMER</button></h2><div id="pBody"></div></div></div>
  <div id="pad">
   <div id="dzone"><div id="dpad"><div class="h"></div><div class="v"></div><div class="c"></div><div class="k" id="kU"></div><div class="k" id="kD"></div><div class="k" id="kL"></div><div class="k" id="kR"></div></div></div>
-  <div id="ab"><div class="btn" id="bB"><span>B</span></div><div class="btn" id="bA"><span>A</span></div><div id="abmid"></div></div>
+  <div id="ab"><div class="btn" id="bB"><span>B</span><em>1</em></div><div class="btn" id="bA"><span>A</span><em>2</em></div><div id="abmid"></div></div>
   <div class="sh" id="bL"><span>L</span></div><div class="sh" id="bR"><span>R</span></div>
   <div id="spk"></div>
   <div id="ss"><div class="pill" id="bSe"><i></i><span>SELECT</span></div><div class="pill" id="bSt"><i></i><span>START</span></div></div>
@@ -402,6 +419,7 @@ let diag=false;try{diag=localStorage.getItem('np_diag')==='1';}catch(e){}
 const IN_MAX=1200,inLog=new Uint8Array(IN_MAX);let bugCap=null,anomaly='';
 function checkPC(){if(!anomaly&&((PC>=0x8000&&PC<0xC000)||(PC>=0xFE00&&PC<0xFF80))){anomaly='Exécution en '+PC.toString(16).toUpperCase();captureBug(anomaly);}}
 function captureBug(reason){
+ if(gg)return;
  if(bugCap||!rewBuf.length)return;
  const o=rewBuf.oldest();if(!o)return;
  const st=structuredClone(o);const from=st.fn||0,to=frameN+1;const n=Math.min(IN_MAX,to-from);
@@ -411,6 +429,7 @@ function captureBug(reason){
 }
 let frzSum=-1,frzCount=0,frzInput=false;
 function freezeCheck(){
+ if(gg)return;
  if((~joyDir&0xF)||(~joyBtn&0xF))frzInput=true;
  if(frameN%60)return;
  const a=cgb?fbc:fb;let h=0;for(let i=0;i<a.length;i+=7)h=(h*31+a[i])|0;
@@ -620,6 +639,392 @@ function flushAudio(){
  const s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(nextT);nextT+=n/AC.sampleRate;
 }
 
+/* ---------- Z80 (Game Gear) ---------- */
+function Z80(bus){
+ const rb=bus.rb,wb=bus.wb,inp=bus.inp,outp=bus.out;
+ const SF=0x80,ZF=0x40,YF=0x20,HF=0x10,XF=0x08,PF=0x04,NF=0x02,CF=0x01;
+ const SZ=new Uint8Array(256),SZP=new Uint8Array(256);
+ for(let i=0;i<256;i++){let p=i;p^=p>>4;p^=p>>2;p^=p>>1;SZ[i]=(i&0xA8)|(i?0:ZF);SZP[i]=SZ[i]|((p&1)?0:PF);}
+ let A=0xFF,F=0xFF,B=0,C=0,D=0,E=0,H=0,L=0,A2=0,F2=0,B2=0,C2=0,D2=0,E2=0,H2=0,L2=0;
+ let IX=0xFFFF,IY=0xFFFF,SP=0xDFF0,PC=0,I=0,R=0,IFF1=0,IFF2=0,IM=1,halted=0,ei=0;
+ let ix=0,cyc=0,irqLine=false,nmiPend=false;
+ const r8=a=>rb(a&0xFFFF);
+ function imm(){const v=rb(PC);PC=(PC+1)&0xFFFF;return v;}
+ function imm16(){const l=imm();return l|(imm()<<8);}
+ function simm(){const v=imm();return v<128?v:v-256;}
+ function push(v){SP=(SP-1)&0xFFFF;wb(SP,v>>8);SP=(SP-1)&0xFFFF;wb(SP,v&0xFF);}
+ function pop(){const l=rb(SP);SP=(SP+1)&0xFFFF;const h=rb(SP);SP=(SP+1)&0xFFFF;return l|(h<<8);}
+ const rd16=a=>rb(a&0xFFFF)|(rb((a+1)&0xFFFF)<<8);
+ function wr16(a,v){wb(a&0xFFFF,v&0xFF);wb((a+1)&0xFFFF,(v>>8)&0xFF);}
+ // HL / IX / IY
+ function gHL(){return ix===0?(H<<8)|L:ix===1?IX:IY;}
+ function sHL(v){v&=0xFFFF;if(ix===0){H=v>>8;L=v&0xFF;}else if(ix===1)IX=v;else IY=v;}
+ let dispAddr=0;
+ function memAddr(){ // adresse (HL) ou (IX+d)
+  if(ix===0)return (H<<8)|L;
+  const d=simm();cyc+=8;return ((ix===1?IX:IY)+d)&0xFFFF;}
+ function getR(r){switch(r){case 0:return B;case 1:return C;case 2:return D;case 3:return E;
+  case 4:return ix===0?H:ix===1?IX>>8:IY>>8;case 5:return ix===0?L:ix===1?IX&0xFF:IY&0xFF;case 6:return rb(dispAddr);default:return A;}}
+ function setR(r,v){switch(r){case 0:B=v;break;case 1:C=v;break;case 2:D=v;break;case 3:E=v;break;
+  case 4:if(ix===0)H=v;else if(ix===1)IX=(IX&0xFF)|(v<<8);else IY=(IY&0xFF)|(v<<8);break;
+  case 5:if(ix===0)L=v;else if(ix===1)IX=(IX&0xFF00)|v;else IY=(IY&0xFF00)|v;break;
+  case 6:wb(dispAddr,v);break;default:A=v;}}
+ // registres "réels" (pour LD r,(IX+d))
+ function getRr(r){switch(r){case 4:return H;case 5:return L;default:return getR(r);}}
+ function setRr(r,v){if(r===4)H=v;else if(r===5)L=v;else setR(r,v);}
+ function getRP(p){switch(p){case 0:return(B<<8)|C;case 1:return(D<<8)|E;case 2:return gHL();default:return SP;}}
+ function setRP(p,v){v&=0xFFFF;switch(p){case 0:B=v>>8;C=v&0xFF;break;case 1:D=v>>8;E=v&0xFF;break;case 2:sHL(v);break;default:SP=v;}}
+ function getRP2(p){return p===3?(A<<8)|F:getRP(p);}
+ function setRP2(p,v){if(p===3){A=(v>>8)&0xFF;F=v&0xFF;}else setRP(p,v);}
+ function cond(y){switch(y){case 0:return!(F&ZF);case 1:return!!(F&ZF);case 2:return!(F&CF);case 3:return!!(F&CF);
+  case 4:return!(F&PF);case 5:return!!(F&PF);case 6:return!(F&SF);default:return!!(F&SF);}}
+ // ALU
+ function add8(v,c){const r=A+v+c;F=(SZ[r&0xFF])|((A^v^r)&HF)|(((A^~v)&(A^r)&0x80)?PF:0)|(r>>8&CF);A=r&0xFF;}
+ function sub8(v,c){const r=A-v-c;F=(SZ[r&0xFF])|((A^v^r)&HF)|(((A^v)&(A^r)&0x80)?PF:0)|NF|((r>>8)&CF);A=r&0xFF;}
+ function cp8(v){const r=A-v;F=(SZ[r&0xFF]&~(XF|YF))|(v&(XF|YF))|((A^v^r)&HF)|(((A^v)&(A^r)&0x80)?PF:0)|NF|((r>>8)&CF);}
+ function alu(k,v){switch(k){case 0:add8(v,0);break;case 1:add8(v,F&CF);break;case 2:sub8(v,0);break;case 3:sub8(v,F&CF);break;
+  case 4:A&=v;F=SZP[A]|HF;break;case 5:A^=v;F=SZP[A];break;case 6:A|=v;F=SZP[A];break;default:cp8(v);}}
+ function inc8(v){const r=(v+1)&0xFF;F=(F&CF)|SZ[r]|(r===0x80?PF:0)|((r&0xF)===0?HF:0);return r;}
+ function dec8(v){const r=(v-1)&0xFF;F=(F&CF)|SZ[r]|NF|(r===0x7F?PF:0)|((r&0xF)===0xF?HF:0);return r;}
+ function add16(a,b){const r=a+b;F=(F&(SF|ZF|PF))|(((a^b^r)>>8)&HF)|((r>>16)&CF)|((r>>8)&(XF|YF));return r&0xFFFF;}
+ function adc16(b){const a=gHL(),r=a+b+(F&CF);F=((r>>8)&(SF|XF|YF))|((r&0xFFFF)?0:ZF)|(((a^b^r)>>8)&HF)|(((a^~b)&(a^r)&0x8000)?PF:0)|((r>>16)&CF);sHL(r);}
+ function sbc16(b){const a=gHL(),r=a-b-(F&CF);F=((r>>8)&(SF|XF|YF))|((r&0xFFFF)?0:ZF)|(((a^b^r)>>8)&HF)|(((a^b)&(a^r)&0x8000)?PF:0)|NF|((r>>16)&CF);sHL(r);}
+ function rot(k,v){let r,c;switch(k){
+  case 0:c=v>>7;r=((v<<1)|c)&0xFF;break; // RLC
+  case 1:c=v&1;r=(v>>1)|(c<<7);break; // RRC
+  case 2:c=v>>7;r=((v<<1)|(F&CF))&0xFF;break; // RL
+  case 3:c=v&1;r=(v>>1)|((F&CF)<<7);break; // RR
+  case 4:c=v>>7;r=(v<<1)&0xFF;break; // SLA
+  case 5:c=v&1;r=(v>>1)|(v&0x80);break; // SRA
+  case 6:c=v>>7;r=((v<<1)|1)&0xFF;break; // SLL
+  default:c=v&1;r=v>>1;} // SRL
+  F=SZP[r]|c;return r;}
+ function daa(){let a=A,cor=0,c=F&CF;const h=F&HF,n=F&NF;
+  if(h||(a&0xF)>9)cor|=6;if(c||a>0x99){cor|=0x60;c=CF;}
+  const r=n?(a-cor)&0xFF:(a+cor)&0xFF;
+  const nh=n?(h&&(a&0xF)<6?HF:0):((a&0xF)>9?HF:0);
+  A=r;F=SZP[r]|c|nh|n;}
+ function irq(){ // IM1
+  if(halted){halted=0;PC=(PC+1)&0xFFFF;}
+  IFF1=IFF2=0;R=(R&0x80)|((R+1)&0x7F);
+  if(IM===2){push(PC);PC=rd16((I<<8)|0xFF);return 19;}
+  push(PC);PC=0x38;return 13;}
+ function nmi(){if(halted){halted=0;PC=(PC+1)&0xFFFF;}IFF2=IFF1;IFF1=0;push(PC);PC=0x66;return 11;}
+ const CYC=[4,10,7,6,4,4,7,4,4,11,7,6,4,4,7,4,8,10,7,6,4,4,7,4,12,11,7,6,4,4,7,4,7,10,16,6,4,4,7,4,7,11,16,6,4,4,7,4,7,10,13,6,11,11,10,4,7,11,13,6,4,4,7,4];
+ const CYC3=[5,10,10,10,10,11,7,11,5,10,10,0,10,17,7,11,5,10,10,11,10,11,7,11,5,4,10,11,10,0,7,11,5,10,10,19,10,11,7,11,5,4,10,4,10,0,7,11,5,10,10,4,10,11,7,11,5,6,10,4,10,0,7,11];
+ function step(){
+  if(nmiPend){nmiPend=false;return nmi();}
+  if(irqLine&&IFF1&&!ei)return irq();
+  ei=0;
+  if(halted){R=(R&0x80)|((R+1)&0x7F);return 4;}
+  cyc=0;ix=0;
+  let op=imm();R=(R&0x80)|((R+1)&0x7F);
+  while(op===0xDD||op===0xFD){ix=op===0xDD?1:2;cyc+=4;op=imm();R=(R&0x80)|((R+1)&0x7F);}
+  if(op===0xCB){return cbOp();}
+  if(op===0xED){ix=0;return edOp();}
+  const x=op>>6,y=(op>>3)&7,z=op&7;
+  if(x===1){ // LD r,r'
+   if(op===0x76){halted=1;PC=(PC-1)&0xFFFF;return cyc+4;}
+   if(y===6){dispAddr=memAddr();wb(dispAddr,getRr(z));return cyc+7;}
+   if(z===6){dispAddr=memAddr();setRr(y,rb(dispAddr));return cyc+7;}
+   setR(y,getR(z));return cyc+4;}
+  if(x===2){if(z===6){dispAddr=memAddr();alu(y,rb(dispAddr));return cyc+7;}alu(y,getR(z));return cyc+4;}
+  if(x===0){
+   switch(z){
+   case 0:
+    switch(y){case 0:return cyc+4;
+     case 1:{let t=A;A=A2;A2=t;t=F;F=F2;F2=t;return cyc+4;}
+     case 2:{const d=simm();B=(B-1)&0xFF;if(B){PC=(PC+d)&0xFFFF;return cyc+13;}return cyc+8;}
+     case 3:{const d=simm();PC=(PC+d)&0xFFFF;return cyc+12;}
+     default:{const d=simm();if(cond(y-4)){PC=(PC+d)&0xFFFF;return cyc+12;}return cyc+7;}}
+   case 1:{const p=y>>1;if(y&1){sHL(add16(gHL(),getRP(p)));return cyc+11;}setRP(p,imm16());return cyc+10;}
+   case 2:switch(y){
+     case 0:wb((B<<8)|C,A);return cyc+7;case 1:A=rb((B<<8)|C);return cyc+7;
+     case 2:wb((D<<8)|E,A);return cyc+7;case 3:A=rb((D<<8)|E);return cyc+7;
+     case 4:wr16(imm16(),gHL());return cyc+16;case 5:sHL(rd16(imm16()));return cyc+16;
+     case 6:wb(imm16(),A);return cyc+13;default:A=rb(imm16());return cyc+13;}
+   case 3:{const p=y>>1;setRP(p,getRP(p)+((y&1)?-1:1));return cyc+6;}
+   case 4:if(y===6){dispAddr=memAddr();wb(dispAddr,inc8(rb(dispAddr)));return cyc+11;}setR(y,inc8(getR(y)));return cyc+4;
+   case 5:if(y===6){dispAddr=memAddr();wb(dispAddr,dec8(rb(dispAddr)));return cyc+11;}setR(y,dec8(getR(y)));return cyc+4;
+   case 6:if(y===6){dispAddr=memAddr();if(ix)cyc-=3;wb(dispAddr,imm());return cyc+10;}setR(y,imm());return cyc+7;
+   default:switch(y){
+     case 0:{const c=A>>7;A=((A<<1)|c)&0xFF;F=(F&(SF|ZF|PF))|(A&(XF|YF))|c;return cyc+4;}
+     case 1:{const c=A&1;A=(A>>1)|(c<<7);F=(F&(SF|ZF|PF))|(A&(XF|YF))|c;return cyc+4;}
+     case 2:{const c=A>>7;A=((A<<1)|(F&CF))&0xFF;F=(F&(SF|ZF|PF))|(A&(XF|YF))|c;return cyc+4;}
+     case 3:{const c=A&1;A=(A>>1)|((F&CF)<<7);F=(F&(SF|ZF|PF))|(A&(XF|YF))|c;return cyc+4;}
+     case 4:daa();return cyc+4;
+     case 5:A^=0xFF;F=(F&(SF|ZF|PF|CF))|HF|NF|(A&(XF|YF));return cyc+4;
+     case 6:F=(F&(SF|ZF|PF))|CF|(A&(XF|YF));return cyc+4;
+     default:{const c=F&CF;F=(F&(SF|ZF|PF))|(c?HF:0)|(c^CF)|(A&(XF|YF));return cyc+4;}}
+   }
+  }
+  // x===3
+  switch(z){
+  case 0:if(cond(y)){PC=pop();return cyc+11;}return cyc+5;
+  case 1:if(y&1){switch(y>>1){
+     case 0:PC=pop();return cyc+10;
+     case 1:{let t=B;B=B2;B2=t;t=C;C=C2;C2=t;t=D;D=D2;D2=t;t=E;E=E2;E2=t;t=H;H=H2;H2=t;t=L;L=L2;L2=t;return cyc+4;}
+     case 2:PC=gHL();return cyc+4;
+     default:SP=gHL();return cyc+6;}}
+   setRP2(y>>1,pop());return cyc+10;
+  case 2:{const a=imm16();if(cond(y))PC=a;return cyc+10;}
+  case 3:switch(y){
+    case 0:PC=imm16();return cyc+10;
+    case 2:outp(imm(),A);return cyc+11;
+    case 3:A=inp(imm())&0xFF;return cyc+11;
+    case 4:{const v=rd16(SP);wr16(SP,gHL());sHL(v);return cyc+19;}
+    case 5:{const t=(D<<8)|E;D=H;E=L;H=t>>8;L=t&0xFF;return cyc+4;}
+    case 6:IFF1=IFF2=0;return cyc+4;
+    default:IFF1=IFF2=1;ei=1;return cyc+4;}
+  case 4:{const a=imm16();if(cond(y)){push(PC);PC=a;return cyc+17;}return cyc+10;}
+  case 5:if(y&1){if(y===1){const a=imm16();push(PC);PC=a;return cyc+17;}return cyc+4;}
+   push(getRP2(y>>1));return cyc+11;
+  case 6:alu(y,imm());return cyc+7;
+  default:push(PC);PC=y<<3;return cyc+11;}
+ }
+ function cbOp(){
+  let addr,op;
+  if(ix){const d=simm();addr=((ix===1?IX:IY)+d)&0xFFFF;op=imm();}
+  else{op=imm();R=(R&0x80)|((R+1)&0x7F);}
+  const x=op>>6,y=(op>>3)&7,z=op&7;
+  if(ix){ // DD CB d op
+   const v=rb(addr);
+   if(x===1){F=(F&CF)|HF|(SZP[v&(1<<y)]&~(XF|YF))|((addr>>8)&(XF|YF));return cyc+16;}
+   let r;if(x===0)r=rot(y,v);else if(x===2)r=v&~(1<<y);else r=v|(1<<y);
+   wb(addr,r);if(z!==6)setRr(z,r);return cyc+19;}
+  const v=z===6?rb((H<<8)|L):getR(z);
+  if(x===1){let f=(F&CF)|HF|(SZP[v&(1<<y)]&~(XF|YF));f|=(z===6?0:v&(XF|YF));F=f;return z===6?12:8;}
+  let r;if(x===0)r=rot(y,v);else if(x===2)r=v&~(1<<y);else r=v|(1<<y);
+  if(z===6){wb((H<<8)|L,r);return 15;}setR(z,r);return 8;
+ }
+ function edOp(){
+  const op=imm();R=(R&0x80)|((R+1)&0x7F);
+  const x=op>>6,y=(op>>3)&7,z=op&7,p=y>>1,q=y&1;
+  if(x===1){switch(z){
+   case 0:{const v=inp((B<<8)|C)&0xFF;if(y!==6)setR(y,v);F=(F&CF)|SZP[v];return 12;}
+   case 1:outp((B<<8)|C,y===6?0:getR(y));return 12;
+   case 2:if(q)adc16(getRP(p));else sbc16(getRP(p));return 15;
+   case 3:if(q)setRP(p,rd16(imm16()));else wr16(imm16(),getRP(p));return 20;
+   case 4:{const a=A;A=0;sub8(a,0);return 8;}
+   case 5:IFF1=IFF2;PC=pop();return 14;
+   case 6:IM=[0,0,1,2,0,0,1,2][y];return 8;
+   default:switch(y){
+    case 0:I=A;return 9;case 1:R=A;return 9;
+    case 2:A=I;F=(F&CF)|SZ[A]|(IFF2?PF:0);return 9;
+    case 3:A=R;F=(F&CF)|SZ[A]|(IFF2?PF:0);return 9;
+    case 4:{const a=(H<<8)|L,m=rb(a);wb(a,((A<<4)|(m>>4))&0xFF);A=(A&0xF0)|(m&0xF);F=(F&CF)|SZP[A];return 18;} // RRD
+    case 5:{const a=(H<<8)|L,m=rb(a);wb(a,((m<<4)|(A&0xF))&0xFF);A=(A&0xF0)|(m>>4);F=(F&CF)|SZP[A];return 18;} // RLD
+    default:return 8;}}}
+  if(x===2&&z<=3&&y>=4){
+   const inc=(y&1)?-1:1,rep=y>=6;
+   let hl=(H<<8)|L,de=(D<<8)|E,bc=(B<<8)|C;
+   switch(z){
+   case 0:{const v=rb(hl);wb(de,v);hl=(hl+inc)&0xFFFF;de=(de+inc)&0xFFFF;bc=(bc-1)&0xFFFF;
+     const n=v+A;F=(F&(SF|ZF|CF))|(bc?PF:0)|(n&XF)|((n<<4)&YF);
+     H=hl>>8;L=hl&0xFF;D=de>>8;E=de&0xFF;B=bc>>8;C=bc&0xFF;
+     if(rep&&bc){PC=(PC-2)&0xFFFF;return 21;}return 16;}
+   case 1:{const v=rb(hl),r=(A-v)&0xFF;hl=(hl+inc)&0xFFFF;bc=(bc-1)&0xFFFF;
+     const h=(A^v^r)&HF,n=r-(h?1:0);
+     F=(F&CF)|NF|(SZ[r]&~(XF|YF))|h|(bc?PF:0)|(n&XF)|((n<<4)&YF);
+     H=hl>>8;L=hl&0xFF;B=bc>>8;C=bc&0xFF;
+     if(rep&&bc&&r){PC=(PC-2)&0xFFFF;return 21;}return 16;}
+   case 2:{const v=inp(bc)&0xFF;wb(hl,v);hl=(hl+inc)&0xFFFF;B=(B-1)&0xFF;H=hl>>8;L=hl&0xFF;
+     F=SZ[B]|((v&0x80)?NF:0);if(rep&&B){PC=(PC-2)&0xFFFF;return 21;}return 16;}
+   default:{const v=rb(hl);B=(B-1)&0xFF;outp((B<<8)|C,v);hl=(hl+inc)&0xFFFF;H=hl>>8;L=hl&0xFF;
+     F=SZ[B]|((v&0x80)?NF:0);if(rep&&B){PC=(PC-2)&0xFFFF;return 21;}return 16;}}
+  }
+  return 8; // NOP ED
+ }
+ function getState(){return[A,F,B,C,D,E,H,L,A2,F2,B2,C2,D2,E2,H2,L2,IX,IY,SP,PC,I,R,IFF1,IFF2,IM,halted,ei];}
+ function setState(s){[A,F,B,C,D,E,H,L,A2,F2,B2,C2,D2,E2,H2,L2,IX,IY,SP,PC,I,R,IFF1,IFF2,IM,halted,ei]=s;}
+ function reset(){A=F=0xFF;B=C=D=E=H=L=0;IX=IY=0xFFFF;SP=0xDFF0;PC=0;I=R=0;IFF1=IFF2=0;IM=1;halted=0;ei=0;irqLine=false;nmiPend=false;}
+ return{step,reset,getState,setState,
+  set irq(v){irqLine=v;},get irq(){return irqLine;},nmi(){nmiPend=true;},
+  get PC(){return PC;},set PC(v){PC=v;},get SP(){return SP;},set SP(v){SP=v;},
+  regs(){return{A,F,B,C,D,E,H,L,IX,IY,SP,PC};},setRegs(o){if('C' in o)C=o.C;if('E' in o)E=o.E;if('D' in o)D=o.D;if('A' in o)A=o.A;}};
+}
+/* ---------- Game Gear : mémoire, VDP, PSG, ports ---------- */
+function GGSys(Z80F,o){
+ // o: {joy():{dir,btn} actif bas façon GB, sample(v), rate()}
+ let rom=new Uint8Array(0x8000),romBanks=2,bankMask=1,cm=false;
+ const ram=new Uint8Array(0x2000),cram=new Uint8Array(0x8000),vram=new Uint8Array(0x4000),pal=new Uint8Array(64);
+ const reg=new Uint8Array(16);
+ const slot=new Int32Array(3);let ramCtl=0,sramUsed=false,sramDirty=false;
+ // VDP
+ let vAddr=0,vCode=0,vLatch=false,vFirst=0,vBuf=0,status=0,lineCnt=0,lineIrq=false,cramLatch=0,vLine=0,hscrollLatch=0;
+ // PSG
+ const tone=new Uint16Array(3),cnt=new Float64Array(4),out=new Int8Array(4),vol=new Uint8Array(4);
+ let noise=0,lfsr=0x8000,psgLatch=0,stereo=0xFF;
+ const VOLT=new Float32Array(16);for(let i=0;i<15;i++)VOLT[i]=Math.pow(10,-i*2/20);VOLT[15]=0;
+ // sortie image : 160x144 RGBA
+ const fb=new Uint32Array(160*144);
+ const LE=new Uint8Array(new Uint32Array([1]).buffer)[0]===1;
+ const colLut=new Uint32Array(4096);
+ for(let c=0;c<4096;c++){const r=(c&15)*17,g=((c>>4)&15)*17,b=((c>>8)&15)*17;colLut[c]=LE?(0xFF000000|(b<<16)|(g<<8)|r):((r<<24)|(g<<16)|(b<<8)|0xFF);}
+ const palRGB=new Uint32Array(32);
+ function updPal(i){palRGB[i]=colLut[pal[i*2]|((pal[i*2+1]&15)<<8)];}
+ // mémoire
+ function rb(a){
+  if(a<0xC000){
+   if(cm){return rom[(slot[a>>14]<<14)|(a&0x3FFF)];}
+   if(a<0x400)return rom[a];
+   if(a>=0x8000&&(ramCtl&8))return cram[((ramCtl&4)?0x4000:0)|(a&0x3FFF)];
+   return rom[(slot[a>>14]<<14)|(a&0x3FFF)];}
+  return ram[a&0x1FFF];}
+ function wb(a,v){
+  if(a>=0xC000){ram[a&0x1FFF]=v;
+   if(!cm&&a>=0xFFFC){if(a===0xFFFC)ramCtl=v;else slot[a-0xFFFD]=v&bankMask;}
+   return;}
+  if(cm){if(a===0x0000||a===0x4000||a===0x8000){slot[a>>14]=v&bankMask;}return;}
+  if(a>=0x8000&&(ramCtl&8)){cram[((ramCtl&4)?0x4000:0)|(a&0x3FFF)]=v;sramUsed=true;sramDirty=true;}}
+ // VDP ports
+ function ctrlW(v){
+  if(!vLatch){vFirst=v;vAddr=(vAddr&0x3F00)|v;vLatch=true;return;}
+  vLatch=false;vCode=v>>6;vAddr=((v&0x3F)<<8)|vFirst;
+  if(vCode===0){vBuf=vram[vAddr];vAddr=(vAddr+1)&0x3FFF;}
+  else if(vCode===2){reg[v&0x0F]=vFirst;updIrq();}}
+ function dataW(v){vLatch=false;
+  if(vCode===3){if(vAddr&1){const i=vAddr&0x3E;pal[i]=cramLatch;pal[i+1]=v;updPal(i>>1);}else cramLatch=v;}
+  else vram[vAddr]=v;
+  vBuf=v;vAddr=(vAddr+1)&0x3FFF;}
+ function dataR(){vLatch=false;const v=vBuf;vBuf=vram[vAddr];vAddr=(vAddr+1)&0x3FFF;return v;}
+ function statR(){const v=status|0x1F;status=0;lineIrq=false;vLatch=false;updIrq();return v;}
+ function updIrq(){cpu.irq=((status&0x80)&&(reg[1]&0x20))||(lineIrq&&(reg[0]&0x10))?true:false;}
+ function vcount(){return vLine<=0xDA?vLine:vLine-6;}
+ let lineCyc=0;
+ function inp(p){p&=0xFF;
+  if(p<0x07){switch(p){case 0:return (o.joy().btn&8?0x80:0)|0x40;case 1:return 0x7F;case 2:return 0xFF;case 3:return 0;case 4:return 0xFF;case 5:return 0;default:return 0xFF;}}
+  if(p<0x40)return 0xFF;
+  if(p<0x80)return (p&1)?((lineCyc*171/228)|0)&0xFF:vcount()&0xFF;
+  if(p<0xC0)return (p&1)?statR():dataR();
+  if(p&1)return 0xFF;
+  if(p===0xC0||p===0xDC){const j=o.joy();
+   // bits: 0 haut,1 bas,2 gauche,3 droite,4 bouton1,5 bouton2 (actif bas)
+   return ((j.dir>>2)&1)|(((j.dir>>3)&1)<<1)|(((j.dir>>1)&1)<<2)|((j.dir&1)<<3)|(((j.btn>>1)&1)<<4)|((j.btn&1)<<5)|0xC0;}
+  return 0xFF;}
+ function outp(p,v){p&=0xFF;
+  if(p<0x07){if(p===6)stereo=v;return;}
+  if(p<0x40)return;
+  if(p<0x80){psgW(v);return;}
+  if(p<0xC0){if(p&1)ctrlW(v);else dataW(v);}}
+ // PSG
+ function psgW(v){
+  if(v&0x80){psgLatch=(v>>4)&7;const ch=psgLatch>>1;
+   if(psgLatch&1)vol[ch]=v&15;
+   else if(ch<3)tone[ch]=(tone[ch]&0x3F0)|(v&15);
+   else{noise=v&7;lfsr=0x8000;}}
+  else{const ch=psgLatch>>1;
+   if(psgLatch&1)vol[ch]=v&15;
+   else if(ch<3)tone[ch]=(tone[ch]&15)|((v&0x3F)<<4);
+   else{noise=v&7;lfsr=0x8000;}}}
+ const PSG_CLK=3579545/16;let smpAcc=0;
+ function psgRun(cycles){ // produit des échantillons au rythme de la sortie audio
+  const rate=o.rate();if(!rate)return;
+  smpAcc+=cycles*rate/3579545;
+  const step=PSG_CLK/rate;
+  while(smpAcc>=1){smpAcc-=1;
+   let s=0;
+   for(let c=0;c<3;c++){const per=tone[c];
+    if(per<=1){s+=VOLT[vol[c]];continue;}
+    cnt[c]-=step;while(cnt[c]<=0){cnt[c]+=per;out[c]^=1;}
+    s+=(out[c]?1:-1)*VOLT[vol[c]];}
+   const np=(noise&3)===3?(tone[2]||1):(0x10<<(noise&3));
+   cnt[3]-=step;
+   while(cnt[3]<=0){cnt[3]+=np;out[3]^=1;
+    if(out[3]){const f=(noise&4)?((lfsr&1)^((lfsr>>3)&1)):(lfsr&1);lfsr=(lfsr>>1)|(f<<15);}}
+   s+=((lfsr&1)?1:-1)*VOLT[vol[3]];
+   o.sample(s/4);}}
+ // rendu
+ const line=new Uint8Array(256),prio=new Uint8Array(256),sprBuf=new Uint8Array(256);
+ function renderLine(y){
+  const gy=y-24;if(gy<0||gy>=144)return;
+  const row=gy*160;
+  const bd=(reg[7]&15)+16;
+  if(!(reg[1]&0x40)){const c=palRGB[bd];for(let x=0;x<160;x++)fb[row+x]=c;return;}
+  const nt=(reg[2]&0x0E)<<10;
+  const hs=((reg[0]&0x40)&&y<16)?0:reg[8];
+  const vsc=reg[9];
+  for(let x=48;x<208;x++){
+   const vs=((reg[0]&0x80)&&x>=192)?0:vsc;
+   const yy=(y+vs)%224;
+   const tx=((x-hs)&0xFF);
+   const ea=nt+((yy>>3)<<6)+((tx>>3)<<1);
+   const lo=vram[ea],hi=vram[ea+1];
+   const tile=lo|((hi&1)<<8);
+   let r=yy&7;if(hi&4)r=7-r;
+   let b=tx&7;if(!(hi&2))b=7-b;
+   const pa=(tile<<5)+(r<<2);
+   const c=((vram[pa]>>b)&1)|(((vram[pa+1]>>b)&1)<<1)|(((vram[pa+2]>>b)&1)<<2)|(((vram[pa+3]>>b)&1)<<3);
+   line[x]=c+((hi&8)?16:0);prio[x]=(hi&0x10)&&c?1:0;}
+  // sprites
+  const sat=(reg[5]&0x7E)<<7,big=reg[1]&2,h=big?16:8,zoom=reg[1]&1,sh=zoom?h*2:h;
+  const pbase=(reg[6]&4)?256:0;let n=0;sprBuf.fill(0,48,208);
+  for(let i=0;i<64;i++){let sy=vram[sat+i];if(sy===0xD0)break;sy++;if(sy>240)sy-=256;
+   if(y<sy||y>=sy+sh)continue;
+   if(++n>8){status|=0x40;break;}
+   let sx=vram[sat+0x80+i*2];if(reg[0]&8)sx-=8;
+   let t=vram[sat+0x81+i*2];if(big)t&=0xFE;t+=pbase;
+   let r=y-sy;if(zoom)r>>=1;if(r>=8){t++;r-=8;}
+   const pa=(t<<5)+(r<<2);
+   for(let k=0;k<(zoom?16:8);k++){const x=sx+k;if(x<48||x>=208)continue;const b=7-(zoom?k>>1:k);
+    const c=((vram[pa]>>b)&1)|(((vram[pa+1]>>b)&1)<<1)|(((vram[pa+2]>>b)&1)<<2)|(((vram[pa+3]>>b)&1)<<3);
+    if(!c)continue;
+    if(sprBuf[x]){status|=0x20;continue;}
+    sprBuf[x]=1;
+    if(!prio[x])line[x]=c+16;}}
+  for(let x=0;x<160;x++)fb[row+x]=palRGB[line[x+48]];}
+ // cycle de trame : 262 lignes x 228 cycles
+ let cpu=Z80F({rb,wb,inp,out:outp});
+ function frame(){
+  for(vLine=0;vLine<262;vLine++){
+   let c=0;
+   if(vLine<=192){if(lineCnt===0){lineCnt=reg[10];lineIrq=true;updIrq();}else lineCnt--;}
+   else lineCnt=reg[10];
+   if(vLine===193){status|=0x80;updIrq();}
+   while(c<228){lineCyc=c;const k=cpu.step();c+=k;psgRun(k);}
+   if(vLine<192)renderLine(vLine);
+  }}
+ function load(bytes){
+  let size=0x4000;while(size<bytes.length)size<<=1;if(size<0x8000)size=0x8000;
+  rom=new Uint8Array(size);rom.set(bytes);romBanks=size>>14;bankMask=romBanks-1;
+  cm=false;
+  if(bytes.length>=0x8000){const ck=bytes[0x7FE6]|(bytes[0x7FE7]<<8),inv=bytes[0x7FE8]|(bytes[0x7FE9]<<8);if(((ck+inv)&0xFFFF)===0&&ck!==0)cm=true;}
+  reset();}
+ function reset(){
+  ram.fill(0);vram.fill(0);pal.fill(0);reg.fill(0);palRGB.fill(colLut[0]);
+  slot[0]=0;slot[1]=1&bankMask;slot[2]=2&bankMask;ramCtl=0;
+  if(cm){slot[0]=0;slot[1]=1;slot[2]=0;}
+  vAddr=0;vCode=0;vLatch=false;vBuf=0;status=0;lineCnt=0;lineIrq=false;
+  tone.fill(0);vol.fill(15);cnt.fill(0);out.fill(0);noise=0;lfsr=0x8000;
+  cpu.reset();fb.fill(colLut[0]);}
+ function save(){return{gg:true,cpu:cpu.getState(),ram:ram.slice(),vram:vram.slice(),pal:pal.slice(),reg:reg.slice(),cram:sramUsed?cram.slice():null,
+  slot:slot.slice(),misc:[ramCtl,vAddr,vCode,vLatch?1:0,vFirst,vBuf,status,lineCnt,lineIrq?1:0,cramLatch,noise,lfsr,psgLatch,stereo],
+  tone:tone.slice(),vol:vol.slice(),fb:fb.slice()};}
+ function saveInto(s){if(!s||!s.gg||(!!s.cram)!==sramUsed)return save();
+  s.cpu=cpu.getState();s.ram.set(ram);s.vram.set(vram);s.pal.set(pal);s.reg.set(reg);if(s.cram)s.cram.set(cram);s.slot.set(slot);
+  s.misc=[ramCtl,vAddr,vCode,vLatch?1:0,vFirst,vBuf,status,lineCnt,lineIrq?1:0,cramLatch,noise,lfsr,psgLatch,stereo];s.tone.set(tone);s.vol.set(vol);s.fb.set(fb);return s;}
+ function restore(s){cpu.setState(s.cpu);ram.set(s.ram);vram.set(s.vram);pal.set(s.pal);reg.set(s.reg);if(s.cram){cram.set(s.cram);sramUsed=true;}
+  slot.set(s.slot);[ramCtl,vAddr,vCode,vLatch,vFirst,vBuf,status,lineCnt,lineIrq,cramLatch,noise,lfsr,psgLatch,stereo]=s.misc;vLatch=!!vLatch;lineIrq=!!lineIrq;
+  tone.set(s.tone);vol.set(s.vol);for(let i=0;i<32;i++)updPal(i);if(s.fb)fb.set(s.fb);updIrq();}
+ return{load,reset,frame,fb,save,saveInto,restore,cpu,
+  get sramUsed(){return sramUsed;},get sramDirty(){return sramDirty;},sramGet(){sramDirty=false;return cram.slice();},
+  sramSet(d){cram.set(d.subarray(0,cram.length));sramUsed=true;},rb,vram,reg};
+}
+let gg=false;
+const GGC=GGSys(Z80,{joy:()=>({dir:joyDir,btn:joyBtn}),sample:s=>pushSample(s),rate:()=>AC?AC.sampleRate:0});
+function isGB(u){return u.length>=0x150&&u[0x104]===0xCE&&u[0x105]===0xED&&u[0x106]===0x66;}
+function isGG(u){return !isGB(u)&&!isGBA(u)&&u.length>=0x2000;}
+async function startGG(bytes,id,name){
+ if(gba)gbaStop();saveRam();autoSave();
+ GGC.load(bytes);gg=true;cgb=false;ramUsable=false;battery=false;
+ curId=id;curName=name||'';title=(name||'GAME GEAR').replace(/_/g,' ').replace(/\s*\(.*$/,'').replace(/\s+(Japan|USA|Europe|En|Fr|World)(\s.*)?$/i,'').toUpperCase().slice(0,26).trim()||'GAME GEAR';
+ const sr=await dbGet('sram',id);if(sr&&sr.data)GGC.sramSet(new Uint8Array(sr.data));
+ loaded=true;paused=false;crashed=false;bugCap=null;rewBuf.clear();frameN=0;led.classList.add('on');
+ applyShell();
+ const r=await dbGet('roms',id);if(r){r.last=Date.now();dbPut('roms',r);}
+ const au=await dbGet('states','auto#'+id);
+ info.textContent=title+' · GAME GEAR'+(au?' · ETATS > AUTO pour reprendre':'');
+}
 /* ---------- cartouche ---------- */
 const info=document.getElementById('info'),led=document.getElementById('led');
 function reset(){
@@ -650,19 +1055,34 @@ cgb=(bytes[0x143]&0x80)!==0;
  return true;
 }
 function ramSize(){return !ramUsable?0:mbc===2?512:(ramMask+1)*0x2000;}
-function saveRam(){if(!battery||!ramDirty||!curId)return;ramDirty=false;dbPut('sram',{id:curId,data:eram.slice(0,ramSize())});}
+function saveRam(){if(gg){if(GGC.sramDirty&&curId)dbPut('sram',{id:curId,data:GGC.sramGet()});return;}if(!battery||!ramDirty||!curId)return;ramDirty=false;dbPut('sram',{id:curId,data:eram.slice(0,ramSize())});}
 setInterval(saveRam,4000);
 setInterval(()=>{if(loaded&&!paused&&!panelOpen&&!document.hidden)autoSave();},30000);
-document.addEventListener('visibilitychange',()=>{if(gba&&G){try{if(document.hidden){G.forceAutoSaveState();G.pauseGame();gbaSync();}else if(!panelOpen&&!paused)G.resumeGame();}catch(e){}}if(document.hidden){saveRam();autoSave();if(AC)AC.suspend().catch(()=>{});}else if(AC)AC.resume().catch(()=>{});});
+/* GBA en veille : on arrête complètement le moteur (sauvegarde auto + arrêt), puis on relance le jeu au retour
+   (mGBA restaure tout seul la sauvegarde auto). Si l'écran WebGL a été perdu pendant la veille, on recharge la page
+   et on relance le jeu automatiquement. */
+let gbaSusp=null,glLost=false;
+document.getElementById('gcv').addEventListener('webglcontextlost',e=>{e.preventDefault();glLost=true;});
+function gbaSuspend(){if(!(gba&&G&&loaded)||gbaSusp)return;
+ try{G.forceAutoSaveState();}catch(e){}gbaSusp=G.filePaths().gamePath+'/'+curId+'.gba';
+ try{G.quitGame();}catch(e){}try{G.FSSync();}catch(e){}try{sessionStorage.setItem('np_resume',curId);}catch(e){}}
+function gbaWake(){if(!gbaSusp)return;const p=gbaSusp;gbaSusp=null;
+ if(glLost){location.reload();return;}
+ setTimeout(()=>{try{if(!G.loadGame(p))throw 0;G.setVolume(sound?100:0);G.setFastForwardMultiplier(fast?2:1);if(panelOpen||paused)G.pauseGame();}catch(e){location.reload();}},60);}
+addEventListener('pagehide',gbaSuspend);addEventListener('freeze',gbaSuspend);
+addEventListener('pageshow',e=>{if(e.persisted)gbaWake();});
+document.addEventListener('visibilitychange',()=>{if(gba&&G){if(document.hidden)gbaSuspend();else gbaWake();}if(document.hidden){saveRam();autoSave();if(AC)AC.suspend().catch(()=>{});}else if(AC)AC.resume().catch(()=>{});});
 addEventListener('pagehide',()=>{saveRam();autoSave();});
 
 /* ---------- états (sauvegarde instantanée / retour arrière) ---------- */
 function snap(withFb){
+ if(gg)return GGC.save();
  return{cgb,dbl,vbank,wbank,hdmaOn,hdmaSrc,hdmaDst,hdmaLeft,bgPal:bgPal.slice(),obPal:obPal.slice(),A,F,B,C,D,E,H,L,SP,PC,IME,eiP,halted,IE,IF,romBank,bankHi,ramBank,ramOn,mbcMode,divC,timA,LY,mode,ppuC,winLine,fsT,fsStep,smpT,
   vram:vram.slice(),wram:wram.slice(),oam:oam.slice(),io:io.slice(),hram:hram.slice(),eram:ramUsable?eram.slice(0,ramSize()):null,
   ch1:{...ch1},ch2:{...ch2},ch3:{...ch3},ch4:{...ch4},fb:withFb?(cgb?fbc.slice():fb.slice()):null};
 }
 function restore(s){
+ if(s.gg){if(gg)GGC.restore(s);return;}
  if(s.bgPal){({dbl,vbank,wbank,hdmaOn,hdmaSrc,hdmaDst,hdmaLeft}=s);bgPal.set(s.bgPal);obPal.set(s.obPal);}
  ({A,F,B,C,D,E,H,L,SP,PC,IME,eiP,halted,IE,IF,romBank,bankHi,ramBank,ramOn,mbcMode,divC,timA,LY,mode,ppuC,winLine,fsT,fsStep,smpT}=s);
  vram.set(s.vram);wram.set(s.wram);oam.set(s.oam);io.set(s.io);hram.set(s.hram);if(s.eram)eram.set(s.eram);
@@ -674,6 +1094,8 @@ const REW_MAX=200;
 const rewBuf={slots:[],head:0,len:0,
  clear(){this.len=0;},
  push(){let sl=this.slots[this.head];
+  if(gg){sl=this.slots[this.head]=GGC.saveInto(sl&&sl.gg?sl:null);sl.fn=frameN;this.head=(this.head+1)%REW_MAX;if(this.len<REW_MAX)this.len++;return;}
+  if(sl&&sl.gg)sl=null;
   if(!sl||sl.cgb!==cgb||(sl.eram&&!ramUsable)||(!sl.eram&&ramUsable)||(sl.eram&&sl.eram.length!==ramSize())){sl=this.slots[this.head]=snap(true);}
   else{snapInto(sl);}
   sl.fn=frameN;this.head=(this.head+1)%REW_MAX;if(this.len<REW_MAX)this.len++;},
@@ -712,7 +1134,7 @@ async function gbaInit(){
  return G;
 }
 let syncT=null;function gbaSync(){clearTimeout(syncT);syncT=setTimeout(()=>{try{G&&G.FSSync();}catch(e){}},1200);}
-function gbaStop(){if(gba&&G){try{G.forceAutoSaveState();}catch(e){}try{G.quitGame();}catch(e){}gbaSync();}gba=false;}
+function gbaStop(){try{sessionStorage.removeItem('np_resume');}catch(e){}if(gba&&G){try{G.forceAutoSaveState();}catch(e){}try{G.quitGame();}catch(e){}gbaSync();}gba=false;}
 async function startGBA(bytes,id,name){
  saveRam();autoSave();
  info.textContent='Chargement du moteur GBA…';
@@ -721,6 +1143,7 @@ async function startGBA(bytes,id,name){
  const path=G.filePaths().gamePath+'/'+id+'.gba';
  try{G.FS.stat(path);}catch(e){G.FS.writeFile(path,bytes);gbaSync();}
  if(!G.loadGame(path)){info.textContent='ROM GBA non reconnue';return;}
+ gg=false;
  gba=true;loaded=true;cgb=false;curId=id;curName=name||'';title=gbaTitle(bytes);rewBuf.clear();
  try{G.setVolume(sound?100:0);G.setFastForwardMultiplier(fast?2:1);}catch(e){}
  if(paused){paused=false;}
@@ -729,7 +1152,9 @@ async function startGBA(bytes,id,name){
  info.textContent=title+' · ADVANCE';
 }
 async function startRom(bytes,id,name){
- if(isGBA(bytes))return startGBA(bytes,id,name);
+ if(isGBA(bytes)){gg=false;return startGBA(bytes,id,name);}
+ if(isGG(bytes))return startGG(bytes,id,name);
+ gg=false;
  if(gba){gbaStop();}
  saveRam();autoSave();
  if(!insert(bytes))return;
@@ -748,7 +1173,7 @@ async function addRom(bytes,fname){
 }
 function isGBA(u){return u.length>=0xC0&&u[0xB2]===0x96&&(u[3]===0xEA||u[3]===0xEB);}
 function gbaTitle(u){let t='';for(let i=0xA0;i<0xAC;i++){const c=u[i];if(c<32||c>126)break;t+=String.fromCharCode(c);}return t.trim()||'SANS TITRE';}
-function romTitle(b){if(isGBA(b))return gbaTitle(b);let t='';for(let i=0x134;i<((b[0x143]&0x80)?0x13F:0x144);i++){const c=b[i];if(c<32||c>126)break;t+=String.fromCharCode(c);}return t.trim()||'SANS TITRE';}
+function romTitle(b){if(isGBA(b))return gbaTitle(b);if(isGG(b))return '';let t='';for(let i=0x134;i<((b[0x143]&0x80)?0x13F:0x144);i++){const c=b[i];if(c<32||c>126)break;t+=String.fromCharCode(c);}return t.trim()||'SANS TITRE';}
 const EXP_ARR=['vram','wram','oam','io','hram','eram','bgPal','obPal'];
 async function packB64(obj,arrs){
  const head=new TextEncoder().encode(JSON.stringify({...obj,lens:arrs.map(([k,v])=>[k,v.length])}));
@@ -795,7 +1220,7 @@ async function unzipFirstGB(buf){
  while(p+30<u.length&&dv.getUint32(p,true)===0x04034b50){
   const meth=dv.getUint16(p+8,true),cs=dv.getUint32(p+18,true),nl=dv.getUint16(p+26,true),xl=dv.getUint16(p+28,true);
   const name=new TextDecoder().decode(u.subarray(p+30,p+30+nl));const start=p+30+nl+xl;const data=u.subarray(start,start+cs);
-  if(/\.(gb|gbc|gba)$/i.test(name)){
+  if(/\.(gb|gbc|gba|gg)$/i.test(name)){
    if(meth===0)return data.slice();
    if(meth===8&&'DecompressionStream' in window){const ds=new DecompressionStream('deflate-raw');const out=await new Response(new Blob([data]).stream().pipeThrough(ds)).arrayBuffer();return new Uint8Array(out);}
    throw new Error('zip');
@@ -809,7 +1234,7 @@ document.getElementById('file').addEventListener('change',async e=>{
  try{let buf=await f.arrayBuffer();let bytes=new Uint8Array(buf);
   if(bytes[0]===0x50&&bytes[1]===0x4B)bytes=await unzipFirstGB(buf);
   if(bytes.length<0x150)throw new Error('court');
-  closePanel();await addRom(bytes,f.name.replace(/\.(zip|gbc?|gba)$/i,''));
+  closePanel();await addRom(bytes,f.name.replace(/\.(zip|gbc?|gba|gg)$/i,''));
  }catch(err){info.textContent=err.message==='zip'?'Archive non lisible : extrais le .gb':'Fichier non reconnu';}
  e.target.value='';
 });
@@ -841,7 +1266,7 @@ function keyName(code){if(!code)return '—';if(klabel[code])return klabel[code]
 function saveKeys(){try{localStorage.setItem('np_keys',JSON.stringify({b:kbind,l:klabel}));}catch(e){}updKeyHelp();}
 function actOf(code){for(const k in kbind)if(kbind[k]===code)return k;return null;}
 function doAct(a,on){const d=KACT.find(x=>x[0]===a);if(!d)return;
- if(d[2]){setKey(d[2],on);showDpad();}
+ if(d[2]){setKey(d[2],on);showDpad();if(d[2][0]==='b'){const e=document.getElementById(['bA','bB','bSe','bSt'][d[2][1]]);if(e&&!e.classList.contains('lock'))e.classList.toggle('on',!!on);}}
  else if(a==='l')shKey('L',on);else if(a==='r')shKey('R',on);
  else if(a==='fast'){if(on)setFast(!fast);}
  else if(a==='rew')setRew(on);}
@@ -853,7 +1278,8 @@ addEventListener('keydown',e=>{
  initAudio();const a=actOf(e.code);if(!a)return;e.preventDefault();if(e.repeat)return;doAct(a,true);});
 addEventListener('keyup',e=>{const a=actOf(e.code);if(a&&!kcap)doAct(a,false);});
 function showKeys(){openPanel('CLAVIER');pBody.innerHTML='';
- for(const[a,lab]of KACT){const row=el('div','row');const t=el('div','t',lab);t.appendChild(el('small',null,kcap===a?'APPUIE SUR UNE TOUCHE… (ECHAP = ANNULER)':keyName(kbind[a])));
+ const KL=gg?{a:'BOUTON 2 (A)',b:'BOUTON 1 (B)',select:'SELECT (GB/GBA)',l:'L (GBA)',r:'R (GBA)'}:{a:'A (GG : 2)',b:'B (GG : 1)'};
+ for(const[a,lab0]of KACT){const lab=KL[a]||lab0;const row=el('div','row');const t=el('div','t',lab);t.appendChild(el('small',null,kcap===a?'APPUIE SUR UNE TOUCHE… (ECHAP = ANNULER)':keyName(kbind[a])));
   const b=el('button','sb'+(kcap===a?' alt':''),kcap===a?'…':'CHANGER');b.onclick=()=>{kcap=a;showKeys();};row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
  const r=el('div','row');const t=el('div','t','TOUCHES PAR DEFAUT');const b=el('button','sb warn','RETABLIR');b.onclick=()=>{kbind={...KDEF};klabel={};kcap=null;saveKeys();showKeys();};r.appendChild(t);r.appendChild(b);pBody.appendChild(r);
  const back=el('button','sb alt add','RETOUR AUX REGLAGES');back.onclick=()=>{kcap=null;showOpt();};pBody.appendChild(back);
@@ -861,7 +1287,7 @@ function showKeys(){openPanel('CLAVIER');pBody.innerHTML='';
 function updKeyHelp(){const h=document.getElementById('deskHelp');if(!h)return;
  const g=a=>keyName(kbind[a]);
  const ar=kbind.up==='ArrowUp'&&kbind.down==='ArrowDown'&&kbind.left==='ArrowLeft'&&kbind.right==='ArrowRight';
- h.textContent='CLAVIER : CROIX='+(ar?'FLECHES':[g('up'),g('down'),g('left'),g('right')].join('/'))+' · A='+g('a')+' · B='+g('b')+' · START='+g('start')+' · SELECT='+g('select')+'  —  REGLAGES > CLAVIER POUR CHANGER';}
+ h.textContent='CLAVIER : CROIX='+(ar?'FLECHES':[g('up'),g('down'),g('left'),g('right')].join('/'))+(gg?' · 1='+g('b')+' · 2='+g('a')+' · START='+g('start'):' · A='+g('a')+' · B='+g('b')+' · START='+g('start')+' · SELECT='+g('select'))+'  —  REGLAGES > CLAVIER POUR CHANGER';}
 function buzz(){try{navigator.vibrate&&navigator.vibrate(8);}catch(e){}}
 const dEl=document.getElementById('dpad'),kel={U:kU,D:kD,L:kL,R:kR};
 function showDpad(){const st={R:!(joyDir&1),L:!(joyDir&2),U:!(joyDir&4),D:!(joyDir&8)};let t='';for(const k of['U','D','L','R']){kel[k].classList.toggle('on',st[k]);if(st[k]&&!t)t=k;}dEl.className=t?'t'+t:'';}
@@ -931,15 +1357,16 @@ async function showLib(){
  const add=el('label','sb add','+ AJOUTER UNE ROM');add.htmlFor='file';pBody.appendChild(add);
  const roms=(await dbAll('roms'))||[];
  if(!db)pBody.appendChild(el('div','note','Le stockage du navigateur n\'est pas disponible ici : les ROMs ne seront pas gardées.'));
- if(!roms.length)pBody.appendChild(el('div','note','Aucune ROM enregistrée. Ajoute un fichier .gb ou .zip : il sera gardé dans ce navigateur pour la prochaine fois.'));
+ if(!roms.length)pBody.appendChild(el('div','note','Aucune ROM enregistrée. Ajoute un fichier .gb, .gbc, .gba, .gg ou .zip : il sera gardé dans ce navigateur pour la prochaine fois.'));
  roms.sort((a,b)=>b.last-a.last);
  const isA=r=>isGBA(new Uint8Array(r.data,0,Math.min(0xC0,r.data.byteLength)));
  const isC=r=>!isA(r)&&(new Uint8Array(r.data,0x143,1)[0]&0x80)!==0;
- const kind=r=>isA(r)?'gba':isC(r)?'gbc':'gb';
- const nGB=roms.filter(r=>kind(r)==='gb').length,nC=roms.filter(r=>kind(r)==='gbc').length,nA=roms.length-nGB-nC;
+ const isG=r=>!isA(r)&&!isGB(new Uint8Array(r.data,0,Math.min(0x150,r.data.byteLength)));
+ const kind=r=>isA(r)?'gba':isG(r)?'gg':isC(r)?'gbc':'gb';
+ const nGB=roms.filter(r=>kind(r)==='gb').length,nC=roms.filter(r=>kind(r)==='gbc').length,nG=roms.filter(r=>kind(r)==='gg').length,nA=roms.length-nGB-nC-nG;
  if(roms.length){
   const tabs=el('div','tabs');
-  for(const[k,lbl]of[['all','TOUS ('+roms.length+')'],['gb','GB ('+nGB+')'],['gbc','COLOR ('+nC+')'],['gba','ADVANCE ('+nA+')']]){
+  for(const[k,lbl]of[['all','TOUS ('+roms.length+')'],['gb','GB ('+nGB+')'],['gbc','COLOR ('+nC+')'],['gba','ADVANCE ('+nA+')'],['gg','GAME GEAR ('+nG+')']]){
    const b=el('button','sb tab'+(libTab===k?'':' alt'),lbl);b.onclick=()=>{libTab=k;try{localStorage.setItem('np_tab',k);}catch(e){}showLib();};tabs.appendChild(b);}
   pBody.appendChild(tabs);
  }
@@ -947,7 +1374,7 @@ async function showLib(){
  if(roms.length&&!shown.length)pBody.appendChild(el('div','note','Aucun jeu dans cette catégorie.'));
  for(const r of shown){
   if(kind(r)==='gba'&&!self.crossOriginIsolated){}
-  const row=el('div','row');const t=el('div','t',r.title);t.appendChild(el('small',null,({gb:'GAME BOY · ',gbc:'COLOR · ',gba:'ADVANCE · '})[kind(r)]+(r.name||'')+' · '+Math.round(r.size/1024)+' Ko'));t.appendChild(el('small',null,'Joué le '+fmtDate(r.last)));
+  const row=el('div','row');const t=el('div','t',r.title||(r.name||'').replace(/_/g,' ').replace(/\s*\(.*$/,'').replace(/\s+(Japan|USA|Europe|En|Fr|World)(\s.*)?$/i,'').toUpperCase());t.appendChild(el('small',null,({gb:'GAME BOY · ',gbc:'COLOR · ',gba:'ADVANCE · ',gg:'GAME GEAR · '})[kind(r)]+(r.name||'')+' · '+Math.round(r.size/1024)+' Ko'));t.appendChild(el('small',null,'Joué le '+fmtDate(r.last)));
   const bs=el('div','btns');const play=el('button','sb',curId===r.id?'EN COURS':'JOUER');
   play.onclick=async()=>{closePanel();if(curId!==r.id)await startRom(new Uint8Array(r.data),r.id,r.name);};
   bs.appendChild(play);
@@ -956,7 +1383,7 @@ async function showLib(){
  }
  pBody.appendChild(el('div','note','Les ROMs restent dans ce navigateur, sur cet appareil. Rien n\'est envoyé en ligne.'));
 }
-function thumb(fbArr){const c=el('canvas','thumb');c.width=160;c.height=144;if(fbArr&&fbArr instanceof Uint16Array){const x=c.getContext('2d'),im=x.createImageData(160,144),u=new Uint32Array(im.data.buffer);for(let i=0;i<23040;i++)u[i]=LUT[fbArr[i]];x.putImageData(im,0,0);return c;}if(fbArr){const x=c.getContext('2d'),im=x.createImageData(160,144);for(let i=0,j=0;i<23040;i++,j+=4){const p=pal[fbArr[i]];im.data[j]=p[0];im.data[j+1]=p[1];im.data[j+2]=p[2];im.data[j+3]=255;}x.putImageData(im,0,0);}return c;}
+function thumb(fbArr){const c=el('canvas','thumb');c.width=160;c.height=144;if(fbArr instanceof Uint32Array){const x=c.getContext('2d'),im=x.createImageData(160,144);new Uint32Array(im.data.buffer).set(fbArr);x.putImageData(im,0,0);return c;}if(fbArr&&fbArr instanceof Uint16Array){const x=c.getContext('2d'),im=x.createImageData(160,144),u=new Uint32Array(im.data.buffer);for(let i=0;i<23040;i++)u[i]=LUT[fbArr[i]];x.putImageData(im,0,0);return c;}if(fbArr){const x=c.getContext('2d'),im=x.createImageData(160,144);for(let i=0,j=0;i<23040;i++,j+=4){const p=pal[fbArr[i]];im.data[j]=p[0];im.data[j+1]=p[1];im.data[j+2]=p[2];im.data[j+3]=255;}x.putImageData(im,0,0);}return c;}
 async function gbaThumb(){try{const n='np_thumb.png';G.screenshot(n);const p=G.filePaths().screenshotsPath+'/'+n;const d=G.FS.readFile(p);
  return await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=()=>r(null);fr.readAsDataURL(new Blob([d],{type:'image/png'}));});}catch(e){return null;}}
 async function showStatesGBA(){
@@ -985,7 +1412,7 @@ async function showStates(){
   const t=el('div','t',slot==='auto'?'AUTO':'EMPLACEMENT '+slot);t.appendChild(el('small',null,r?fmtDate(r.date):'Vide'));if(slot==='auto')t.appendChild(el('small',null,'Enregistré quand tu quittes ou changes de jeu'));
   const bs=el('div','btns');
   if(slot!=='auto'){const sv=el('button','sb','SAUVER');sv.onclick=async()=>{await saveSlot(slot);info.textContent='Etat '+slot+' sauvé';showStates();};bs.appendChild(sv);}
-  if(r&&diag){const cp=el('button','sb alt','COPIER');cp.onclick=async()=>{const t=await exportState(r.state);const row2=partButtons(t.replace(/^NEURSTATE1:/,''),'NEURSTATE1');row.after(row2);cp.remove();};bs.appendChild(cp);}
+  if(r&&diag&&!gg){const cp=el('button','sb alt','COPIER');cp.onclick=async()=>{const t=await exportState(r.state);const row2=partButtons(t.replace(/^NEURSTATE1:/,''),'NEURSTATE1');row.after(row2);cp.remove();};bs.appendChild(cp);}
   if(r){const ld=el('button','sb alt','CHARGER');ld.onclick=async()=>{await loadSlot(slot);info.textContent='Etat '+(slot==='auto'?'auto':slot)+' chargé';closePanel();};bs.appendChild(ld);}
   row.appendChild(t);row.appendChild(bs);pBody.appendChild(row);
  }
@@ -993,20 +1420,20 @@ async function showStates(){
 function showOpt(){
  openPanel('REGLAGES');pBody.innerHTML='';
  const items=[
-  (cgb||gba)&&loaded?['CHASSIS',SHELLS[shellI].n,()=>{shellI=(shellI+1)%SHELLS.length;try{localStorage.setItem('np_shell',shellI);}catch(e){}applyShell();showOpt();}]
+  gg&&loaded?null:(cgb||gba)&&loaded?['CHASSIS',SHELLS[shellI].n,()=>{shellI=(shellI+1)%SHELLS.length;try{localStorage.setItem('np_shell',shellI);}catch(e){}applyShell();showOpt();}]
    :['COULEURS',PALS_N[palI],()=>{setPal((palI+1)%PALS.length);if(loaded)blit();showOpt();}],
   ['SON',sound?'OUI':'NON',()=>{sound=!sound;initAudio();if(G)try{G.setVolume(sound?100:0);}catch(e){}showOpt();}],
   ['PAUSE',paused?'OUI':'NON',()=>{if(loaded)paused=!paused;if(gba&&G)try{paused?G.pauseGame():null;}catch(e){}showOpt();}],
   ['CLAVIER','PERSONNALISER LES TOUCHES',showKeys],
   ['MODE DIAGNOSTIC',diag?'OUI':'NON',()=>{diag=!diag;try{localStorage.setItem('np_diag',diag?'1':'0');}catch(e){}if(diag&&bugCap)info.textContent='⚠ Anomalie capturée — ETATS > ENVOYER À CLAUDE';showOpt();}],
-  ['REDEMARRER LE JEU','',()=>{if(gba&&G){try{G.quickReload();}catch(e){}closePanel();return;}if(loaded){saveRam();reset();rewBuf.clear();closePanel();}}]
+  ['REDEMARRER LE JEU','',()=>{if(gg&&loaded){GGC.reset();rewBuf.clear();closePanel();return;}if(gba&&G){try{G.quickReload();}catch(e){}closePanel();return;}if(loaded){saveRam();reset();rewBuf.clear();closePanel();}}]
  ];
- for(const[a,v,fn]of items){const row=el('div','row');const t=el('div','t',a);if(v)t.appendChild(el('small',null,v));const b=el('button','sb',v?'CHANGER':'OK');b.onclick=fn;row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
+ for(const it of items){if(!it)continue;const[a,v,fn]=it;const row=el('div','row');const t=el('div','t',a);if(v)t.appendChild(el('small',null,v));const b=el('button','sb',v?'CHANGER':'OK');b.onclick=fn;row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
  const vr=el('div','row');const vt=el('div','t','VERSION');vt.appendChild(el('small',null,'Neur Pocket '+VERSION));vt.appendChild(el('small',null,'Moteur GBA : mGBA (MPL 2.0) — '+(self.crossOriginIsolated?'disponible':'version installée uniquement')));vr.appendChild(vt);pBody.appendChild(vr);
  pBody.appendChild(el('div','note',(cgb&&loaded?'CHASSIS change la couleur de la console (jeux Game Boy Color). ':'COULEURS change les teintes de l\'écran (jeux Game Boy). ')+'Appuie entre A et B pour presser les deux à la fois.'));
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.1.0';
+const VERSION='2.2.1';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
@@ -1016,9 +1443,9 @@ const SHELLS=[
  {n:'FRAISE',s:'#de3a57',s2:'#b4243f',ink:'#fff0f3'}];
 let shellI=0;try{shellI=(+localStorage.getItem('np_shell')||0)%SHELLS.length;}catch(e){}
 function applyShell(){
- const app=document.getElementById('app'),st=app.style;app.classList.toggle('gbc',(cgb||gba)&&loaded);app.classList.toggle('gba',gba&&loaded);
+ const app=document.getElementById('app'),st=app.style;app.classList.toggle('gbc',(cgb||gba||gg)&&loaded);app.classList.toggle('gba',gba&&loaded);app.classList.toggle('gg',gg&&loaded);updKeyHelp();
  const props=['--shell','--shell2','--btn','--btnSh','--btnOn','--ink'];
- if((cgb||gba)&&loaded){const c=SHELLS[shellI];
+ if((cgb||gba||gg)&&loaded){const c=gg?{s:'#2c2c31',s2:'#1c1c20',ink:'#c9cbd6'}:SHELLS[shellI];
   st.setProperty('--shell',c.s);st.setProperty('--shell2',c.s2);st.setProperty('--btn','#34343b');st.setProperty('--btnSh','#141418');st.setProperty('--btnOn','#26262c');st.setProperty('--ink',c.ink);
   st.backgroundImage=c.glass?'repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 5px,transparent 5px 11px),radial-gradient(circle at 30% 20%,rgba(255,255,255,.35),transparent 60%),linear-gradient('+c.s+','+c.s2+')':'';
   document.querySelector('meta[name=theme-color]').content=c.s;}
@@ -1055,16 +1482,17 @@ const LUT=new Uint32Array(32768);
  const R=Math.min(255,(r*26+g*4+b*2)>>2),G=Math.min(255,(g*24+b*8)>>2),B=Math.min(255,(r*6+g*4+b*22)>>2);
  LUT[c]=le?(0xFF000000|(B<<16)|(G<<8)|R):((R<<24)|(G<<16)|(B<<8)|0xFF);}})();
 const img32=new Uint32Array(img.data.buffer);
-function blit(){if(cgb){for(let i=0;i<23040;i++)img32[i]=LUT[fbc[i]];ctx.putImageData(img,0,0);return;}
+function blit(){if(gg){img32.set(GGC.fb);ctx.putImageData(img,0,0);return;}if(cgb){for(let i=0;i<23040;i++)img32[i]=LUT[fbc[i]];ctx.putImageData(img,0,0);return;}
  const d=img.data;for(let i=0,j=0;i<23040;i++,j+=4){const c=pal[fb[i]];d[j]=c[0];d[j+1]=c[1];d[j+2]=c[2];d[j+3]=255;}ctx.putImageData(img,0,0);}
 function idleScreen(){
  ctx.fillStyle=PALS[palI][0];ctx.fillRect(0,0,160,144);ctx.fillStyle=PALS[palI][3];
  ctx.font='8px "Press Start 2P", monospace';ctx.textBaseline='top';
  const t=(s,y)=>ctx.fillText(s,80-s.length*4,y);
  t('NEUR POCKET',30);t('APPUIE SUR',70);t('« JEUX » POUR',82);t('CHOISIR UN JEU',94);
- ctx.fillStyle=PALS[palI][2];t('GB  GBC  GBA',124);
+ ctx.fillStyle=PALS[palI][2];t('GB GBC GBA GG',124);
 }
 function runFrame(){
+ if(gg){GGC.frame();return;}
  let cyc=0;
  while(cyc<70224&&!crashed){let c=step();if(PC>=0x8000&&PC<0xC000||PC>=0xFE00&&PC<0xFF80)checkPC();if(stall){c+=stall;stall=0;}tickTimer(c);const p=dbl?c>>1:c;tickPPU(p);tickAPU(p);cyc+=p;}
 }
@@ -1089,7 +1517,10 @@ function loop(ts){
 }
 document.fonts&&document.fonts.load('8px "Press Start 2P"').catch(()=>{});
 requestAnimationFrame(loop);
-openDB().then(async()=>{const r=await dbAll('roms');if(r&&r.length)showLib();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}});
+openDB().then(async()=>{const r=await dbAll('roms');
+ let rs=null;try{rs=sessionStorage.getItem('np_resume');sessionStorage.removeItem('np_resume');}catch(e){}
+ const rr=rs&&r&&r.find(x=>x.id===rs);
+ if(rr&&self.crossOriginIsolated){await startRom(new Uint8Array(rr.data),rr.id,rr.name);}else if(r&&r.length)showLib();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}});
 (function(){try{
  if(!('serviceWorker' in navigator)||/claude/.test(location.hostname))return;
  if(!(location.protocol==='https:'||/^(localhost|127\.0\.0\.1)$/.test(location.hostname)))return;

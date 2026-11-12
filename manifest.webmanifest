@@ -1,15 +1,25 @@
 {
-  "name": "Neur Pocket",
-  "short_name": "Neur Pocket",
-  "description": "Émulateur Game Boy, Game Boy Color et Game Boy Advance — Games by Neur",
-  "start_url": "./",
-  "scope": "./",
-  "display": "fullscreen",
-  "orientation": "any",
-  "background_color": "#d3d0c8",
-  "theme_color": "#d3d0c8",
-  "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
-  ]
+ "name": "Neur Pocket",
+ "short_name": "Neur Pocket",
+ "description": "Émulateur Game Boy, Game Boy Color, Game Boy Advance et Game Gear — Games by Neur",
+ "start_url": "./",
+ "scope": "./",
+ "display": "fullscreen",
+ "orientation": "any",
+ "background_color": "#d3d0c8",
+ "theme_color": "#d3d0c8",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any maskable"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
 }
