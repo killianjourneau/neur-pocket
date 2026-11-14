@@ -179,7 +179,8 @@ html.desk #app.gba #spk{right:9%;bottom:16%}
 #app.n64 #cv,#app.n64 #gcv,#app.n64 #ncv{display:none!important}#app.n64 #n64f{display:block}
 .n64b,#n64ui{display:none}#app.n64 .n64b{display:inline;font-style:italic}
 #app.n64 #dzone,#app.n64 #ab,#app.n64 #ss,#app.n64 .sh,#app.n64 #spk{display:none!important}
-#app.n64 #n64ui{display:block;position:absolute;inset:0}
+#app.n64 #n64ui{display:block;position:absolute;inset:0;pointer-events:none!important}
+#app.n64 #n64ui>*{pointer-events:auto}
 #app.n64 #bezel{background:linear-gradient(160deg,#3d3d44,#232328 60%);border-radius:10px;padding:12px 16px 28px;box-shadow:inset 0 0 0 2px #151518,0 3px 0 rgba(0,0,0,.25)}
 #app.n64 #cbrand{color:#e8e8ee;font-size:7px;bottom:9px}#app.n64 #cbrand i{font-style:italic}
 #app.n64 #led.on{background:#ff3b3b;box-shadow:0 0 6px #ff3b3b}
@@ -1993,11 +1994,12 @@ setInterval(()=>{if(loaded&&!paused&&!panelOpen&&!document.hidden)autoSave();},3
    (mGBA restaure tout seul la sauvegarde auto). Si l'écran WebGL a été perdu pendant la veille, on recharge la page
    et on relance le jeu automatiquement. */
 let gbaSusp=null,glLost=false;
-document.getElementById('gcv').addEventListener('webglcontextlost',e=>{e.preventDefault();glLost=true;});
-function gbaSuspend(){if(!(gba&&G&&loaded)||gbaSusp)return;
+document.getElementById('gcv').addEventListener('webglcontextlost',e=>{e.preventDefault();glLost=true;gdEv('contexte graphique perdu');});
+document.getElementById('gcv').addEventListener('webglcontextrestored',()=>gdEv('contexte graphique restauré'));
+function gbaSuspend(){if(!(gba&&G&&loaded)||gbaSusp)return;gdEv('mise en veille');
  try{G.forceAutoSaveState();}catch(e){}gbaSusp=G.filePaths().gamePath+'/'+curId+'.gba';
  try{G.quitGame();}catch(e){}try{G.FSSync();}catch(e){}try{sessionStorage.setItem('np_resume',curId);}catch(e){}}
-function gbaWake(){if(!gbaSusp)return;const p=gbaSusp;gbaSusp=null;
+function gbaWake(){if(!gbaSusp)return;gdEv('réveil');gdGl=null;const p=gbaSusp;gbaSusp=null;
  if(glLost){location.reload();return;}
  setTimeout(()=>{try{if(!G.loadGame(p))throw 0;gbaCb();G.setVolume(sound?100:0);G.setFastForwardMultiplier(fast?2:1);if(panelOpen||paused)G.pauseGame();}catch(e){location.reload();}},60);}
 addEventListener('pagehide',gbaSuspend);addEventListener('freeze',gbaSuspend);
@@ -2069,9 +2071,39 @@ async function gbaInit(){
  try{G.toggleInput(false);}catch(e){}
  return G;
 }
-let syncT=null;function gbaSync(){clearTimeout(syncT);syncT=setTimeout(()=>{try{G&&G.FSSync();}catch(e){}},1200);}
-function gbaCb(){try{G.addCoreCallbacks({saveDataUpdatedCallback:gbaSync,autoSaveStateCapturedCallback:gbaSync,videoFrameEndedCallback:()=>{emuF++;dispF++;}});}catch(e){}}
+let syncT=null;function gbaSync(){clearTimeout(syncT);syncT=setTimeout(()=>{const t=performance.now();try{G&&G.FSSync();}catch(e){}gdEv('ecriture disque '+Math.round(performance.now()-t)+' ms');},1200);}
+/* ---------- Diagnostic GBA : enregistre chaque seconde le nombre d'images produites par le moteur,
+   les images réellement affichées, l'image figée, les longues tâches et les événements ---------- */
+const gd={dr:0,vf:0,raf:0,lt:0,ltMax:0,fz:0,ev:[],sec:[],inc:[],t0:0,last:'',same:0};
+function gdEv(t){if(!diag||!gba)return;gd.ev.push(t);}
+let gdGl=null,gdBuf=new Uint8Array(240*160*4),gdT=0;
+function gdHook(){ // compte les images réellement dessinées à l'écran par le moteur GBA
+ try{const gl=document.getElementById('gcv').getContext('webgl2');if(!gl)return;gdGl=gl;if(gl.__np)return;gl.__np=1;
+  for(const f of['drawArrays','drawElements']){const o=gl[f].bind(gl);gl[f]=function(){const r=o.apply(null,arguments);
+   if(!gl.getParameter(gl.FRAMEBUFFER_BINDING)){gd.dr++;if(diag&&gd.dr%30===0)gdPix();}return r;};}}catch(e){}}
+function gdPix(){ // lit 3 lignes de l'image juste après son dessin, pour savoir si elle change
+ try{if(!gdGl)return;let h=0;
+  const w=gdGl.drawingBufferWidth,hh=gdGl.drawingBufferHeight;if(gdBuf.length<w*hh*4)gdBuf=new Uint8Array(w*hh*4);gdGl.readPixels(0,0,w,hh,gdGl.RGBA,gdGl.UNSIGNED_BYTE,gdBuf);for(let i=0;i<w*hh*4;i+=12)h=(h*31+gdBuf[i]+gdBuf[i+1]*7+gdBuf[i+2]*13)|0;
+  const t=performance.now();
+  if(h===gd.last){if(!gdT)gdT=t;gd.same=t-gdT;}else{if(gd.same>=1500)gd.ev.push('image figée '+(gd.same/1000).toFixed(1)+' s');gdT=0;gd.same=0;gd.last=h;}}catch(e){}}
+(function(){
+ const fr=()=>{gd.raf++;requestAnimationFrame(fr);};requestAnimationFrame(fr);
+ try{new PerformanceObserver(l=>{for(const e of l.getEntries()){gd.lt++;if(e.duration>gd.ltMax)gd.ltMax=e.duration;}}).observe({entryTypes:['longtask']});}catch(e){}
+ setInterval(()=>{const busy=paused||panelOpen||document.hidden;
+  if(!diag||!gba||!loaded){gd.vf=gd.raf=gd.lt=gd.ltMax=0;gd.ev=[];return;}
+  if(!gd.t0)gd.t0=Date.now();const s=Math.round((Date.now()-gd.t0)/1000);
+  const line=s+'s emu:'+gd.vf+' dessin:'+gd.dr+' ecran:'+gd.raf+(gd.lt?' lt:'+gd.lt+'/'+Math.round(gd.ltMax)+'ms':'')+(busy?' [pause]':'')+(gd.same>=1000?' FIGEE '+(gd.same/1000).toFixed(1)+'s':'')+(gd.ev.length?' | '+gd.ev.join(' ; '):'');
+  gd.sec.push(line);if(gd.sec.length>180)gd.sec.shift();
+  if(!busy&&(gd.vf<50||gd.dr<50||gd.raf<45||gd.ltMax>150||gd.same>=3000||gd.ev.some(e=>e.startsWith('image figée'))))
+   {gd.inc.push(line);if(gd.inc.length>60)gd.inc.shift();info.textContent='⚠ Incident noté ('+gd.inc.length+') — ETATS > RAPPORT GBA';}
+  gd.vf=gd.dr=gd.raf=gd.lt=gd.ltMax=0;gd.ev=[];},1000);
+})();
+function gdReport(){const nav=navigator.userAgent.replace(/\s+/g,' ');
+ return ['NEURDIAG GBA '+VERSION+' · '+title,nav,'ecran '+innerWidth+'x'+innerHeight+' dpr '+devicePixelRatio+' · son '+(sound?'oui':'non')+' · x2 '+(fast?'oui':'non')+' · fps '+(showFps?'oui':'non'),
+  'INCIDENTS ('+gd.inc.length+')',...gd.inc,'DERNIERES SECONDES',...gd.sec.slice(-90)].join('\n');}
+function gbaCb(){try{G.addCoreCallbacks({saveDataUpdatedCallback:()=>{gdEv('save jeu');gbaSync();},autoSaveStateCapturedCallback:()=>gdEv('autosave'),videoFrameEndedCallback:()=>{emuF++;dispF++;gd.vf++;}});gdHook();}catch(e){}}
 function gbaStop(){try{sessionStorage.removeItem('np_resume');}catch(e){}if(gba&&G){try{G.forceAutoSaveState();}catch(e){}try{G.quitGame();}catch(e){}gbaSync();}gba=false;}
+function gdReset(){gd.sec=[];gd.inc=[];gd.t0=0;gd.same=0;}
 async function startGBA(bytes,id,name){
  saveRam();autoSave();
  info.textContent='Chargement du moteur GBA…';
@@ -2080,7 +2112,7 @@ async function startGBA(bytes,id,name){
  const path=G.filePaths().gamePath+'/'+id+'.gba';
  try{G.FS.stat(path);}catch(e){G.FS.writeFile(path,bytes);gbaSync();}
  if(!G.loadGame(path)){info.textContent='ROM GBA non reconnue';return;}
- gbaCb();
+ gbaCb();gdReset();
  gg=false;
  gba=true;loaded=true;cgb=false;curId=id;curName=name||'';title=gbaTitle(bytes);rewBuf.clear();
  try{G.setVolume(sound?100:0);G.setFastForwardMultiplier(fast?2:1);}catch(e){}
@@ -2316,7 +2348,7 @@ let paused=false;
 /* ---------- panneaux ---------- */
 const panel=document.getElementById('panel'),pBody=document.getElementById('pBody'),pTitle=document.getElementById('pTitle');
 let panelOpen=false;
-function openPanel(t){pTitle.textContent=t;panel.classList.add('show');panelOpen=true;if(gba&&G)try{G.pauseGame();}catch(e){}if(n64)try{n64E().pause();}catch(e){}}
+function openPanel(t){gdEv('menu '+t);pTitle.textContent=t;panel.classList.add('show');panelOpen=true;if(gba&&G)try{G.pauseGame();}catch(e){}if(n64)try{n64E().pause();}catch(e){}}
 function closePanel(){panel.classList.remove('show');panelOpen=false;if(gba&&G&&!paused)try{G.resumeGame();}catch(e){}if(n64&&!paused)try{n64E().play();}catch(e){}}
 document.getElementById('pClose').onclick=closePanel;
 panel.addEventListener('pointerdown',e=>{if(e.target===panel)closePanel();});
@@ -2373,6 +2405,9 @@ function thumb(fbArr){const c=el('canvas','thumb');c.width=160;c.height=144;if(f
 async function gbaThumb(){try{const n='np_thumb.png';G.screenshot(n);const p=G.filePaths().screenshotsPath+'/'+n;const d=G.FS.readFile(p);
  return await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=()=>r(null);fr.readAsDataURL(new Blob([d],{type:'image/png'}));});}catch(e){return null;}}
 async function showStatesGBA(){
+ if(diag){const r=el('div','row');const t=el('div','t','RAPPORT GBA');t.appendChild(el('small',null,gd.inc.length+' ralentissement(s) noté(s) · '+gd.sec.length+' s enregistrées'));r.appendChild(t);
+  const b=el('button','sb','COPIER');b.onclick=()=>{const w=partButtons(btoa(unescape(encodeURIComponent(gdReport()))),'NEURDIAG');r.after(w);b.remove();};r.appendChild(b);pBody.appendChild(r);
+  pBody.appendChild(el('div','note','Joue jusqu\'à ce que l\'image se fige, puis ouvre ETATS et copie le rapport dans la conversation.'));}
  pBody.appendChild(el('div','note',title+' — sauvegarde instantanée, à tout moment.'));
  for(const slot of['auto',1,2,3]){
   const r=await dbGet('states',slot+'#'+curId);
@@ -2428,7 +2463,7 @@ function showOpt(){
   '2 joueurs : PeerJS 1.5.5 (MIT)'])vt.appendChild(el('small',null,l));vr.appendChild(vt);pBody.appendChild(vr);
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.8.1';
+const VERSION='2.8.2';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
