@@ -2064,7 +2064,7 @@ async function gbaInit(){
  const mod=await import('./mgba.js');
  G=await mod.default({canvas:document.getElementById('gcv')});
  await G.FSInit();
- try{G.setCoreSettings({rewindEnable:true,rewindBufferCapacity:200,rewindBufferInterval:3,audioBufferSize:2048,autoSaveStateEnable:true,restoreAutoSaveStateOnLoad:true,autoSaveStateTimerIntervalSeconds:30});}catch(e){}
+ try{G.setCoreSettings({rewindEnable:true,rewindBufferCapacity:600,rewindBufferInterval:1,autoSaveStateEnable:true,restoreAutoSaveStateOnLoad:true,autoSaveStateTimerIntervalSeconds:30});}catch(e){}
  gbaCb();
  try{G.toggleInput(false);}catch(e){}
  return G;
@@ -2428,7 +2428,7 @@ function showOpt(){
   '2 joueurs : PeerJS 1.5.5 (MIT)'])vt.appendChild(el('small',null,l));vr.appendChild(vt);pBody.appendChild(vr);
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.8.0';
+const VERSION='2.8.1';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
