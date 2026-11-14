@@ -1,7 +1,7 @@
 {
  "name": "Neur Pocket",
  "short_name": "Neur Pocket",
- "description": "Émulateur Game Boy, Game Boy Color, Game Boy Advance et Game Gear — Games by Neur",
+ "description": "Émulateur Game Boy, GBC, GBA, Game Gear, NES et Super Nintendo — Games by Neur",
  "start_url": "./",
  "scope": "./",
  "display": "fullscreen",

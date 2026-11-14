@@ -13,3 +13,10 @@ Composants tiers :
 
 Les émulateurs Game Boy et Game Boy Color sont écrits pour Neur Pocket.
 Aucune ROM n'est fournie : chaque utilisateur charge ses propres fichiers.
+
+----------------------------------------------------------------
+Moteur Super Nintendo : snes9x2005 (libretro)
+Source : https://github.com/libretro/snes9x2005 (commit a79dfe9), compilé en WebAssembly
+(snes9x.wasm) pour Neur Pocket avec une petite enveloppe d'appel.
+Licence Snes9x : utilisation et distribution gratuites, usage NON COMMERCIAL uniquement
+(voir le fichier "copyright" du dépôt source). Neur Pocket n'est pas vendu.
