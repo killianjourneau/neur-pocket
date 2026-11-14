@@ -212,6 +212,17 @@ html.desk #app.gba #spk{right:9%;bottom:16%}
 #app.land.n64 #nCU{top:calc(50% - 120px)}#app.land.n64 #nCL,#app.land.n64 #nCR{top:calc(50% - 74px)}#app.land.n64 #nCD{top:calc(50% - 28px)}
 #app.land.n64 #nB{top:calc(50% + 30px)}#app.land.n64 #nA{top:calc(50% + 56px)}
 #app.land.n64 #nZ{top:6px}#app.land.n64 #nR{top:6px}
+/* ===== Disposition des commandes ===== */
+#lay{display:none;position:fixed;left:0;right:0;top:0;z-index:60;background:rgba(30,26,46,.94);color:#fff;padding:calc(env(safe-area-inset-top) + 8px) 10px 8px;font-size:8px}
+#app.edit #lay{display:block}
+#lay .lt{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}#lay .lt b{font-size:9px;color:#ffb3cf}#lay .lt small{font-size:8px}
+#lay .lb{display:flex;gap:6px}#lay .lb .sb{flex:1;padding:9px 0;font-size:9px}
+#lay .lh{font-size:6px;line-height:1.6;color:#c9c4e6;margin-top:6px}
+#app.edit [data-lay]{outline:2px dashed rgba(255,80,140,.75);outline-offset:3px;cursor:move}
+#app.edit [data-lay].laysel{outline:3px solid #ff3b7a}
+#app.edit #pad *{transition:none!important}
+#fps{display:none;position:absolute;right:8px;top:3px;z-index:5;font-size:6px;letter-spacing:.5px;padding:2px 4px;border-radius:4px;background:rgba(0,0,0,.45);color:#8cff9c;pointer-events:none;white-space:nowrap}
+#app.showfps #fps{display:block}#fps.mid{color:#ffcf5a}#fps.low{color:#ff6b6b}
 #panel{position:fixed;inset:0;background:rgba(40,40,48,.55);display:none;align-items:center;justify-content:center;z-index:10}
 #panel.show{display:flex}
 #card{width:min(92vw,420px);max-height:86vh;overflow:auto;touch-action:pan-y;background:#e4e1d9;border-radius:12px 12px 30px 12px;box-shadow:0 6px 0 #9c998f;padding:14px;font-size:9px;color:#2b308f;box-sizing:border-box}
@@ -228,6 +239,12 @@ html.desk #app.gba #spk{right:9%;bottom:16%}
 .add{display:block;text-align:center;margin-bottom:12px;padding:12px}
 .tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .tabs .sb{flex:1;padding:8px 4px;font-size:7px}
+.tabs.sub{margin-top:-4px}.tabs.sub .sb{font-size:6px;padding:7px 3px}
+.codebig{font-size:24px;letter-spacing:8px;color:#a3214f;text-align:center;padding:16px 0 8px;user-select:text;-webkit-user-select:text}
+.codein{font:inherit;font-size:12px;width:96px;padding:8px 4px;border:2px solid #b9b6ac;border-radius:8px;text-transform:uppercase;text-align:center;letter-spacing:2px;background:#fff;color:#222;flex:none;user-select:text;-webkit-user-select:text;outline:none}
+.codein:focus{border-color:#a3214f}
+.netmsg{font-size:8px;line-height:1.7;color:#7a1238;background:#f7dfe6;border-radius:8px;padding:9px;margin-bottom:8px}
+.sec{font-size:8px;color:#4b3f86;margin:10px 2px 6px;padding-bottom:4px;border-bottom:2px solid #d9d6cc}
 .note{font-size:7px;color:#7b7d86;line-height:1.7;margin-top:6px}
 #info{font-size:7px;color:var(--ink);opacity:.75;margin-top:6px;min-height:8px;text-align:center;max-width:300px}
 #pad{position:relative;flex:1;width:100%;max-width:520px;min-height:200px}
@@ -275,7 +292,7 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
 <body>
 <div id="app">
  <div id="top">
-  <div id="bezel"><div id="led"></div><canvas id="cv" width="160" height="144"></canvas><canvas id="gcv" width="240" height="160"></canvas><canvas id="ncv" width="256" height="224"></canvas><div id="cbrand">NEUR POCKET<b class="adv"> ADVANCE</b><b class="gear"> GEAR</b><b class="nesb"> 8-BIT</b><b class="snesb"> 16-BIT</b><b class="n64b"> <i style="color:#e53935">6</i><i style="color:#1e88e5">4</i></b> <i style="color:#ff5a6e">●</i><i style="color:#ffd84a">●</i><i style="color:#6fdc6f">●</i><i style="color:#5ab4ff">●</i></div></div>
+  <div id="bezel"><div id="led"></div><div id="fps"></div><canvas id="cv" width="160" height="144"></canvas><canvas id="gcv" width="240" height="160"></canvas><canvas id="ncv" width="256" height="224"></canvas><div id="cbrand">NEUR POCKET<b class="adv"> ADVANCE</b><b class="gear"> GEAR</b><b class="nesb"> 8-BIT</b><b class="snesb"> 16-BIT</b><b class="n64b"> <i style="color:#e53935">6</i><i style="color:#1e88e5">4</i></b> <i style="color:#ff5a6e">●</i><i style="color:#ffd84a">●</i><i style="color:#6fdc6f">●</i><i style="color:#5ab4ff">●</i></div></div>
   <div id="brand">NEUR <b>POCKET</b></div>
   <div id="bar">
    <button class="tb" id="bLib">JEUX</button>
@@ -288,6 +305,9 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
   <div id="info"></div>
  </div>
  <div id="panel"><div id="card"><h2><span id="pTitle"></span><button class="sb alt" id="pClose">FERMER</button></h2><div id="pBody"></div></div></div>
+ <div id="lay"><div class="lt"><b id="layT">DISPOSITION</b><small id="laySel">Touche une commande</small></div>
+ <div class="lb"><button class="sb alt" id="layM">−</button><button class="sb alt" id="layP">+</button><button class="sb alt" id="layR">RESET</button><button class="sb warn" id="layA">TOUT</button><button class="sb" id="layOK">OK</button></div>
+ <div class="lh">Fais glisser une commande pour la déplacer. Pince à deux doigts ou −/+ pour la taille. Réglage mémorisé pour cette console et cette orientation.</div></div>
  <div id="pad">
   <div id="n64ui">
    <div id="n64stick"><div id="n64knob"></div></div>
@@ -305,6 +325,7 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
  </div>
 </div>
 <script>
+var emuF=0,dispF=0,n64Pal=false;
 'use strict';
 /* =========================================================
    NEUR POCKET — émulateur Game Boy (DMG)
@@ -1388,16 +1409,16 @@ function NESSys(o){
   }}
  // ---------- CPU 6502 ----------
  let A=0,X=0,Y=0,S=0xFD,PC=0,FC=0,FZ=1,FI=1,FD=0,FV=0,FN=0,cyc=0,stall=0;
- let pad=0,padLatch=0,strobe=0;
- function padState(){const j=o.joy();
+ let pad=0,padLatch=0,padLatch2=0,strobe=0;
+ function padState(n){const j=n?(o.joy2?o.joy2():{dir:15,btn:15}):o.joy();
   // NES : A,B,Select,Start,Haut,Bas,Gauche,Droite (1=appuyé)
   return ((~j.btn&1))|((~j.btn>>1&1)<<1)|((~j.btn>>2&1)<<2)|((~j.btn>>3&1)<<3)|((~j.dir>>2&1)<<4)|((~j.dir>>3&1)<<5)|((~j.dir>>1&1)<<6)|((~j.dir&1)<<7);}
  function cpuRead(a){
   if(a<0x2000)return ram[a&0x7FF];
   if(a<0x4000)return regR(a&7);
   if(a<0x4020){
-   if(a===0x4016){if(strobe)return 0x40|(padState()&1);const b=padLatch&1;padLatch=(padLatch>>1)|0x80;return 0x40|b;}
-   if(a===0x4017)return 0x40;
+   if(a===0x4016){if(strobe)return 0x40|(padState(0)&1);const b=padLatch&1;padLatch=(padLatch>>1)|0x80;return 0x40|b;}
+   if(a===0x4017){if(strobe)return 0x40|(padState(1)&1);const b=padLatch2&1;padLatch2=(padLatch2>>1)|0x80;return 0x40|b;}
    if(a===0x4015)return apuStatus();
    return 0;}
   if(a<0x6000)return 0;
@@ -1408,7 +1429,7 @@ function NESSys(o){
   if(a<0x4000){regW(a&7,val);return;}
   if(a<0x4020){
    if(a===0x4014){const b=val<<8;for(let i=0;i<256;i++){oam[(oamAddr+i)&0xFF]=cpuRead(b|i);}stall+=513+(cyc&1);return;}
-   if(a===0x4016){strobe=val&1;if(strobe)padLatch=padState();else padLatch=padState();return;}
+   if(a===0x4016){strobe=val&1;padLatch=padState(0);padLatch2=padState(1);return;}
    apuW(a,val);return;}
   if(a<0x6000)return;
   if(a<0x8000){wram[a&0x1FFF]=val;wramDirty=true;wramUsed=true;return;}
@@ -1552,7 +1573,7 @@ function NESSys(o){
   A=X=Y=0;S=0xFD;setP(0x24);PC=rd16(0xFFFC);lastI=1;stall=0;fb.fill(RGB[0x0F]);}
  // ---------- états ----------
  function cpuSt(){return[A,X,Y,S,PC,getP(0),cyc,lastI,stall];}
- function ppuSt(){return[ctrl,mask,pstat,oamAddr,v,t,fx,w,rbuf,openBus,scan,dot,oddF?1:0,nmiPend?1:0,nmiDelay,mirror,irqCnt,irqLatch,irqEn?1:0,irqReload?1:0,mapIrq?1:0,padLatch,strobe];}
+ function ppuSt(){return[ctrl,mask,pstat,oamAddr,v,t,fx,w,rbuf,openBus,scan,dot,oddF?1:0,nmiPend?1:0,nmiDelay,mirror,irqCnt,irqLatch,irqEn?1:0,irqReload?1:0,mapIrq?1:0,padLatch,strobe,padLatch2];}
  function apuSt(){return JSON.stringify({P,T,N,DM,f:[fcMode,fcIrqI,fcIrq?1:0,fcCyc,apuOdd]});}
  function save(){return{nes:true,cpu:cpuSt(),ppu:ppuSt(),apu:apuSt(),ram:ram.slice(),ciram:ciram.slice(),pal:pal.slice(),oam:oam.slice(),
   mreg:mreg.slice(),chr:chrRam?chr.slice():null,wram:wram.slice(),fb:fb.slice()};}
@@ -1561,7 +1582,7 @@ function NESSys(o){
   if(s.chr)s.chr.set(chr);s.wram.set(wram);s.fb.set(fb);return s;}
  function restore(s){
   let p;[A,X,Y,S,PC,p,cyc,lastI,stall]=s.cpu;setP(p);
-  let of,np,ie,ir,mi;[ctrl,mask,pstat,oamAddr,v,t,fx,w,rbuf,openBus,scan,dot,of,np,nmiDelay,mirror,irqCnt,irqLatch,ie,ir,mi,padLatch,strobe]=s.ppu;
+  let of,np,ie,ir,mi;[ctrl,mask,pstat,oamAddr,v,t,fx,w,rbuf,openBus,scan,dot,of,np,nmiDelay,mirror,irqCnt,irqLatch,ie,ir,mi,padLatch,strobe,padLatch2]=s.ppu;padLatch2=padLatch2||0;
   oddF=!!of;nmiPend=!!np;irqEn=!!ie;irqReload=!!ir;mapIrq=!!mi;
   const a=JSON.parse(s.apu);Object.assign(P[0],a.P[0]);Object.assign(P[1],a.P[1]);Object.assign(T,a.T);Object.assign(N,a.N);Object.assign(DM,a.DM);
   [fcMode,fcIrqI,fcIrq,fcCyc,apuOdd]=a.f;fcIrq=!!fcIrq;
@@ -1570,10 +1591,12 @@ function NESSys(o){
  return{load,reset,frame,fb,save,saveInto,restore,
   get battery(){return battery;},get sramDirty(){return wramDirty&&battery;},sramGet(){wramDirty=false;return wram.slice();},sramSet(d){wram.set(d.subarray(0,0x2000));},
   get mapper(){return mapper;},
+  hash(){let h=(A|(X<<8)|(Y<<16)|(S<<24))^PC;for(let i=0;i<0x800;i++)h=(Math.imul(h,31)+ram[i])|0;for(let i=0;i<256;i+=4)h=(Math.imul(h,31)+oam[i])|0;return h;},
   dbg:{get PC(){return PC;},set PC(x){PC=x;},regs:()=>({A,X,Y,S,P:getP(0),PC,cyc}),step,rd,ppu:()=>({scan,dot})}};
 }
 let nes=false;
-const NESC=NESSys({joy:()=>({dir:joyDir,btn:joyBtn}),sample:s=>pushSample(s),rate:()=>AC?AC.sampleRate:0});
+let netOn=false,netP1=0xFF,netP2=0xFF;
+const NESC=NESSys({joy:()=>netOn?{dir:netP1&15,btn:netP1>>4}:{dir:joyDir,btn:joyBtn},joy2:()=>netOn?{dir:netP2&15,btn:netP2>>4}:{dir:15,btn:15},sample:s=>pushSample(s),rate:()=>AC?AC.sampleRate:0});
 function isNES(u){return u.length>=16&&u[0]===0x4E&&u[1]===0x45&&u[2]===0x53&&u[3]===0x1A;}
 function cleanName(n){return (n||'').replace(/_/g,' ').replace(/\s*\(.*$/,'').replace(/\s+(Japan|USA|Europe|En|Fr|World)(\s.*)?$/i,'').toUpperCase().slice(0,26).trim();}
 async function startNES(bytes,id,name){
@@ -1587,6 +1610,166 @@ async function startNES(bytes,id,name){
  const r=await dbGet('roms',id);if(r){r.last=Date.now();dbPut('roms',r);}
  const au=await dbGet('states','auto#'+id);
  info.textContent=title+' · NES'+(au?' · ETATS > AUTO pour reprendre':'');
+}
+/* ---------- 2 joueurs en ligne (NES) ----------
+   Connexion directe entre les deux appareils (WebRTC, mise en relation par PeerJS, licence MIT).
+   Les deux machines font tourner le même jeu à l'identique : seules les touches sont échangées,
+   avec un petit délai commun (netD images) pour que chacun reçoive celles de l'autre à temps.
+   Une somme de contrôle est comparée chaque seconde ; en cas d'écart, l'hôte renvoie son état. */
+const NET_PROTO=1,NM=1023,NET_ALPHA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+let netPeer=null,netConn=null,netConnOpen=false,netOpen=false,netRole=null,netCode='',netState='off',netMsg='',netJoining=false,netFirst=false;
+let netRunN=0,netStallN=0,netQ=100,netQr=100,netBad=0,netDauto=0,netAdv=0,netSkipF=0;
+let netEpoch=0,netD=3,netDman=0,netF=0,netLMax=0,netRMax=0,netAcc=0,netStallT=0,netRtt=0,netLastRx=0,netRxE=-1,netRxParts=null,netLastSync=0,netResyncs=0;
+const netL=new Uint8Array(NM+1),netR=new Uint8Array(NM+1),netRF=new Int32Array(NM+1).fill(-1),netCk=new Map(),netCkR=new Map();
+function netB64(u){let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s);}
+function netUnB64(b){const s=atob(b),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u;}
+function netPack(o){const out={};for(const k in o){const v=o[k];if(k==='fb')continue;
+ if(v&&v.buffer instanceof ArrayBuffer)out[k]={T:v.constructor.name,b:netB64(new Uint8Array(v.buffer,v.byteOffset,v.byteLength))};else out[k]=v;}return JSON.stringify(out);}
+function netUnpack(s){const o=JSON.parse(s),TA={Uint8Array,Int32Array,Uint16Array,Uint32Array};
+ for(const k in o){const v=o[k];if(v&&typeof v==='object'&&TA[v.T]&&typeof v.b==='string')o[k]=new TA[v.T](netUnB64(v.b).buffer);}return o;}
+function netLoadLib(){return new Promise((res,rej)=>{if(self.Peer)return res();const s=document.createElement('script');s.src='./peerjs.min.js';s.onload=()=>self.Peer?res():rej();s.onerror=()=>rej();document.head.appendChild(s);});}
+function netPeerOpts(){let o={debug:0};try{const j=JSON.parse(localStorage.getItem('np_peer')||'null');if(j)o=Object.assign(o,j);}catch(e){}return o;}
+function netErr(e){const t=e&&e.type;
+ if(t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed')return 'Service de mise en relation injoignable. Vérifie ta connexion Internet et réessaie.';
+ if(t==='browser-incompatible')return 'Ce navigateur ne permet pas la connexion directe.';
+ return 'Erreur de connexion'+(t?' ('+t+')':'')+'.';}
+function netSend(o){try{if(netConn&&netConnOpen){if(self.__netlag){const c=netConn;setTimeout(()=>{try{c.send(o);}catch(e){}},self.__netlag[0]+Math.random()*self.__netlag[1]);}else netConn.send(o);}}catch(e){}}
+function netLabel(){return title+' · 2 JOUEURS · TU ES J'+(netRole==='host'?1:2);}
+function showNetIf(){if(panelOpen&&pTitle.textContent==='2 JOUEURS')showNet();}
+function netStop(){
+ try{if(netConn&&netConnOpen)netConn.send({t:'bye'});}catch(e){}
+ const c=netConn,p=netPeer;netConn=null;netPeer=null;netConnOpen=false;netOpen=false;netOn=false;netState='off';netRole=null;netRxE=-1;netRxParts=null;netRtt=0;netFirst=false;netDauto=0;netQ=netQr=100;
+ setTimeout(()=>{try{c&&c.close();}catch(e){}try{p&&p.destroy();}catch(e){}},200);}
+function netLost(msg){if(!netPeer&&!netConn)return;const was=netOn;netStop();netMsg=msg;info.textContent=msg+(was?' Tu continues en solo.':'');showNetIf();}
+async function netHost(){
+ if(!(nes&&loaded)){netMsg='Lance d\'abord un jeu NES.';showNet();return;}
+ netStop();
+ try{await netLoadLib();}catch(e){netMsg='Module 2 joueurs introuvable (fichier peerjs.min.js manquant).';showNet();return;}
+ netRole='host';netState='wait';netMsg='';
+ const mk=()=>{netCode='';for(let i=0;i<5;i++)netCode+=NET_ALPHA[Math.random()*32|0];
+  const p=new Peer('neurpocket-'+netCode,netPeerOpts());netPeer=p;netOpen=false;
+  p.on('open',()=>{if(netPeer===p){netOpen=true;showNetIf();}});
+  p.on('connection',c=>{if(netPeer!==p)return;if(netConn){c.on('open',()=>{try{c.send({t:'full'});}catch(e){}setTimeout(()=>{try{c.close();}catch(e){}},300);});return;}netAttach(c);});
+  p.on('error',e=>{if(netPeer!==p)return;if(e&&e.type==='unavailable-id'){try{p.destroy();}catch(_){}mk();return;}
+   if(netState==='wait'&&!netConn){const m=netErr(e);netStop();netMsg=m;showNetIf();}});
+  p.on('disconnected',()=>{if(netPeer===p&&netState==='wait'){try{p.reconnect();}catch(_){}}});
+ };mk();showNet();}
+async function netJoin(code){
+ code=(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(code.length<5){netMsg='Code incomplet : il fait 5 caractères.';showNet();return;}
+ netStop();
+ try{await netLoadLib();}catch(e){netMsg='Module 2 joueurs introuvable (fichier peerjs.min.js manquant).';showNet();return;}
+ netRole='guest';netState='hand';netCode=code;netMsg='';
+ const p=new Peer('neurpocket-g-'+Math.random().toString(36).slice(2,10)+Date.now().toString(36),netPeerOpts());netPeer=p;
+ p.on('open',()=>{if(netPeer!==p)return;netAttach(p.connect('neurpocket-'+code,{reliable:false,serialization:'json'}));});
+ p.on('error',e=>{if(netPeer!==p||netOn)return;const m=e&&e.type==='peer-unavailable'?'Code introuvable. Vérifie le code avec ton ami.':netErr(e);netStop();netMsg=m;showNetIf();});
+ showNet();
+ setTimeout(()=>{if(netPeer===p&&!netConnOpen){netStop();netMsg='Connexion impossible. Réessaie, ou change de réseau (Wi-Fi / 4G).';showNetIf();}},25000);}
+function netAttach(c){netConn=c;netConnOpen=false;
+ c.on('open',()=>{if(netConn!==c)return;netConnOpen=true;netLastRx=performance.now();
+  if(netRole==='guest')netSend({t:'hi',v:NET_PROTO});else netState='hand';
+  for(const d of[0,150,300,600])setTimeout(()=>netSend({t:'pg',s:performance.now()}),d);showNetIf();});
+ c.on('data',d=>{if(netConn===c)netRecv(d);});
+ c.on('close',()=>{if(netConn===c)netLost('Le joueur '+(netRole==='host'?2:1)+' a quitté la partie.');});
+ c.on('error',()=>{if(netConn===c)netLost('Connexion perdue.');});}
+setInterval(()=>{if(!netConnOpen)return;
+ if(netOn&&netState==='run'&&!paused&&!panelOpen){const t=netRunN+netStallN;if(t>30){netQ=Math.round(100*netRunN/t);netRunN=0;netStallN=0;}}
+ netSend({t:'pg',s:performance.now(),q:netQ});
+ // délai automatique : si les deux côtés saccadent, l'hôte ajoute une image de délai
+ if(netRole==='host'&&netOn&&netState==='run'&&!netDman&&!paused&&!panelOpen){if(netQ<96&&netQr<96)netBad++;else netBad=0;
+  if(netBad>=4&&netD<12&&performance.now()-netLastSync>6000){netBad=0;netDauto=netD+1;netSync();}}
+},1000);
+addEventListener('pagehide',()=>{if(netConnOpen)netSend({t:'bye'});});
+function netAutoD(){const r=netRtt||60;return Math.min(12,Math.max(netDauto,2,Math.ceil((r/2+10)/FRAME)+1));}
+function netReset(){netF=0;netRF.fill(-1);for(let g=0;g<netD;g++){netL[g]=0xFF;netR[g]=0xFF;netRF[g]=g;}netLMax=netD-1;netRMax=netD-1;netCk.clear();netCkR.clear();netAcc=0;netStallT=0;netRunN=0;netStallN=0;netQ=100;netBad=0;netAdv=0;netSkipF=0;rewBuf.clear();}
+function netSync(){ // hôte : envoie son état, les deux repartent de l'image 0
+ if(netRole!=='host'||!netConnOpen||!nes)return;
+ netLastSync=performance.now();netEpoch++;netState='sync';if(!netDman)netD=netAutoD();else netD=netDman;
+ const s=netPack(NESC.save());NESC.restore(netUnpack(s));netOn=true;netReset();
+ const n=Math.ceil(s.length/12000);for(let i=0;i<n;i++)netSend({t:'st',e:netEpoch,i,n,D:netD,d:s.substr(i*12000,12000)});}
+function netRunStart(){info.textContent=netLabel();blit();
+ if(!netFirst){netFirst=true;if(panelOpen&&pTitle.textContent==='2 JOUEURS')closePanel();const p=netPeer;setTimeout(()=>{try{if(netPeer===p&&netOn&&!p.disconnected)p.disconnect();}catch(e){}},4000);}
+ else showNetIf();}
+function netGuestState(m){
+ if(m.e<netRxE)return;if(m.e>netRxE){netRxE=m.e;netRxParts=new Array(m.n).fill(null);if(netOn)netState='sync';}
+ if(!netRxParts)return;netRxParts[m.i]=m.d;if(netRxParts.some(x=>x===null))return;
+ const s=netRxParts.join('');netRxParts=null;
+ try{NESC.restore(netUnpack(s));}catch(e){netLost('Synchronisation impossible.');return;}
+ netEpoch=m.e;netD=m.D|0;if(fast)setFast(false);netOn=true;netReset();netState='run';netSend({t:'ok',e:netEpoch});netRunStart();}
+async function netGuestGame(m){
+ const r=await dbGet('roms',m.rom);
+ if(!r||!isNES(new Uint8Array(r.data,0,16))){netSend({t:'norom'});const msg='Tu n\'as pas le jeu « '+m.title+' ». Ajoute exactement le même fichier ROM dans MES JEUX, puis réessaie.';setTimeout(()=>{netStop();netMsg=msg;showNetIf();},400);return;}
+ netJoining=true;try{if(!(nes&&loaded&&curId===m.rom))await startRom(new Uint8Array(r.data),r.id,r.name);}finally{netJoining=false;}
+ if(!(nes&&curId===m.rom)){netStop();netMsg='Impossible de lancer le jeu.';showNetIf();return;}
+ netSend({t:'rdy'});}
+function netDesync(){netResyncs++;if(netRole==='host'){if(performance.now()-netLastSync>1000)netSync();}else netSend({t:'rq'});}
+function netRecv(m){if(!m||typeof m!=='object')return;netLastRx=performance.now();
+ switch(m.t){
+ case 'i':if(m.e===netEpoch&&netOn&&Array.isArray(m.a)){const a=m.a,f0=m.f-a.length+1;
+   if(typeof m.c==='number'){const adv=netF-(m.c+(netRtt/2)/FRAME);netAdv=netAdv*0.9+adv*0.1;} // avance (en images) sur l'autre joueur
+   for(let k=0;k<a.length;k++){const g=f0+k;if(g>netRMax&&g<netF+NM-16&&netRF[g&NM]!==g){netRF[g&NM]=g;netR[g&NM]=a[k]&0xFF;}}
+   while(netRF[(netRMax+1)&NM]===netRMax+1)netRMax++;}break;
+ case 'ck':if(m.e===netEpoch&&netOn){if(netCk.has(m.f)){const h=netCk.get(m.f);netCk.delete(m.f);if(h!==m.h)netDesync();}else{netCkR.set(m.f,m.h);if(netCkR.size>30)netCkR.delete(netCkR.keys().next().value);}}break;
+ case 'pg':if(typeof m.q==='number')netQr=m.q;netSend({t:'po',s:m.s});break;
+ case 'po':{const r=performance.now()-m.s;if(r>=0&&r<5000)netRtt=netRtt?netRtt*0.7+r*0.3:r;}break;
+ case 'hi':if(netRole==='host'){if(m.v!==NET_PROTO){netSend({t:'ver'});break;}if(!(nes&&loaded)){netSend({t:'bye'});break;}netSend({t:'game',rom:curId,title});}break;
+ case 'game':if(netRole==='guest')netGuestGame(m);break;
+ case 'rdy':if(netRole==='host'&&nes&&loaded){if(fast)setFast(false);netResyncs=0;netSync();}break;
+ case 'st':if(netRole==='guest')netGuestState(m);break;
+ case 'ok':if(netRole==='host'&&m.e===netEpoch&&netState==='sync'){netState='run';netRunStart();}break;
+ case 'rq':if(netRole==='host'&&performance.now()-netLastSync>1000)netSync();break;
+ case 'norom':if(netRole==='host'){const c=netConn;netConn=null;netConnOpen=false;netState='wait';setTimeout(()=>{try{c&&c.close();}catch(e){}},300);netMsg='Le joueur 2 n\'a pas le même fichier ROM dans MES JEUX. Le code reste valable.';showNetIf();}break;
+ case 'full':netStop();netMsg='Cette partie a déjà deux joueurs.';showNetIf();break;
+ case 'ver':netStop();netMsg='Les deux Neur Pocket n\'ont pas la même version. Mettez-les à jour.';showNetIf();break;
+ case 'bye':netLost('Le joueur '+(netRole==='host'?2:1)+' a quitté la partie.');break;
+ }}
+function netSendIn(){const n=Math.min(12,netLMax+1),a=new Array(n);for(let k=0;k<n;k++)a[k]=netL[(netLMax-n+1+k)&NM];netSend({t:'i',e:netEpoch,f:netLMax,c:netF,a});}
+function netStep(){
+ const cur=(joyDir&0xF)|((joyBtn&0xF)<<4);let ns=false;
+ while(netLMax<netF+netD){netLMax++;netL[netLMax&NM]=cur;ns=true;}
+ if(ns)netSendIn();
+ if(netRMax<netF)return false; // les touches de l'autre joueur pour cette image ne sont pas encore arrivées
+ const l=netL[netF&NM],r=netR[netF&NM];
+ if(netRole==='host'){netP1=l;netP2=r;}else{netP1=r;netP2=l;}
+ NESC.frame();frameN++;netF++;emuF++;
+ if(netF%60===0){const h=NESC.hash(),f=netF;netSend({t:'ck',e:netEpoch,f,h});if(self.__netlog)self.__netlog.push(netEpoch+':'+f+':'+h);
+  if(netCkR.has(f)){const o=netCkR.get(f);netCkR.delete(f);if(o!==h)netDesync();}else{netCk.set(f,h);if(netCk.size>30)netCk.delete(netCk.keys().next().value);}}
+ return true;}
+function netTick(dt){
+ if(netState!=='run'||paused||panelOpen){apos=0;netAcc=0;return;}
+ netAcc+=dt;let ran=0,tries=0;
+ if(netAdv>1.2&&netF-netSkipF>10&&netAcc>=FRAME){netAcc-=FRAME;netSkipF=netF;netAdv-=1;} // en avance sur l'autre : on laisse passer une image pour rester alignés
+ while(netAcc>=FRAME&&tries<3){tries++;if(!netStep())break;netAcc-=FRAME;ran++;flushAudio();}
+ if(ran&&netOn&&netRMax-netF>netD&&netStep()){ran++;flushAudio();} // en retard sur l'autre : on rattrape une image
+ if(netAcc>FRAME*2)netAcc=FRAME*2;
+ if(ran){netRunN+=ran;if(netStallT>600)info.textContent=netLabel();netStallT=0;blit();}
+ else if(tries){netStallN++;apos=0;netStallT+=dt;if(netStallT>600)info.textContent='En attente de l\'autre joueur…';
+  if(performance.now()-netLastRx>60000)netLost('Connexion perdue.');}
+}
+function showNet(){
+ openPanel('2 JOUEURS');pBody.innerHTML='';
+ const row=(a,sm)=>{const r=el('div','row'),t=el('div','t',a);if(sm)t.appendChild(el('small',null,sm));r.appendChild(t);pBody.appendChild(r);return r;};
+ const btn=(r,lbl,fn,cls)=>{const b=el('button','sb'+(cls?' '+cls:''),lbl);b.onclick=fn;r.appendChild(b);return b;};
+ if(netMsg)pBody.appendChild(el('div','netmsg',netMsg));
+ if(/claude/.test(location.hostname)||!self.RTCPeerConnection){pBody.appendChild(el('div','note','Le mode 2 joueurs relie directement les deux appareils. Il fonctionne dans la version installée (GitHub), pas sur cette page.'));return;}
+ if(netState==='off'){
+  const ok=nes&&loaded;
+  const r1=row('CREER UNE PARTIE',ok?title+' · tu seras le joueur 1':'Lance d\'abord un jeu NES depuis JEUX');btn(r1,'CREER',()=>{netMsg='';netHost();},ok?'':'alt');
+  const r2=row('REJOINDRE','Tape le code donné par ton ami');const inp=el('input','codein');inp.maxLength=5;inp.placeholder='CODE';inp.autocapitalize='characters';inp.autocomplete='off';inp.spellcheck=false;r2.appendChild(inp);
+  const go=()=>{netMsg='';netJoin(inp.value);};btn(r2,'OK',go);inp.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+  pBody.appendChild(el('div','note','Jeu à deux en ligne pour la NES, chacun sur son appareil (téléphone ou ordinateur). Les deux joueurs doivent avoir exactement le même fichier ROM dans MES JEUX. Seules les touches passent par Internet, jamais le jeu.'));
+ }else if(netState==='wait'){
+  pBody.appendChild(el('div','codebig',netOpen?netCode:'· · ·'));
+  pBody.appendChild(el('div','note',netOpen?'Donne ce code à ton ami. Chez lui : REGLAGES > 2 JOUEURS > REJOINDRE. La partie démarre dès qu\'il est connecté.':'Création de la partie…'));
+  const r=row('EN ATTENTE DU JOUEUR 2',title);btn(r,'ANNULER',()=>{netStop();netMsg='';showNet();},'alt');
+ }else if(netState!=='run'&&!netFirst){
+  const r=row('CONNEXION EN COURS…',netRole==='guest'?'Code '+netCode:'Joueur 2 trouvé');btn(r,'ANNULER',()=>{netStop();netMsg='';showNet();},'alt');
+ }else{
+  row('CONNECTE','Tu es le joueur '+(netRole==='host'?1:2)+' · '+title);
+  row('LIAISON','Ping '+Math.round(netRtt)+' ms · délai des touches : '+netD+' images ('+Math.round(netD*FRAME)+' ms) · fluidité '+Math.min(netQ,netQr)+' %'+(netResyncs?' · '+netResyncs+' resynchro.':''));
+  if(netRole==='host'){const r=row('DELAI DES TOUCHES',netDman?netDman+' IMAGES':'AUTO');btn(r,'CHANGER',()=>{netDman=netDman?(netDman>=12?0:netDman+1):2;netSync();showNet();});}
+  const r=row('QUITTER LA PARTIE','Chacun continue seul de son côté');btn(r,'QUITTER',()=>{netStop();netMsg='Partie à 2 terminée.';info.textContent=title+' · NES';showNet();},'warn');
+  pBody.appendChild(el('div','note','Tant que ce menu est ouvert, le jeu est en pause pour les deux joueurs. Un délai plus petit rend les touches plus réactives ; s\'il y a des saccades, augmente-le.'));
+ }
 }
 /* ---------- Super Nintendo : cœur libretro snes9x2005 compilé en WebAssembly (snes9x.wasm) ---------- */
 let snes=false,SN=null,snesPal=false,palCnt=0,snesRs=0,snesRom=null,snesSramSum=-1,snesRate=32040;
@@ -1679,6 +1862,7 @@ function n64Stop(){if(n64f){if(n64ready){n64SaveRam();try{const g=n64gm(),st=g.g
 async function startN64(bytes,id,name){
  if(gba)gbaStop();saveRam();autoSave();n64Stop();
  n64=true;nes=false;gg=false;snes=false;cgb=false;ramUsable=false;battery=false;n64st={};n64SramSum=0;
+ {const x=bytes[0]===0x37?1:bytes[0]===0x40?3:0,c=String.fromCharCode(bytes[0x3E^x]);n64Pal='DFIPSUXY'.includes(c);}
  curId=id;curName=name||'';title=(n64Title(bytes)||cleanName(name)||'NINTENDO 64').toUpperCase().slice(0,26);
  loaded=true;paused=false;crashed=false;bugCap=null;rewBuf.clear();frameN=0;led.classList.add('on');
  const f=document.createElement('iframe');f.id='n64f';f.src='n64.html';f.setAttribute('allow','autoplay; gamepad; fullscreen');f.setAttribute('tabindex','-1');
@@ -1833,7 +2017,7 @@ async function gbaInit(){
  G=await mod.default({canvas:document.getElementById('gcv')});
  await G.FSInit();
  try{G.setCoreSettings({rewindEnable:true,rewindBufferCapacity:600,rewindBufferInterval:1,autoSaveStateEnable:true,restoreAutoSaveStateOnLoad:true,autoSaveStateTimerIntervalSeconds:30});}catch(e){}
- try{G.addCoreCallbacks({saveDataUpdatedCallback:gbaSync,autoSaveStateCapturedCallback:gbaSync});}catch(e){}
+ try{G.addCoreCallbacks({saveDataUpdatedCallback:gbaSync,autoSaveStateCapturedCallback:gbaSync,videoFrameEndedCallback:()=>{emuF++;dispF++;}});}catch(e){}
  try{G.toggleInput(false);}catch(e){}
  return G;
 }
@@ -1856,6 +2040,7 @@ async function startGBA(bytes,id,name){
  info.textContent=title+' · ADVANCE';
 }
 async function startRom(bytes,id,name){
+ if((netPeer||netConn)&&!netJoining){netStop();netMsg='';}
  if(isN64(bytes))return startN64(bytes,id,name);
  if(n64){n64Stop();n64=false;}
  if(isGBA(bytes)){gg=false;nes=false;snes=false;return startGBA(bytes,id,name);}
@@ -1918,8 +2103,9 @@ async function saveSlot(slot){
 }
 function autoSave(){if(loaded&&curId&&frameN>60)saveSlot('auto');}
 async function loadSlot(slot){
+ if(netOn&&netRole!=='host'){info.textContent='A 2 joueurs, seul le joueur 1 peut charger un état';return false;}
  const r=await dbGet('states',slot+'#'+curId);if(!r)return false;
- restore(r.state);crashed=false;stall=0;rewBuf.clear();blit();return true;
+ restore(r.state);crashed=false;stall=0;rewBuf.clear();blit();if(netOn)netSync();return true;
 }
 
 // lecture ZIP minimal (stocké / deflate via DecompressionStream)
@@ -1986,12 +2172,13 @@ function doAct(a,on){const d=KACT.find(x=>x[0]===a);if(!d)return;
  else if(a==='fast'){if(on)setFast(!fast);}
  else if(a==='rew')setRew(on);}
 addEventListener('keydown',e=>{
+ if(e.target&&e.target.tagName==='INPUT')return;
  if(kcap){e.preventDefault();if(e.code==='Escape'){kcap=null;showKeys();return;}
   const old=actOf(e.code);if(old&&old!==kcap)kbind[old]=null;kbind[kcap]=e.code;
   if(e.key&&e.key.length===1&&e.key!==' ')klabel[e.code]=e.key.toUpperCase();
   kcap=null;saveKeys();showKeys();return;}
  initAudio();const a=actOf(e.code);if(!a)return;e.preventDefault();if(e.repeat)return;doAct(a,true);});
-addEventListener('keyup',e=>{const a=actOf(e.code);if(a&&!kcap)doAct(a,false);});
+addEventListener('keyup',e=>{if(e.target&&e.target.tagName==='INPUT')return;const a=actOf(e.code);if(a&&!kcap)doAct(a,false);});
 function showKeys(){openPanel('CLAVIER');pBody.innerHTML='';
  const KL=gg?{a:'BOUTON 2 (A)',b:'BOUTON 1 (B)',select:'SELECT (GB/GBA)',l:'L (GBA)',r:'R (GBA)'}:{a:'A (GG : 2)',b:'B (GG : 1)'};
  for(const[a,lab0]of KACT){const lab=KL[a]||lab0;const row=el('div','row');const t=el('div','t',lab);t.appendChild(el('small',null,kcap===a?'APPUIE SUR UNE TOUCHE… (ECHAP = ANNULER)':keyName(kbind[a])));
@@ -2030,17 +2217,17 @@ function showDpad(){const st={R:!(joyDir&1),L:!(joyDir&2),U:!(joyDir&4),D:!(joyD
 })();
 (function(){const zone=document.getElementById('ab');const ptr=new Map();
  const SNB=[['a','bA'],['b','bB'],['x','bX'],['y','bY']],ADJ={ax:1,xa:1,ab:1,ba:1,by:1,yb:1,yx:1,xy:1};
- function hitSnes(e){const zr=zone.getBoundingClientRect();const r={a:0,b:0,x:0,y:0};
-  const d=SNB.map(([k,id])=>{const el=document.getElementById(id);return[k,Math.hypot(e.clientX-(zr.left+el.offsetLeft+el.offsetWidth/2),e.clientY-(zr.top+el.offsetTop+el.offsetHeight/2))];}).sort((p,q)=>p[1]-q[1]);
+ function hitSnes(e){const zr=zone.getBoundingClientRect(),k=zr.width/(zone.offsetWidth||1);const r={a:0,b:0,x:0,y:0};
+  const d=SNB.map(([q,id])=>{const el=document.getElementById(id);return[q,Math.hypot(e.clientX-(zr.left+(el.offsetLeft+el.offsetWidth/2)*k),e.clientY-(zr.top+(el.offsetTop+el.offsetHeight/2)*k))/k];}).sort((p,q)=>p[1]-q[1]);
   const[i,di]=d[0],[j,dj]=d[1];
   if(combos&&ADJ[i+j]&&dj-di<18&&di<64){r[i]=1;r[j]=1;}else if(di<(combos?48:58))r[i]=1;return r;}
  function hit(e){
   if(snes)return hitSnes(e);
   // Axe B -> A : début = B, fin = A, tiers central = A+B (un seul pouce)
-  const zr=zone.getBoundingClientRect();
-  const ax=zr.left+bA.offsetLeft+30,ay=zr.top+bA.offsetTop+30,bx=zr.left+bB.offsetLeft+30,by=zr.top+bB.offsetTop+30;
+  const zr=zone.getBoundingClientRect(),k=zr.width/(zone.offsetWidth||1);
+  const ax=zr.left+(bA.offsetLeft+30)*k,ay=zr.top+(bA.offsetTop+30)*k,bx=zr.left+(bB.offsetLeft+30)*k,by=zr.top+(bB.offsetTop+30)*k;
   const vx=ax-bx,vy=ay-by,L=Math.hypot(vx,vy),px=e.clientX-bx,py=e.clientY-by;
-  const t=(px*vx+py*vy)/(L*L),perp=Math.abs(px*vy-py*vx)/L,Rr=52;
+  const t=(px*vx+py*vy)/(L*L),perp=Math.abs(px*vy-py*vx)/L,Rr=52*k;
   if(t<0)return{a:0,b:Math.hypot(px,py)<Rr?1:0};
   if(t>1)return{a:Math.hypot(e.clientX-ax,e.clientY-ay)<Rr?1:0,b:0};
   if(perp>Rr)return{a:0,b:0};
@@ -2085,7 +2272,11 @@ panel.addEventListener('pointerdown',e=>{if(e.target===panel)closePanel();});
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
 function fmtDate(t){const d=new Date(t);return d.toLocaleDateString('fr-FR')+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
 function confirmBtn(label,fn){const b=el('button','sb warn',label);let armed=false;b.onclick=()=>{if(!armed){armed=true;b.textContent='SUR ?';setTimeout(()=>{armed=false;b.textContent=label;},2500);}else fn();};return b;}
-let libTab='all';try{libTab=localStorage.getItem('np_tab')||'all';}catch(e){}
+let libTab='all',libSub='all';try{libTab=localStorage.getItem('np_tab')||'all';libSub=localStorage.getItem('np_sub')||'all';}catch(e){}
+const LIBCAT={port:['gb','gbc','gba','gg'],home:['nes','snes','n64']};
+const LIBNAME={gb:'GAME BOY',gbc:'COLOR',gba:'ADVANCE',gg:'GAME GEAR',nes:'NES',snes:'SUPER NES',n64:'N64'};
+if(!['all','port','home'].includes(libTab)){libSub=libTab;libTab=LIBCAT.port.includes(libTab)?'port':LIBCAT.home.includes(libTab)?'home':'all';}
+if(libTab==='all'||!(LIBCAT[libTab]||[]).includes(libSub))libSub='all';
 async function showLib(){
  initAudio();openPanel('MES JEUX');pBody.innerHTML='';
  const add=el('label','sb add','+ AJOUTER UNE ROM');add.htmlFor='file';pBody.appendChild(add);
@@ -2100,17 +2291,24 @@ async function showLib(){
  const isS=r=>!isA(r)&&!isN(r)&&!is64(r)&&isSNES(new Uint8Array(r.data));
  const isG=r=>!is64(r)&&!isA(r)&&!isN(r)&&!isS(r)&&!isGB(new Uint8Array(r.data,0,Math.min(0x150,r.data.byteLength)));
  const kind=r=>is64(r)?'n64':isA(r)?'gba':isN(r)?'nes':isS(r)?'snes':isG(r)?'gg':isC(r)?'gbc':'gb';
- const nGB=roms.filter(r=>kind(r)==='gb').length,nC=roms.filter(r=>kind(r)==='gbc').length,nG=roms.filter(r=>kind(r)==='gg').length,nN=roms.filter(r=>kind(r)==='nes').length,nS=roms.filter(r=>kind(r)==='snes').length,n6=roms.filter(r=>kind(r)==='n64').length,nA=roms.length-nGB-nC-nG-nN-nS-n6;
+ const cnt={};for(const r of roms){r._k=kind(r);cnt[r._k]=(cnt[r._k]||0)+1;}
+ const catOf=k=>LIBCAT.port.includes(k)?'port':'home',nCat=c=>LIBCAT[c].reduce((n,k)=>n+(cnt[k]||0),0);
+ const setTab=(t,u)=>{libTab=t;libSub=u;try{localStorage.setItem('np_tab',t);localStorage.setItem('np_sub',u);}catch(e){}showLib();};
  if(roms.length){
   const tabs=el('div','tabs');
-  for(const[k,lbl]of[['all','TOUS ('+roms.length+')'],['gb','GB ('+nGB+')'],['gbc','COLOR ('+nC+')'],['gba','ADVANCE ('+nA+')'],['gg','GAME GEAR ('+nG+')'],['nes','NES ('+nN+')'],['snes','SNES ('+nS+')'],['n64','N64 ('+n6+')']]){
-   const b=el('button','sb tab'+(libTab===k?'':' alt'),lbl);b.onclick=()=>{libTab=k;try{localStorage.setItem('np_tab',k);}catch(e){}showLib();};tabs.appendChild(b);}
+  for(const[k,lbl]of[['all','TOUS ('+roms.length+')'],['port','PORTABLES ('+nCat('port')+')'],['home','SALON ('+nCat('home')+')']]){
+   const b=el('button','sb tab'+(libTab===k?'':' alt'),lbl);b.onclick=()=>setTab(k,'all');tabs.appendChild(b);}
   pBody.appendChild(tabs);
+  if(libTab!=='all'){const sub=el('div','tabs sub');
+   for(const k of['all',...LIBCAT[libTab]]){const b=el('button','sb tab'+(libSub===k?'':' alt'),k==='all'?'TOUTES':LIBNAME[k]+' ('+(cnt[k]||0)+')');b.onclick=()=>setTab(libTab,k);sub.appendChild(b);}
+   pBody.appendChild(sub);}
  }
- const shown=roms.filter(r=>libTab==='all'||libTab===kind(r));
+ const shown=roms.filter(r=>libTab==='all'||(catOf(r._k)===libTab&&(libSub==='all'||libSub===r._k)));
+ if(libTab==='all')shown.sort((a,b)=>(catOf(a._k)===catOf(b._k)?0:catOf(a._k)==='port'?-1:1)||b.last-a.last);
  if(roms.length&&!shown.length)pBody.appendChild(el('div','note','Aucun jeu dans cette catégorie.'));
+ let lastCat=null;
  for(const r of shown){
-  if(kind(r)==='gba'&&!self.crossOriginIsolated){}
+  if(libTab==='all'&&catOf(r._k)!==lastCat){lastCat=catOf(r._k);pBody.appendChild(el('div','sec',lastCat==='port'?'CONSOLES PORTABLES':'CONSOLES DE SALON'));}
   const row=el('div','row');const t=el('div','t',r.title||cleanName(r.name));t.appendChild(el('small',null,({gb:'GAME BOY · ',gbc:'COLOR · ',gba:'ADVANCE · ',gg:'GAME GEAR · ',nes:'NES · ',snes:'SUPER NINTENDO · ',n64:'NINTENDO 64 · '})[kind(r)]+(r.name||'')+' · '+Math.round(r.size/1024)+' Ko'));t.appendChild(el('small',null,'Joué le '+fmtDate(r.last)));
   const bs=el('div','btns');const play=el('button','sb',curId===r.id?'EN COURS':'JOUER');
   play.onclick=async()=>{closePanel();if(curId!==r.id)await startRom(new Uint8Array(r.data),r.id,r.name);};
@@ -2151,7 +2349,7 @@ async function showStates(){
   const bs=el('div','btns');
   if(slot!=='auto'){const sv=el('button','sb','SAUVER');sv.onclick=async()=>{await saveSlot(slot);info.textContent='Etat '+slot+' sauvé';showStates();};bs.appendChild(sv);}
   if(r&&diag&&!gg&&!nes&&!snes){const cp=el('button','sb alt','COPIER');cp.onclick=async()=>{const t=await exportState(r.state);const row2=partButtons(t.replace(/^NEURSTATE1:/,''),'NEURSTATE1');row.after(row2);cp.remove();};bs.appendChild(cp);}
-  if(r){const ld=el('button','sb alt','CHARGER');ld.onclick=async()=>{await loadSlot(slot);info.textContent='Etat '+(slot==='auto'?'auto':slot)+' chargé';closePanel();};bs.appendChild(ld);}
+  if(r){const ld=el('button','sb alt','CHARGER');ld.onclick=async()=>{const ok=await loadSlot(slot);if(ok!==false&&!netOn)info.textContent='Etat '+(slot==='auto'?'auto':slot)+' chargé';closePanel();};bs.appendChild(ld);}
   row.appendChild(t);row.appendChild(bs);pBody.appendChild(row);
  }
 }
@@ -2162,17 +2360,20 @@ function showOpt(){
    :['COULEURS',PALS_N[palI],()=>{setPal((palI+1)%PALS.length);if(loaded)blit();showOpt();}],
   ['SON',sound?'OUI':'NON',()=>{sound=!sound;initAudio();if(G)try{G.setVolume(sound?100:0);}catch(e){}if(n64)try{n64E().setVolume(sound?1:0);}catch(e){}showOpt();}],
   ['PAUSE',paused?'OUI':'NON',()=>{if(loaded)paused=!paused;if(gba&&G)try{paused?G.pauseGame():null;}catch(e){}if(n64)try{paused?n64E().pause():null;}catch(e){}showOpt();}],
+  ['2 JOUEURS',netOn?'CONNECTE · JOUEUR '+(netRole==='host'?1:2):netState!=='off'?'CONNEXION EN COURS':'EN LIGNE · JEUX NES',showNet],
+  ['DISPOSITION','DEPLACER / REDIMENSIONNER LES COMMANDES',startLayout],
   ['CLAVIER','PERSONNALISER LES TOUCHES',showKeys],
   ['DOUBLES APPUIS',combos?'ACTIVES':'DESACTIVES',()=>{combos=!combos;try{localStorage.setItem('np_combo',combos?'1':'0');}catch(e){}applyCombo();showOpt();}],
+  ['INDICATEUR FPS',showFps?'AFFICHE':'MASQUE',()=>{showFps=!showFps;try{localStorage.setItem('np_fps',showFps?'1':'0');}catch(e){}applyFps();showOpt();}],
   ['MODE DIAGNOSTIC',diag?'OUI':'NON',()=>{diag=!diag;try{localStorage.setItem('np_diag',diag?'1':'0');}catch(e){}if(diag&&bugCap)info.textContent='⚠ Anomalie capturée — ETATS > ENVOYER À CLAUDE';showOpt();}],
-  ['REDEMARRER LE JEU','',()=>{if(n64&&loaded){try{n64gm().restart();}catch(e){}closePanel();return;}if(snes&&loaded){SN.np_reset();rewBuf.clear();closePanel();return;}if(nes&&loaded){NESC.reset();rewBuf.clear();closePanel();return;}if(gg&&loaded){GGC.reset();rewBuf.clear();closePanel();return;}if(gba&&G){try{G.quickReload();}catch(e){}closePanel();return;}if(loaded){saveRam();reset();rewBuf.clear();closePanel();}}]
+  ['REDEMARRER LE JEU','',()=>{if(n64&&loaded){try{n64gm().restart();}catch(e){}closePanel();return;}if(snes&&loaded){SN.np_reset();rewBuf.clear();closePanel();return;}if(nes&&loaded){if(netOn&&netRole!=='host'){info.textContent='A 2 joueurs, seul le joueur 1 peut redémarrer';closePanel();return;}NESC.reset();rewBuf.clear();if(netOn)netSync();closePanel();return;}if(gg&&loaded){GGC.reset();rewBuf.clear();closePanel();return;}if(gba&&G){try{G.quickReload();}catch(e){}closePanel();return;}if(loaded){saveRam();reset();rewBuf.clear();closePanel();}}]
  ];
- for(const it of items){if(!it)continue;const[a,v,fn]=it;const row=el('div','row');const t=el('div','t',a);if(v)t.appendChild(el('small',null,v));const b=el('button','sb',v?'CHANGER':'OK');b.onclick=fn;row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
+ for(const it of items){if(!it)continue;const[a,v,fn]=it;const row=el('div','row');const t=el('div','t',a);if(v)t.appendChild(el('small',null,v));const b=el('button','sb',(fn===showNet||fn===showKeys)?'OUVRIR':fn===startLayout?'MODIFIER':v?'CHANGER':'OK');b.onclick=fn;row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
  const vr=el('div','row');const vt=el('div','t','VERSION');vt.appendChild(el('small',null,'Neur Pocket '+VERSION));vt.appendChild(el('small',null,'Moteur GBA : mGBA (MPL 2.0) — '+(self.crossOriginIsolated?'disponible':'version installée uniquement')));vr.appendChild(vt);pBody.appendChild(vr);
  pBody.appendChild(el('div','note',(cgb&&loaded?'CHASSIS change la couleur de la console (jeux Game Boy Color). ':'COULEURS change les teintes de l\'écran (jeux Game Boy). ')+'Appuie entre A et B pour presser les deux à la fois.'));
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.5.0';
+const VERSION='2.7.0';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
@@ -2195,9 +2396,9 @@ document.getElementById('bLib').onclick=showLib;
 document.getElementById('bState').onclick=showStates;
 document.getElementById('bOpt').onclick=showOpt;
 const bFast=document.getElementById('bFast'),bRew=document.getElementById('bRew');
-function setFast(v){fast=v;bFast.classList.toggle('act',fast);if(n64){const g=n64gm();if(g)try{g.setFastForwardRatio(2);g.toggleFastForward(fast?1:0);}catch(e){}}if(G)try{G.setFastForwardMultiplier(fast?2:1);}catch(e){}}
+function setFast(v){if(netOn){if(v)info.textContent='Vitesse x2 indisponible à 2 joueurs';fast=false;bFast.classList.remove('act');return;}fast=v;bFast.classList.toggle('act',fast);if(n64){const g=n64gm();if(g)try{g.setFastForwardRatio(2);g.toggleFastForward(fast?1:0);}catch(e){}}if(G)try{G.setFastForwardMultiplier(fast?2:1);}catch(e){}}
 bFast.onclick=()=>setFast(!fast);
-function setRew(v){if(n64){if(v)info.textContent='Retour arrière indisponible sur N64';rewinding=false;return;}rewinding=v&&loaded;bRew.classList.toggle('act',rewinding);if(gba&&G)try{G.toggleRewind(!!rewinding);}catch(e){}}
+function setRew(v){if(netOn){if(v)info.textContent='Retour arrière indisponible à 2 joueurs';rewinding=false;return;}if(n64){if(v)info.textContent='Retour arrière indisponible sur N64';rewinding=false;return;}rewinding=v&&loaded;bRew.classList.toggle('act',rewinding);if(gba&&G)try{G.toggleRewind(!!rewinding);}catch(e){}}
 bRew.addEventListener('pointerdown',e=>{e.preventDefault();try{bRew.setPointerCapture(e.pointerId);}catch(_){}setRew(true);});
 for(const ev of['pointerup','pointercancel','lostpointercapture'])bRew.addEventListener(ev,()=>setRew(false));
 updKeyHelp();addEventListener('DOMContentLoaded',updKeyHelp);applyCombo();
@@ -2214,7 +2415,78 @@ function fit(){
  let s=Math.max(1,Math.min(aw/160,ah/144));if(s>=3)s=Math.floor(s);
  cv.style.width=Math.round(160*s)+'px';cv.style.height=Math.round(144*s)+'px';
 }
-addEventListener('resize',fit);fit();
+addEventListener('resize',()=>fit());
+/* ---------- Indicateur FPS / vitesse d'émulation ---------- */
+let showFps=false;try{showFps=localStorage.getItem('np_fps')==='1';}catch(e){}
+(function(){const box=document.getElementById('fps');let t0=performance.now(),e0=0,d0=0,n0=-1;
+ function applyFps(){document.getElementById('app').classList.toggle('showfps',showFps);}applyFps();window.applyFps=applyFps;
+ setInterval(()=>{const t=performance.now(),dt=(t-t0)/1000;if(!showFps){t0=t;e0=emuF;d0=dispF;n0=-1;return;}
+  if(n64){const g=n64gm();let n=-1;try{n=g?g.getFrameNum():-1;}catch(e){}if(n>=0&&n0>=0&&n>=n0){emuF+=n-n0;dispF+=n-n0;}n0=n;}else n0=-1;
+  const ef=(emuF-e0)/dt,df=(dispF-d0)/dt;t0=t;e0=emuF;d0=dispF;
+  box.classList.remove('mid','low');
+  if(!loaded){box.textContent='—';return;}
+  if(paused||panelOpen||document.body.classList.contains('editing')){box.textContent='PAUSE';return;}
+  const base=n64?(n64Pal?50:60):snes&&snesPal?(1000/FRAME)*5/6:1000/FRAME;
+  const pct=Math.round(100*ef/base);
+  box.textContent=Math.round(df)+' FPS · '+pct+' %';
+  const nominal=fast?200:100;if(pct<nominal*0.85)box.classList.add('low');else if(pct<nominal*0.97)box.classList.add('mid');
+ },500);})();
+
+/* ---------- Disposition des commandes (déplacer / redimensionner) ---------- */
+let layEdit=false,laySel=null,layWasPaused=false;
+let layData={};try{layData=JSON.parse(localStorage.getItem('np_lay')||'{}')||{};}catch(e){}
+const LAYN={dzone:'CROIX',ab:'BOUTONS',ss:'SELECT / START',bL:'GACHETTE L',bR:'GACHETTE R',n64stick:'STICK',nZ:'GACHETTE Z',nR:'GACHETTE R',nL:'GACHETTE L',nC:'BOUTONS C',nA:'BOUTON A',nB:'BOUTON B',nST:'START'};
+const LAYG={nC:['nCU','nCL','nCR','nCD']};
+function layKind(){return (n64&&loaded?'n64':snes&&loaded?'snes':nes&&loaded?'nes':gba&&loaded?'gba':gg&&loaded?'gg':'gb')+(document.documentElement.classList.contains('desk')?'D':document.getElementById('app').classList.contains('land')?'L':'P');}
+function layItems(){const ids=n64&&loaded?['n64stick','nZ','nR','nL','nC','nA','nB','nST']:['dzone','ab','ss','bL','bR'];
+ return ids.filter(id=>{const m=LAYG[id]||[id];const e=document.getElementById(m[0]);return e&&getComputedStyle(e).display!=='none';});}
+function layMembers(id){return (LAYG[id]||[id]).map(x=>document.getElementById(x)).filter(Boolean);}
+function layApplyOne(id,v){const els=layMembers(id);const dx=v?v[0]:0,dy=v?v[1]:0,sc=v?v[2]:1;
+ if(els.length>1){let cx=0,cy=0;for(const e of els){cx+=e.offsetLeft+e.offsetWidth/2;cy+=e.offsetTop+e.offsetHeight/2;}cx/=els.length;cy/=els.length;
+  for(const e of els){const ex=e.offsetLeft+e.offsetWidth/2,ey=e.offsetTop+e.offsetHeight/2;
+   const tx=dx+(ex-cx)*(sc-1),ty=dy+(ey-cy)*(sc-1);e.style.translate=(tx||ty)?tx+'px '+ty+'px':'';e.style.scale=sc!==1?sc:'';}}
+ else for(const e of els){e.style.translate=(dx||dy)?dx+'px '+dy+'px':'';e.style.scale=sc!==1?sc:'';}}
+function applyLayout(){const p=layData[layKind()]||{};
+ for(const id of Object.keys(LAYN))layApplyOne(id,p[id]);}
+function laySave(){try{localStorage.setItem('np_lay',JSON.stringify(layData));}catch(e){}}
+function layGet(id){const p=layData[layKind()]||(layData[layKind()]={});return p[id]||(p[id]=[0,0,1]);}
+function layMark(){for(const e of document.querySelectorAll('[data-lay]')){e.removeAttribute('data-lay');e.classList.remove('laysel');}
+ if(!layEdit)return;for(const id of layItems())for(const e of layMembers(id)){e.setAttribute('data-lay',id);if(id===laySel)e.classList.add('laysel');}
+ const v=laySel&&(layData[layKind()]||{})[laySel];
+ document.getElementById('laySel').textContent=laySel?LAYN[laySel]+' · '+Math.round((v?v[2]:1)*100)+' %':'Touche une commande';}
+function startLayout(){closePanel();layWasPaused=paused;paused=true;if(gba&&G)try{G.pauseGame();}catch(e){}if(n64)try{n64E().pause();}catch(e){}
+ layEdit=true;laySel=null;document.body.classList.add('editing');document.getElementById('app').classList.add('edit');
+ const k=layKind();document.getElementById('layT').textContent='DISPOSITION · '+({gb:'GAME BOY',gba:'GBA',gg:'GAME GEAR',nes:'NES',snes:'SUPER NES',n64:'N64'})[k.slice(0,-1)]+' · '+({P:'PORTRAIT',L:'PAYSAGE',D:'ORDINATEUR'})[k.slice(-1)];
+ layMark();}
+function endLayout(){layEdit=false;laySel=null;document.body.classList.remove('editing');document.getElementById('app').classList.remove('edit');layMark();
+ paused=layWasPaused;if(!paused){if(gba&&G)try{G.resumeGame();}catch(e){}if(n64)try{n64E().play();}catch(e){}}laySave();}
+function layScale(f){if(!laySel)return;const v=layGet(laySel);v[2]=Math.max(0.5,Math.min(2.2,Math.round(v[2]*f*100)/100));layApplyOne(laySel,v);laySave();layMark();}
+document.getElementById('layM').onclick=()=>layScale(1/1.1);
+document.getElementById('layP').onclick=()=>layScale(1.1);
+document.getElementById('layR').onclick=()=>{if(!laySel)return;const p=layData[layKind()];if(p)delete p[laySel];layApplyOne(laySel,null);laySave();layMark();};
+document.getElementById('layA').onclick=()=>{delete layData[layKind()];applyLayout();laySave();layMark();};
+document.getElementById('layOK').onclick=endLayout;
+(function(){const pts=new Map();let drag=null;
+ const inUI=e=>e.target&&e.target.closest&&(e.target.closest('#lay')||e.target.closest('#panel'));
+ function factor(id){const e=layMembers(id)[0],v=layGet(id);const w=e.getBoundingClientRect().width;return (w/(e.offsetWidth*v[2]))||1;}
+ function begin(){const v=layGet(laySel);const a=[...pts.values()];
+  drag={v0:v.slice(),f:factor(laySel),x:a[0].x,y:a[0].y,d:a.length>1?Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y):0,n:a.length};}
+ addEventListener('pointerdown',e=>{if(!layEdit||inUI(e))return;e.preventDefault();e.stopPropagation();
+  const t=e.target.closest&&e.target.closest('[data-lay]');
+  if(!pts.size){if(!t){laySel=null;layMark();return;}laySel=t.getAttribute('data-lay');layMark();}
+  if(!laySel)return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});begin();},true);
+ addEventListener('pointermove',e=>{if(!layEdit||inUI(e)||!pts.has(e.pointerId))return;e.preventDefault();e.stopPropagation();
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!drag||!laySel)return;const a=[...pts.values()],v=layGet(laySel);
+  if(a.length>1&&drag.d){const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);v[2]=Math.max(0.5,Math.min(2.2,Math.round(drag.v0[2]*d/drag.d*100)/100));}
+  else{v[0]=Math.round(drag.v0[0]+(a[0].x-drag.x)/drag.f);v[1]=Math.round(drag.v0[1]+(a[0].y-drag.y)/drag.f);}
+  layApplyOne(laySel,v);layMark();},true);
+ const up=e=>{if(!layEdit||inUI(e))return;e.stopPropagation();if(pts.delete(e.pointerId)){if(pts.size)begin();else{drag=null;laySave();}}};
+ addEventListener('pointerup',up,true);addEventListener('pointercancel',up,true);
+ for(const t of['click','lostpointercapture','gotpointercapture'])addEventListener(t,e=>{if(layEdit&&!inUI(e))e.stopPropagation();},true);
+})();
+addEventListener('resize',()=>{if(layEdit)layMark();applyLayout();});
+{const f0=fit;fit=function(){f0.apply(this,arguments);applyLayout();};}
+fit();
 
 /* ---------- écran & boucle ---------- */
 const LUT=new Uint32Array(32768);
@@ -2224,7 +2496,7 @@ const LUT=new Uint32Array(32768);
  LUT[c]=le?(0xFF000000|(B<<16)|(G<<8)|R):((R<<24)|(G<<16)|(B<<8)|0xFF);}})();
 const img32=new Uint32Array(img.data.buffer);
 const ncv=document.getElementById('ncv'),nctx=ncv.getContext('2d'),nimg=nctx.createImageData(256,224),nimg32=new Uint32Array(nimg.data.buffer);
-function blit(){if(snes){snesBlit();return;}if(nes){nimg32.set(NESC.fb.subarray(256*8,256*232));nctx.putImageData(nimg,0,0);return;}if(gg){img32.set(GGC.fb);ctx.putImageData(img,0,0);return;}if(cgb){for(let i=0;i<23040;i++)img32[i]=LUT[fbc[i]];ctx.putImageData(img,0,0);return;}
+function blit(){dispF++;if(snes){snesBlit();return;}if(nes){nimg32.set(NESC.fb.subarray(256*8,256*232));nctx.putImageData(nimg,0,0);return;}if(gg){img32.set(GGC.fb);ctx.putImageData(img,0,0);return;}if(cgb){for(let i=0;i<23040;i++)img32[i]=LUT[fbc[i]];ctx.putImageData(img,0,0);return;}
  const d=img.data;for(let i=0,j=0;i<23040;i++,j+=4){const c=pal[fb[i]];d[j]=c[0];d[j+1]=c[1];d[j+2]=c[2];d[j+3]=255;}ctx.putImageData(img,0,0);}
 function idleScreen(){
  ctx.fillStyle=PALS[palI][0];ctx.fillRect(0,0,160,144);ctx.fillStyle=PALS[palI][3];
@@ -2234,6 +2506,7 @@ function idleScreen(){
  ctx.fillStyle=PALS[palI][2];t('GB GBC GBA GG',118);t('NES SNES N64',132);
 }
 function runFrame(){
+ emuF++;
  if(gg){GGC.frame();return;}
  if(nes){NESC.frame();return;}
  if(snes){snesFrame();return;}
@@ -2246,6 +2519,7 @@ function loop(ts){
  if(!loaded){if(!gba)idleScreen();return;}
  if(gba||n64)return;
  if(!last)last=ts;let dt=ts-last;last=ts;if(dt>100)dt=FRAME;
+ if(netOn&&nes){netTick(dt);return;}
  if(rewinding&&!panelOpen){rewT+=dt;while(rewT>=FRAME*1.5){rewT-=FRAME*1.5;const s=rewBuf.pop();if(s){restore(s);blit();}}if(crashed){crashed=false;stall=0;info.textContent=title+' · reprise';}apos=0;accT=0;return;}
  if(paused||panelOpen){apos=0;return;}
  if(crashed){apos=0;return;}

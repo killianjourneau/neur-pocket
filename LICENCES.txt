@@ -25,3 +25,8 @@ Licence Snes9x : utilisation et distribution gratuites, usage NON COMMERCIAL uni
 Moteur Nintendo 64 : EmulatorJS 4.2.3 (licence GPL-3.0) avec le cœur mupen64plus-next (libretro, GPL-2.0)
 Sources : https://github.com/EmulatorJS/EmulatorJS et https://github.com/EmulatorJS/mupen64plus-libretro-nx
 Fichiers : n64.html et dossier ejs/ (seule modification : la vérification de mise à jour en ligne est désactivée).
+
+----------------------------------------------------------------
+Mode 2 joueurs : PeerJS 1.5.5 (licence MIT) — https://github.com/peers/peerjs
+Fichier : peerjs.min.js. La mise en relation des deux appareils passe par le service public gratuit de PeerJS ;
+ensuite les touches circulent directement d'un appareil à l'autre.
