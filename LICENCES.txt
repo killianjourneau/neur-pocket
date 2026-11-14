@@ -20,3 +20,8 @@ Source : https://github.com/libretro/snes9x2005 (commit a79dfe9), compilé en We
 (snes9x.wasm) pour Neur Pocket avec une petite enveloppe d'appel.
 Licence Snes9x : utilisation et distribution gratuites, usage NON COMMERCIAL uniquement
 (voir le fichier "copyright" du dépôt source). Neur Pocket n'est pas vendu.
+
+----------------------------------------------------------------
+Moteur Nintendo 64 : EmulatorJS 4.2.3 (licence GPL-3.0) avec le cœur mupen64plus-next (libretro, GPL-2.0)
+Sources : https://github.com/EmulatorJS/EmulatorJS et https://github.com/EmulatorJS/mupen64plus-libretro-nx
+Fichiers : n64.html et dossier ejs/ (seule modification : la vérification de mise à jour en ligne est désactivée).

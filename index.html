@@ -157,6 +157,13 @@ html.desk #app.gba #spk{right:9%;bottom:16%}
 #app.snes .btn{width:56px;height:56px}
 #app.snes #bX{left:60px;top:0}#app.snes #bY{left:2px;top:58px}#app.snes #bA{right:2px;left:auto;top:58px}#app.snes #bB{left:60px;top:116px}
 #app.snes #abmid{display:none}
+#app.nocombo #abmid,#app.nocombo .dm{display:none!important}
+#app.snes #bX,#app.snes #bY{pointer-events:none}
+.dm{display:none}
+#app.snes .dm{display:block;position:absolute;width:20px;height:20px;border-radius:50%;border:2px dashed rgba(80,70,120,.45);pointer-events:none}
+#app.snes .dm.on{background:rgba(120,100,200,.35);border-style:solid}
+#app.snes #dmxa{left:107px;top:47px}#app.snes #dmab{left:107px;top:105px}#app.snes #dmby{left:49px;top:105px}#app.snes #dmyx{left:49px;top:47px}
+#app.snes:not(.land) #ab{top:calc(1% + 46px)}
 #app.snes .btn span{bottom:auto;top:50%;left:0;right:0;transform:translateY(-50%);color:#fff;font-size:13px;text-shadow:0 1px 0 rgba(0,0,0,.35)}
 #app.snes #bA{background:radial-gradient(circle at 50% 38%,#ef4a5c,#c41e33 70%);box-shadow:0 4px 0 #7c1020}
 #app.snes #bB{background:radial-gradient(circle at 50% 38%,#ffd75a,#e2a90f 70%);box-shadow:0 4px 0 #8f6a05}
@@ -167,6 +174,44 @@ html.desk #app.gba #spk{right:9%;bottom:16%}
 #app.snes .pill i{background:#8e8d97;box-shadow:0 2px 0 #64636c}
 #app.snes .pill span{color:#4b3f86}
 #app.land.snes #ss{left:max(2%,env(safe-area-inset-left));transform:none;bottom:4px}
+/* ===== Habillage Nintendo 64 ===== */
+#n64f{display:none;border:0;background:#000;pointer-events:none}
+#app.n64 #cv,#app.n64 #gcv,#app.n64 #ncv{display:none!important}#app.n64 #n64f{display:block}
+.n64b,#n64ui{display:none}#app.n64 .n64b{display:inline;font-style:italic}
+#app.n64 #dzone,#app.n64 #ab,#app.n64 #ss,#app.n64 .sh,#app.n64 #spk{display:none!important}
+#app.n64 #n64ui{display:block;position:absolute;inset:0}
+#app.n64 #bezel{background:linear-gradient(160deg,#3d3d44,#232328 60%);border-radius:10px;padding:12px 16px 28px;box-shadow:inset 0 0 0 2px #151518,0 3px 0 rgba(0,0,0,.25)}
+#app.n64 #cbrand{color:#e8e8ee;font-size:7px;bottom:9px}#app.n64 #cbrand i{font-style:italic}
+#app.n64 #led.on{background:#ff3b3b;box-shadow:0 0 6px #ff3b3b}
+.nb{position:absolute;touch-action:none;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none}
+.nb span{font-size:11px;color:#fff;pointer-events:none}
+.nb.on{transform:translateY(3px)}
+#n64stick{position:absolute;left:5%;top:66px;width:150px;height:150px;border-radius:50%;touch-action:none;background:radial-gradient(circle,#55555d 0 30%,#3a3a41 31% 62%,#2b2b31 63%);box-shadow:inset 0 3px 8px rgba(0,0,0,.5),0 2px 0 rgba(255,255,255,.4)}
+#n64knob{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 45% 38%,#8d8d96,#4b4b53 70%);box-shadow:0 4px 0 #1d1d22,inset 0 0 0 6px rgba(0,0,0,.12);transition:transform .04s}
+#n64stick.on #n64knob{transition:none}
+.nsh{top:1%;width:96px;height:34px;border-radius:18px 18px 8px 8px;background:linear-gradient(#cfcfd6,#9e9ea8);box-shadow:0 4px 0 #6e6e78}
+.nsh span{color:#3d3d46;font-size:12px}
+#nZ{left:4%}#nR{right:4%}
+.nsm{left:calc(5% + 45px);top:232px;width:60px;height:28px;border-radius:14px;background:linear-gradient(#cfcfd6,#9e9ea8);box-shadow:0 3px 0 #6e6e78}
+.nsm span{color:#3d3d46}
+.nc{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#ffd84d,#e0a800 70%);box-shadow:0 4px 0 #8a6700}
+.nc b{width:0;height:0;border:8px solid transparent;pointer-events:none}
+#nCU{right:72px;top:54px}#nCU b{border-bottom:11px solid #5b4300;margin-top:-10px}
+#nCD{right:72px;top:146px}#nCD b{border-top:11px solid #5b4300;margin-top:10px}
+#nCL{right:118px;top:100px}#nCL b{border-right:11px solid #5b4300;margin-left:-10px}
+#nCR{right:26px;top:100px}#nCR b{border-left:11px solid #5b4300;margin-left:10px}
+.nbig{width:62px;height:62px;border-radius:50%}
+#nA{right:40px;top:212px;background:radial-gradient(circle at 50% 38%,#4f86ff,#1f55d8 70%);box-shadow:0 5px 0 #0e2f86}
+#nB{right:118px;top:190px;background:radial-gradient(circle at 50% 38%,#45c06a,#178a3f 70%);box-shadow:0 5px 0 #0b5226}
+.nbig span{font-size:15px}
+#nST{left:50%;margin-left:-28px;bottom:6%;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#ff5a5a,#d01f1f 70%);box-shadow:0 4px 0 #7d0f0f}
+#nST span{font-size:7px}
+#app.land.n64 #n64stick{top:calc(50% - 75px);left:max(3%,env(safe-area-inset-left))}
+#app.land.n64 .nsm{left:max(3%,env(safe-area-inset-left));top:auto;bottom:10px}
+#app.land.n64 #nST{left:calc(max(3%,env(safe-area-inset-left)) + 100px);margin-left:0;bottom:6px;width:46px;height:46px}
+#app.land.n64 #nCU{top:calc(50% - 120px)}#app.land.n64 #nCL,#app.land.n64 #nCR{top:calc(50% - 74px)}#app.land.n64 #nCD{top:calc(50% - 28px)}
+#app.land.n64 #nB{top:calc(50% + 30px)}#app.land.n64 #nA{top:calc(50% + 56px)}
+#app.land.n64 #nZ{top:6px}#app.land.n64 #nR{top:6px}
 #panel{position:fixed;inset:0;background:rgba(40,40,48,.55);display:none;align-items:center;justify-content:center;z-index:10}
 #panel.show{display:flex}
 #card{width:min(92vw,420px);max-height:86vh;overflow:auto;touch-action:pan-y;background:#e4e1d9;border-radius:12px 12px 30px 12px;box-shadow:0 6px 0 #9c998f;padding:14px;font-size:9px;color:#2b308f;box-sizing:border-box}
@@ -230,7 +275,7 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
 <body>
 <div id="app">
  <div id="top">
-  <div id="bezel"><div id="led"></div><canvas id="cv" width="160" height="144"></canvas><canvas id="gcv" width="240" height="160"></canvas><canvas id="ncv" width="256" height="224"></canvas><div id="cbrand">NEUR POCKET<b class="adv"> ADVANCE</b><b class="gear"> GEAR</b><b class="nesb"> 8-BIT</b><b class="snesb"> 16-BIT</b> <i style="color:#ff5a6e">●</i><i style="color:#ffd84a">●</i><i style="color:#6fdc6f">●</i><i style="color:#5ab4ff">●</i></div></div>
+  <div id="bezel"><div id="led"></div><canvas id="cv" width="160" height="144"></canvas><canvas id="gcv" width="240" height="160"></canvas><canvas id="ncv" width="256" height="224"></canvas><div id="cbrand">NEUR POCKET<b class="adv"> ADVANCE</b><b class="gear"> GEAR</b><b class="nesb"> 8-BIT</b><b class="snesb"> 16-BIT</b><b class="n64b"> <i style="color:#e53935">6</i><i style="color:#1e88e5">4</i></b> <i style="color:#ff5a6e">●</i><i style="color:#ffd84a">●</i><i style="color:#6fdc6f">●</i><i style="color:#5ab4ff">●</i></div></div>
   <div id="brand">NEUR <b>POCKET</b></div>
   <div id="bar">
    <button class="tb" id="bLib">JEUX</button>
@@ -239,13 +284,21 @@ html.desk #deskHelp{display:block;position:fixed;left:50%;bottom:6px;transform:t
    <button class="tb" id="bFast">x2</button>
    <button class="tb" id="bOpt">REGLAGES</button>
   </div>
-  <input type="file" id="file" accept=".gb,.gbc,.gba,.gg,.nes,.sfc,.smc,.zip,application/octet-stream">
+  <input type="file" id="file" accept=".gb,.gbc,.gba,.gg,.nes,.sfc,.smc,.z64,.n64,.v64,.zip,application/octet-stream">
   <div id="info"></div>
  </div>
  <div id="panel"><div id="card"><h2><span id="pTitle"></span><button class="sb alt" id="pClose">FERMER</button></h2><div id="pBody"></div></div></div>
  <div id="pad">
+  <div id="n64ui">
+   <div id="n64stick"><div id="n64knob"></div></div>
+   <div class="nb nsh" id="nZ"><span>Z</span></div><div class="nb nsh" id="nR"><span>R</span></div>
+   <div class="nb nsm" id="nL"><span>L</span></div>
+   <div class="nb nc" id="nCU"><b></b></div><div class="nb nc" id="nCL"><b></b></div><div class="nb nc" id="nCR"><b></b></div><div class="nb nc" id="nCD"><b></b></div>
+   <div class="nb nbig" id="nB"><span>B</span></div><div class="nb nbig" id="nA"><span>A</span></div>
+   <div class="nb" id="nST"><span>START</span></div>
+  </div>
   <div id="dzone"><div id="dpad"><div class="h"></div><div class="v"></div><div class="c"></div><div class="k" id="kU"></div><div class="k" id="kD"></div><div class="k" id="kL"></div><div class="k" id="kR"></div></div></div>
-  <div id="ab"><div class="sq" id="sqB"></div><div class="sq" id="sqA"></div><div class="btn" id="bB"><span>B</span><em>1</em></div><div class="btn" id="bA"><span>A</span><em>2</em></div><div class="btn" id="bX"><span>X</span></div><div class="btn" id="bY"><span>Y</span></div><div id="abmid"></div></div>
+  <div id="ab"><div class="sq" id="sqB"></div><div class="sq" id="sqA"></div><div class="btn" id="bB"><span>B</span><em>1</em></div><div class="btn" id="bA"><span>A</span><em>2</em></div><div class="btn" id="bX"><span>X</span></div><div class="btn" id="bY"><span>Y</span></div><div class="dm" id="dmxa"></div><div class="dm" id="dmab"></div><div class="dm" id="dmby"></div><div class="dm" id="dmyx"></div><div id="abmid"></div></div>
   <div class="sh" id="bL"><span>L</span></div><div class="sh" id="bR"><span>R</span></div>
   <div id="spk"></div>
   <div id="ss"><div class="pill" id="bSe"><i></i><span>SELECT</span></div><div class="pill" id="bSt"><i></i><span>START</span></div></div>
@@ -480,6 +533,8 @@ function step(){
 function badOp(op){if(!crashed){crashed=true;crashMsg='Instruction invalide '+op.toString(16).toUpperCase()+' à '+((PC-1)&0xFFFF).toString(16).toUpperCase();}}
 let crashMsg='';
 let diag=false;try{diag=localStorage.getItem('np_diag')==='1';}catch(e){}
+let combos=true;try{combos=localStorage.getItem('np_combo')!=='0';}catch(e){}
+function applyCombo(){document.getElementById('app').classList.toggle('nocombo',!combos);}
 const IN_MAX=1200,inLog=new Uint8Array(IN_MAX);let bugCap=null,anomaly='';
 function checkPC(){if(!anomaly&&((PC>=0x8000&&PC<0xC000)||(PC>=0xFE00&&PC<0xFF80))){anomaly='Exécution en '+PC.toString(16).toUpperCase();captureBug(anomaly);}}
 function captureBug(reason){
@@ -1596,6 +1651,64 @@ function snesRestore(s){const p=SN.np_malloc(s.st.length);snesHeap(p,s.st.length
  if(s.fb){nimg32.set(s.fb);nctx.putImageData(nimg,0,0);}}
 function snesSaveRam(){if(!SN||!curId)return;const n=SN.np_sram_size();if(!n)return;const d=snesHeap(SN.np_sram(),n).slice();const h=sum32(d);
  if(h===snesSramSum)return;if(snesSramSum===-1&&!d.some(x=>x))return;snesSramSum=h;dbPut('sram',{id:curId,data:d});}
+/* ---------- Nintendo 64 : EmulatorJS (GPL-3.0) + cœur mupen64plus-next, dans un cadre n64.html ---------- */
+let n64=false,n64f=null,n64ready=false,n64st={},n64SramSum=0,n64Stick=false;
+function isN64(u){if(u.length<0x40)return false;const a=u[0],b=u[1],c=u[2],d=u[3];
+ return (a===0x80&&b===0x37&&c===0x12&&d===0x40)||(a===0x37&&b===0x80&&c===0x40&&d===0x12)||(a===0x40&&b===0x12&&c===0x37&&d===0x80);}
+function n64Title(u){const x=u[0]===0x37?1:u[0]===0x40?3:0;let t='';for(let i=0x20;i<0x34;i++){const c=u[i^x];t+=(c>=0x20&&c<0x7F)?String.fromCharCode(c):' ';}return t.trim().replace(/\s+/g,' ');}
+function n64E(){try{return n64f&&n64f.contentWindow&&n64f.contentWindow.EJS_emulator||null;}catch(e){return null;}}
+function n64gm(){const E=n64E();return n64ready&&E&&E.gameManager?E.gameManager:null;}
+function n64Set(idx,val){const g=n64gm();if(!g)return;if(n64st[idx]===val)return;n64st[idx]=val;try{g.simulateInput(0,idx,val);}catch(e){}}
+const N64B={nA:[0,1],nB:[1,1],nST:[3,1],nL:[10,1],nR:[11,1],nZ:[12,1],nCR:[20,0x7fff],nCL:[21,0x7fff],nCD:[22,0x7fff],nCU:[23,0x7fff]};
+function n64Btn(id,on){const m=N64B[id];if(!m)return;n64Set(m[0],on?m[1]:0);const e=document.getElementById(id);if(e)e.classList.toggle('on',!!on);}
+function n64StickSet(x,y){n64Set(16,x>0?Math.round(x*0x7fff):0);n64Set(17,x<0?Math.round(-x*0x7fff):0);n64Set(18,y>0?Math.round(y*0x7fff):0);n64Set(19,y<0?Math.round(-y*0x7fff):0);
+ const k=document.getElementById('n64knob');if(k)k.style.transform='translate('+(x*42)+'px,'+(y*42)+'px)';}
+function n64FromJoy(){if(!n64)return;
+ if(!n64Stick){const x=(!(joyDir&1)?1:0)-(!(joyDir&2)?1:0),y=(!(joyDir&8)?1:0)-(!(joyDir&4)?1:0);const n=(x&&y)?0.7071:1;n64StickSet(x*n,y*n);}
+ n64Btn('nA',!(joyBtn&1));n64Btn('nB',!(joyBtn&2));n64Btn('nST',!(joyBtn&8));}
+function n64Thumb(){try{const E=n64E(),cv=E&&E.canvas;if(!cv||!cv.width)return Promise.resolve(null);
+ const c=document.createElement('canvas');c.width=128;c.height=96;const w=cv.width,h=cv.height,a=4/3;let sw=w,sh=h,sx=0,sy=0;
+ if(w/h>a){sw=h*a;sx=(w-sw)/2;}else{sh=w/a;sy=(h-sh)/2;}
+ c.getContext('2d').drawImage(cv,sx,sy,sw,sh,0,0,128,96);return Promise.resolve(c.toDataURL('image/jpeg',0.7));}catch(e){return Promise.resolve(null);}}
+function n64SaveRam(){const g=n64gm();if(!g||!curId)return;try{g.saveSaveFiles();const d=g.getSaveFile(false);if(d&&d.length){const h=sum32(d);if(h!==n64SramSum){n64SramSum=h;dbPut('sram',{id:curId,data:new Uint8Array(d)});}}}catch(e){}}
+async function n64SaveAuto(withThumb){const g=n64gm();if(!g||!curId)return;let st=null;try{st=g.getState();}catch(e){}if(!st)return;
+ const old=await dbGet('states','auto#'+curId);const th=withThumb?await n64Thumb():(old&&old.thumb)||null;
+ await dbPut('states',{key:'auto#'+curId,id:curId,slot:'auto',date:Date.now(),thumb:th,state:{n64:true,st}});}
+function n64Stop(){if(n64f){if(n64ready){n64SaveRam();try{const g=n64gm(),st=g.getState();dbGet('states','auto#'+curId).then(o=>dbPut('states',{key:'auto#'+curId,id:curId,slot:'auto',date:Date.now(),thumb:o&&o.thumb||null,state:{n64:true,st}}));}catch(e){}}
+ n64f.remove();n64f=null;}n64ready=false;n64st={};}
+async function startN64(bytes,id,name){
+ if(gba)gbaStop();saveRam();autoSave();n64Stop();
+ n64=true;nes=false;gg=false;snes=false;cgb=false;ramUsable=false;battery=false;n64st={};n64SramSum=0;
+ curId=id;curName=name||'';title=(n64Title(bytes)||cleanName(name)||'NINTENDO 64').toUpperCase().slice(0,26);
+ loaded=true;paused=false;crashed=false;bugCap=null;rewBuf.clear();frameN=0;led.classList.add('on');
+ const f=document.createElement('iframe');f.id='n64f';f.src='n64.html';f.setAttribute('allow','autoplay; gamepad; fullscreen');f.setAttribute('tabindex','-1');
+ document.getElementById('bezel').appendChild(f);n64f=f;
+ const buf=bytes.slice().buffer;f.onload=()=>{try{f.contentWindow.npStart(buf,id);}catch(e){info.textContent='MOTEUR N64 INTROUVABLE';}};
+ applyShell();info.textContent='Chargement du moteur Nintendo 64…';
+ const r=await dbGet('roms',id);if(r){r.last=Date.now();dbPut('roms',r);}
+}
+window.npN64Started=async function(){n64ready=true;const g=n64gm();
+ try{const sr=await dbGet('sram',curId);if(sr&&sr.data){const d=new Uint8Array(sr.data),p=g.getSaveFilePath(),parts=p.split('/');let cp='';
+  for(let i=0;i<parts.length-1;i++){if(!parts[i])continue;cp+='/'+parts[i];if(!g.FS.analyzePath(cp).exists)g.FS.mkdir(cp);}
+  if(g.FS.analyzePath(p).exists)g.FS.unlink(p);g.FS.writeFile(p,d);g.loadSaveFiles();n64SramSum=sum32(d);}}catch(e){}
+ const E=n64E();try{E.setVolume(sound?1:0);if(fast){g.setFastForwardRatio(2);g.toggleFastForward(1);}if(paused||panelOpen)E.pause();}catch(e){}
+ const au=await dbGet('states','auto#'+curId);info.textContent=title+' · NINTENDO 64'+(au?' · ETATS > AUTO pour reprendre':'');};
+setInterval(()=>{if(n64&&n64ready&&!paused&&!panelOpen){n64SaveRam();}},20000);
+setInterval(()=>{if(n64&&n64ready&&!paused&&!panelOpen&&!document.hidden)n64SaveAuto(false);},60000);
+document.addEventListener('pointerdown',()=>{if(!n64)return;try{const al=n64E().Module.AL;if(al&&al.currentCtx&&al.currentCtx.audioCtx.state!=='running')al.currentCtx.audioCtx.resume();}catch(e){}},true);
+async function showStatesN64(){
+ pBody.appendChild(el('div','note',title+' — sauvegarde instantanée, à tout moment.'));
+ for(const slot of['auto',1,2,3]){
+  const r=await dbGet('states',slot+'#'+curId);
+  const row=el('div','row');const im=el('img','thumb');im.style.width='80px';im.style.height='60px';if(r&&r.thumb)im.src=r.thumb;row.appendChild(im);
+  const t=el('div','t',slot==='auto'?'AUTO':'EMPLACEMENT '+slot);t.appendChild(el('small',null,r?fmtDate(r.date):(slot==='auto'?'Enregistré régulièrement et quand tu quittes':'Vide')));
+  const bs=el('div','btns');
+  if(slot!=='auto'){const sv=el('button','sb','SAUVER');sv.onclick=async()=>{const g=n64gm();const th=await n64Thumb();let st=null;try{st=g&&g.getState();}catch(e){}if(!st){info.textContent='Sauvegarde impossible';return;}
+   await dbPut('states',{key:slot+'#'+curId,id:curId,slot,date:Date.now(),thumb:th,state:{n64:true,st}});info.textContent='Etat '+slot+' sauvé';pBody.innerHTML='';showStatesN64();};bs.appendChild(sv);}
+  if(r){const ld=el('button','sb alt','CHARGER');ld.onclick=()=>{const g=n64gm();try{g.loadState(r.state.st);info.textContent='Etat '+(slot==='auto'?'auto':slot)+' chargé';}catch(e){info.textContent='Chargement impossible';}closePanel();};bs.appendChild(ld);}
+  row.appendChild(t);row.appendChild(bs);pBody.appendChild(row);}
+ pBody.appendChild(el('div','note','Sur N64, le retour arrière n\'est pas disponible (trop lourd pour un téléphone).'));
+}
 let gg=false;
 const GGC=GGSys(Z80,{joy:()=>({dir:joyDir,btn:joyBtn}),sample:s=>pushSample(s),rate:()=>AC?AC.sampleRate:0});
 function isGB(u){return u.length>=0x150&&u[0x104]===0xCE&&u[0x105]===0xED&&u[0x106]===0x66;}
@@ -1657,7 +1770,7 @@ function gbaWake(){if(!gbaSusp)return;const p=gbaSusp;gbaSusp=null;
  setTimeout(()=>{try{if(!G.loadGame(p))throw 0;G.setVolume(sound?100:0);G.setFastForwardMultiplier(fast?2:1);if(panelOpen||paused)G.pauseGame();}catch(e){location.reload();}},60);}
 addEventListener('pagehide',gbaSuspend);addEventListener('freeze',gbaSuspend);
 addEventListener('pageshow',e=>{if(e.persisted)gbaWake();});
-document.addEventListener('visibilitychange',()=>{if(gba&&G){if(document.hidden)gbaSuspend();else gbaWake();}if(document.hidden){saveRam();autoSave();if(AC)AC.suspend().catch(()=>{});}else if(AC)AC.resume().catch(()=>{});});
+document.addEventListener('visibilitychange',()=>{if(n64&&n64ready){if(document.hidden){n64SaveRam();n64SaveAuto(false);try{n64E().pause();}catch(e){}}else if(!paused&&!panelOpen){try{n64E().play();}catch(e){}}}if(gba&&G){if(document.hidden)gbaSuspend();else gbaWake();}if(document.hidden){saveRam();autoSave();if(AC)AC.suspend().catch(()=>{});}else if(AC)AC.resume().catch(()=>{});});
 addEventListener('pagehide',()=>{saveRam();autoSave();});
 
 /* ---------- états (sauvegarde instantanée / retour arrière) ---------- */
@@ -1743,6 +1856,8 @@ async function startGBA(bytes,id,name){
  info.textContent=title+' · ADVANCE';
 }
 async function startRom(bytes,id,name){
+ if(isN64(bytes))return startN64(bytes,id,name);
+ if(n64){n64Stop();n64=false;}
  if(isGBA(bytes)){gg=false;nes=false;snes=false;return startGBA(bytes,id,name);}
  if(isNES(bytes)){snes=false;return startNES(bytes,id,name);}
  if(isSNES(bytes)){gg=false;nes=false;return startSNES(bytes,id,name);}
@@ -1766,7 +1881,7 @@ async function addRom(bytes,fname){
 }
 function isGBA(u){return u.length>=0xC0&&u[0xB2]===0x96&&(u[3]===0xEA||u[3]===0xEB);}
 function gbaTitle(u){let t='';for(let i=0xA0;i<0xAC;i++){const c=u[i];if(c<32||c>126)break;t+=String.fromCharCode(c);}return t.trim()||'SANS TITRE';}
-function romTitle(b){if(isGBA(b))return gbaTitle(b);if(isNES(b))return '';if(isSNES(b))return snesTitle(b);if(isGG(b))return '';let t='';for(let i=0x134;i<((b[0x143]&0x80)?0x13F:0x144);i++){const c=b[i];if(c<32||c>126)break;t+=String.fromCharCode(c);}return t.trim()||'SANS TITRE';}
+function romTitle(b){if(isGBA(b))return gbaTitle(b);if(isN64(b))return n64Title(b);if(isNES(b))return '';if(isSNES(b))return snesTitle(b);if(isGG(b))return '';let t='';for(let i=0x134;i<((b[0x143]&0x80)?0x13F:0x144);i++){const c=b[i];if(c<32||c>126)break;t+=String.fromCharCode(c);}return t.trim()||'SANS TITRE';}
 const EXP_ARR=['vram','wram','oam','io','hram','eram','bgPal','obPal'];
 async function packB64(obj,arrs){
  const head=new TextEncoder().encode(JSON.stringify({...obj,lens:arrs.map(([k,v])=>[k,v.length])}));
@@ -1813,7 +1928,7 @@ async function unzipFirstGB(buf){
  while(p+30<u.length&&dv.getUint32(p,true)===0x04034b50){
   const meth=dv.getUint16(p+8,true),cs=dv.getUint32(p+18,true),nl=dv.getUint16(p+26,true),xl=dv.getUint16(p+28,true);
   const name=new TextDecoder().decode(u.subarray(p+30,p+30+nl));const start=p+30+nl+xl;const data=u.subarray(start,start+cs);
-  if(/\.(gb|gbc|gba|gg|nes|sfc|smc)$/i.test(name)){
+  if(/\.(gb|gbc|gba|gg|nes|sfc|smc|z64|n64|v64)$/i.test(name)){
    if(meth===0)return data.slice();
    if(meth===8&&'DecompressionStream' in window){const ds=new DecompressionStream('deflate-raw');const out=await new Response(new Blob([data]).stream().pipeThrough(ds)).arrayBuffer();return new Uint8Array(out);}
    throw new Error('zip');
@@ -1827,7 +1942,7 @@ document.getElementById('file').addEventListener('change',async e=>{
  try{let buf=await f.arrayBuffer();let bytes=new Uint8Array(buf);
   if(bytes[0]===0x50&&bytes[1]===0x4B)bytes=await unzipFirstGB(buf);
   if(bytes.length<0x150)throw new Error('court');
-  closePanel();await addRom(bytes,f.name.replace(/\.(zip|gbc?|gba|gg|nes|sfc|smc)$/i,''));
+  closePanel();await addRom(bytes,f.name.replace(/\.(zip|gbc?|gba|gg|nes|sfc|smc|z64|n64|v64)$/i,''));
  }catch(err){info.textContent=err.message==='zip'?'Archive non lisible : extrais le .gb':'Fichier non reconnu';}
  e.target.value='';
 });
@@ -1835,7 +1950,7 @@ document.getElementById('file').addEventListener('change',async e=>{
 /* ---------- contrôles ---------- */
 const KEYS={ArrowRight:['d',0],ArrowLeft:['d',1],ArrowUp:['d',2],ArrowDown:['d',3],KeyX:['b',0],KeyK:['b',0],KeyZ:['b',1],KeyJ:['b',1],ShiftLeft:['b',2],ShiftRight:['b',2],Enter:['b',3]};
 const held={};
-function shKey(n,on){if(n==='L')snL=on?1:0;else snR=on?1:0;if(gba&&G){try{on?G.buttonPress(n):G.buttonUnpress(n);}catch(e){}}document.getElementById('b'+n).classList.toggle('on',!!on);}
+function shKey(n,on){if(n64){n64Btn(n==='L'?'nL':'nR',on);return;}if(n==='L')snL=on?1:0;else snR=on?1:0;if(gba&&G){try{on?G.buttonPress(n):G.buttonUnpress(n);}catch(e){}}document.getElementById('b'+n).classList.toggle('on',!!on);}
 function xyKey(n,on){if(n==='X')snX=on?1:0;else snY=on?1:0;document.getElementById('b'+n).classList.toggle('on',!!on);}
 for(const n of['X','Y']){const el_=document.getElementById('b'+n);
  el_.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();initAudio();xyKey(n,true);buzz();});
@@ -1848,10 +1963,11 @@ function setKey(id,on){
  if(gba&&G){const was=g==='d'?!(joyDir&m):!(joyBtn&m);if(was!==!!on){try{on?G.buttonPress(GBN[g+bit]):G.buttonUnpress(GBN[g+bit]);}catch(e){}}}
  if(g==='d'){if(on){if(joyDir&m)IF|=0x10;joyDir&=~m;}else joyDir|=m;}
  else{if(on){if(joyBtn&m)IF|=0x10;joyBtn&=~m;}else joyBtn|=m;}
+ if(n64)n64FromJoy();
 }
 /* ---- Clavier configurable (Réglages > CLAVIER) ---- */
-const KACT=[['up','HAUT',['d',2]],['down','BAS',['d',3]],['left','GAUCHE',['d',1]],['right','DROITE',['d',0]],['a','A',['b',0]],['b','B',['b',1]],['start','START',['b',3]],['select','SELECT',['b',2]],['x','X (SNES)'],['y','Y (SNES)'],['l','L (GBA/SNES)'],['r','R (GBA/SNES)'],['fast','VITESSE x2'],['rew','RETOUR (maintenir)']];
-const KDEF={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyX',b:'KeyZ',start:'Enter',select:'ShiftLeft',l:'KeyA',r:'KeyS',x:'KeyD',y:'KeyC',fast:'Tab',rew:'Backspace'};
+const KACT=[['up','HAUT',['d',2]],['down','BAS',['d',3]],['left','GAUCHE',['d',1]],['right','DROITE',['d',0]],['a','A',['b',0]],['b','B',['b',1]],['start','START',['b',3]],['select','SELECT',['b',2]],['x','X (SNES)'],['y','Y (SNES)'],['z','Z (N64)'],['cu','C HAUT (N64)'],['cd','C BAS (N64)'],['cl','C GAUCHE (N64)'],['cr','C DROITE (N64)'],['l','L (GBA/SNES)'],['r','R (GBA/SNES)'],['fast','VITESSE x2'],['rew','RETOUR (maintenir)']];
+const KDEF={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyX',b:'KeyZ',start:'Enter',select:'ShiftLeft',l:'KeyA',r:'KeyS',x:'KeyD',y:'KeyC',z:'KeyQ',cu:'KeyI',cd:'KeyK',cl:'KeyJ',cr:'KeyL',fast:'Tab',rew:'Backspace'};
 let kbind={},klabel={},kcap=null,klayout=null;
 try{const j=JSON.parse(localStorage.getItem('np_keys')||'null');if(j){kbind=j.b||{};klabel=j.l||{};}}catch(e){}
 for(const k in KDEF)if(!(k in kbind))kbind[k]=KDEF[k];
@@ -1864,6 +1980,7 @@ function saveKeys(){try{localStorage.setItem('np_keys',JSON.stringify({b:kbind,l
 function actOf(code){for(const k in kbind)if(kbind[k]===code)return k;return null;}
 function doAct(a,on){const d=KACT.find(x=>x[0]===a);if(!d)return;
  if(d[2]){setKey(d[2],on);showDpad();if(d[2][0]==='b'){const e=document.getElementById(['bA','bB','bSe','bSt'][d[2][1]]);if(e&&!e.classList.contains('lock'))e.classList.toggle('on',!!on);}}
+ else if(a==='z'||a==='cu'||a==='cd'||a==='cl'||a==='cr'){if(n64)n64Btn({z:'nZ',cu:'nCU',cd:'nCD',cl:'nCL',cr:'nCR'}[a],on);}
  else if(a==='x')xyKey('X',on);else if(a==='y')xyKey('Y',on);
  else if(a==='l')shKey('L',on);else if(a==='r')shKey('R',on);
  else if(a==='fast'){if(on)setFast(!fast);}
@@ -1912,7 +2029,13 @@ function showDpad(){const st={R:!(joyDir&1),L:!(joyDir&2),U:!(joyDir&4),D:!(joyD
  zone.addEventListener('pointerup',end);zone.addEventListener('pointercancel',end);zone.addEventListener('lostpointercapture',end);
 })();
 (function(){const zone=document.getElementById('ab');const ptr=new Map();
+ const SNB=[['a','bA'],['b','bB'],['x','bX'],['y','bY']],ADJ={ax:1,xa:1,ab:1,ba:1,by:1,yb:1,yx:1,xy:1};
+ function hitSnes(e){const zr=zone.getBoundingClientRect();const r={a:0,b:0,x:0,y:0};
+  const d=SNB.map(([k,id])=>{const el=document.getElementById(id);return[k,Math.hypot(e.clientX-(zr.left+el.offsetLeft+el.offsetWidth/2),e.clientY-(zr.top+el.offsetTop+el.offsetHeight/2))];}).sort((p,q)=>p[1]-q[1]);
+  const[i,di]=d[0],[j,dj]=d[1];
+  if(combos&&ADJ[i+j]&&dj-di<18&&di<64){r[i]=1;r[j]=1;}else if(di<(combos?48:58))r[i]=1;return r;}
  function hit(e){
+  if(snes)return hitSnes(e);
   // Axe B -> A : début = B, fin = A, tiers central = A+B (un seul pouce)
   const zr=zone.getBoundingClientRect();
   const ax=zr.left+bA.offsetLeft+30,ay=zr.top+bA.offsetTop+30,bx=zr.left+bB.offsetLeft+30,by=zr.top+bB.offsetTop+30;
@@ -1921,12 +2044,25 @@ function showDpad(){const st={R:!(joyDir&1),L:!(joyDir&2),U:!(joyDir&4),D:!(joyD
   if(t<0)return{a:0,b:Math.hypot(px,py)<Rr?1:0};
   if(t>1)return{a:Math.hypot(e.clientX-ax,e.clientY-ay)<Rr?1:0,b:0};
   if(perp>Rr)return{a:0,b:0};
+  if(!combos)return t<0.5?{a:0,b:1}:{a:1,b:0};
   if(t<0.37)return{a:0,b:1};if(t>0.63)return{a:1,b:0};return{a:1,b:1};
  }
- function apply(){let a=0,b=0;for(const v of ptr.values()){a|=v.a;b|=v.b;}if((a&&joyBtn&1)||(b&&joyBtn&2))buzz();setKey(['b',0],a);setKey(['b',1],b);bA.classList.toggle('on',!!a);bB.classList.toggle('on',!!b);abmid.classList.toggle('on',!!(a&&b));}
+ function apply(){let a=0,b=0,x=0,y=0;for(const v of ptr.values()){a|=v.a;b|=v.b;x|=v.x||0;y|=v.y||0;}if((a&&joyBtn&1)||(b&&joyBtn&2)||(x&&!snX)||(y&&!snY))buzz();setKey(['b',0],a);setKey(['b',1],b);bA.classList.toggle('on',!!a);bB.classList.toggle('on',!!b);abmid.classList.toggle('on',!!(a&&b));
+  if(snes){snX=x;snY=y;bX.classList.toggle('on',!!x);bY.classList.toggle('on',!!y);for(const[k,p,q]of[['xa',x,a],['ab',a,b],['by',b,y],['yx',y,x]])document.getElementById('dm'+k).classList.toggle('on',!!(p&&q));}}
  zone.addEventListener('pointerdown',e=>{e.preventDefault();initAudio();try{zone.setPointerCapture(e.pointerId);}catch(_){}ptr.set(e.pointerId,hit(e));apply();});
  zone.addEventListener('pointermove',e=>{if(ptr.has(e.pointerId)){ptr.set(e.pointerId,hit(e));apply();}});
  const end=e=>{ptr.delete(e.pointerId);apply();};zone.addEventListener('pointerup',end);zone.addEventListener('pointercancel',end);
+})();
+(function(){
+ for(const id of Object.keys(N64B)){const e=document.getElementById(id);if(!e)continue;
+  e.addEventListener('pointerdown',ev=>{ev.preventDefault();ev.stopPropagation();initAudio();try{e.setPointerCapture(ev.pointerId);}catch(_){}n64Btn(id,true);buzz();});
+  for(const t of['pointerup','pointercancel','lostpointercapture'])e.addEventListener(t,()=>n64Btn(id,false));}
+ const st=document.getElementById('n64stick');let pid=null;
+ function mv(ev){const r=st.getBoundingClientRect(),R=r.width/2;let x=(ev.clientX-r.left-R)/(R*0.75),y=(ev.clientY-r.top-R)/(R*0.75);const m=Math.hypot(x,y);if(m>1){x/=m;y/=m;}if(m<0.12){x=0;y=0;}n64StickSet(x,y);}
+ st.addEventListener('pointerdown',ev=>{ev.preventDefault();initAudio();pid=ev.pointerId;try{st.setPointerCapture(pid);}catch(_){}n64Stick=true;st.classList.add('on');mv(ev);});
+ st.addEventListener('pointermove',ev=>{if(ev.pointerId===pid)mv(ev);});
+ const end=ev=>{if(ev.pointerId!==pid)return;pid=null;n64Stick=false;st.classList.remove('on');n64StickSet(0,0);n64FromJoy();};
+ st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end);st.addEventListener('lostpointercapture',end);
 })();
 // SELECT/START : appui long (0,5 s) = verrouillé enfoncé, pour les combinaisons à 3 touches (ex. Haut+A+Select). Nouvel appui = relâché.
 for(const[id,bit,nm]of[['bSe',2,'SELECT'],['bSt',3,'START']]){const el=document.getElementById(id);let tm=null,lock=false,down=false;
@@ -1942,8 +2078,8 @@ let paused=false;
 /* ---------- panneaux ---------- */
 const panel=document.getElementById('panel'),pBody=document.getElementById('pBody'),pTitle=document.getElementById('pTitle');
 let panelOpen=false;
-function openPanel(t){pTitle.textContent=t;panel.classList.add('show');panelOpen=true;if(gba&&G)try{G.pauseGame();}catch(e){}}
-function closePanel(){panel.classList.remove('show');panelOpen=false;if(gba&&G&&!paused)try{G.resumeGame();}catch(e){}}
+function openPanel(t){pTitle.textContent=t;panel.classList.add('show');panelOpen=true;if(gba&&G)try{G.pauseGame();}catch(e){}if(n64)try{n64E().pause();}catch(e){}}
+function closePanel(){panel.classList.remove('show');panelOpen=false;if(gba&&G&&!paused)try{G.resumeGame();}catch(e){}if(n64&&!paused)try{n64E().play();}catch(e){}}
 document.getElementById('pClose').onclick=closePanel;
 panel.addEventListener('pointerdown',e=>{if(e.target===panel)closePanel();});
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
@@ -1955,18 +2091,19 @@ async function showLib(){
  const add=el('label','sb add','+ AJOUTER UNE ROM');add.htmlFor='file';pBody.appendChild(add);
  const roms=(await dbAll('roms'))||[];
  if(!db)pBody.appendChild(el('div','note','Le stockage du navigateur n\'est pas disponible ici : les ROMs ne seront pas gardées.'));
- if(!roms.length)pBody.appendChild(el('div','note','Aucune ROM enregistrée. Ajoute un fichier .gb, .gbc, .gba, .gg, .nes, .sfc ou .zip : il sera gardé dans ce navigateur pour la prochaine fois.'));
+ if(!roms.length)pBody.appendChild(el('div','note','Aucune ROM enregistrée. Ajoute un fichier .gb, .gbc, .gba, .gg, .nes, .sfc, .z64 ou .zip : il sera gardé dans ce navigateur pour la prochaine fois.'));
  roms.sort((a,b)=>b.last-a.last);
  const isA=r=>isGBA(new Uint8Array(r.data,0,Math.min(0xC0,r.data.byteLength)));
  const isC=r=>!isA(r)&&(new Uint8Array(r.data,0x143,1)[0]&0x80)!==0;
  const isN=r=>isNES(new Uint8Array(r.data,0,Math.min(16,r.data.byteLength)));
- const isS=r=>!isA(r)&&!isN(r)&&isSNES(new Uint8Array(r.data));
- const isG=r=>!isA(r)&&!isN(r)&&!isS(r)&&!isGB(new Uint8Array(r.data,0,Math.min(0x150,r.data.byteLength)));
- const kind=r=>isA(r)?'gba':isN(r)?'nes':isS(r)?'snes':isG(r)?'gg':isC(r)?'gbc':'gb';
- const nGB=roms.filter(r=>kind(r)==='gb').length,nC=roms.filter(r=>kind(r)==='gbc').length,nG=roms.filter(r=>kind(r)==='gg').length,nN=roms.filter(r=>kind(r)==='nes').length,nS=roms.filter(r=>kind(r)==='snes').length,nA=roms.length-nGB-nC-nG-nN-nS;
+ const is64=r=>isN64(new Uint8Array(r.data,0,Math.min(64,r.data.byteLength)));
+ const isS=r=>!isA(r)&&!isN(r)&&!is64(r)&&isSNES(new Uint8Array(r.data));
+ const isG=r=>!is64(r)&&!isA(r)&&!isN(r)&&!isS(r)&&!isGB(new Uint8Array(r.data,0,Math.min(0x150,r.data.byteLength)));
+ const kind=r=>is64(r)?'n64':isA(r)?'gba':isN(r)?'nes':isS(r)?'snes':isG(r)?'gg':isC(r)?'gbc':'gb';
+ const nGB=roms.filter(r=>kind(r)==='gb').length,nC=roms.filter(r=>kind(r)==='gbc').length,nG=roms.filter(r=>kind(r)==='gg').length,nN=roms.filter(r=>kind(r)==='nes').length,nS=roms.filter(r=>kind(r)==='snes').length,n6=roms.filter(r=>kind(r)==='n64').length,nA=roms.length-nGB-nC-nG-nN-nS-n6;
  if(roms.length){
   const tabs=el('div','tabs');
-  for(const[k,lbl]of[['all','TOUS ('+roms.length+')'],['gb','GB ('+nGB+')'],['gbc','COLOR ('+nC+')'],['gba','ADVANCE ('+nA+')'],['gg','GAME GEAR ('+nG+')'],['nes','NES ('+nN+')'],['snes','SNES ('+nS+')']]){
+  for(const[k,lbl]of[['all','TOUS ('+roms.length+')'],['gb','GB ('+nGB+')'],['gbc','COLOR ('+nC+')'],['gba','ADVANCE ('+nA+')'],['gg','GAME GEAR ('+nG+')'],['nes','NES ('+nN+')'],['snes','SNES ('+nS+')'],['n64','N64 ('+n6+')']]){
    const b=el('button','sb tab'+(libTab===k?'':' alt'),lbl);b.onclick=()=>{libTab=k;try{localStorage.setItem('np_tab',k);}catch(e){}showLib();};tabs.appendChild(b);}
   pBody.appendChild(tabs);
  }
@@ -1974,7 +2111,7 @@ async function showLib(){
  if(roms.length&&!shown.length)pBody.appendChild(el('div','note','Aucun jeu dans cette catégorie.'));
  for(const r of shown){
   if(kind(r)==='gba'&&!self.crossOriginIsolated){}
-  const row=el('div','row');const t=el('div','t',r.title||cleanName(r.name));t.appendChild(el('small',null,({gb:'GAME BOY · ',gbc:'COLOR · ',gba:'ADVANCE · ',gg:'GAME GEAR · ',nes:'NES · ',snes:'SUPER NINTENDO · '})[kind(r)]+(r.name||'')+' · '+Math.round(r.size/1024)+' Ko'));t.appendChild(el('small',null,'Joué le '+fmtDate(r.last)));
+  const row=el('div','row');const t=el('div','t',r.title||cleanName(r.name));t.appendChild(el('small',null,({gb:'GAME BOY · ',gbc:'COLOR · ',gba:'ADVANCE · ',gg:'GAME GEAR · ',nes:'NES · ',snes:'SUPER NINTENDO · ',n64:'NINTENDO 64 · '})[kind(r)]+(r.name||'')+' · '+Math.round(r.size/1024)+' Ko'));t.appendChild(el('small',null,'Joué le '+fmtDate(r.last)));
   const bs=el('div','btns');const play=el('button','sb',curId===r.id?'EN COURS':'JOUER');
   play.onclick=async()=>{closePanel();if(curId!==r.id)await startRom(new Uint8Array(r.data),r.id,r.name);};
   bs.appendChild(play);
@@ -2002,6 +2139,7 @@ function showStatesGBA2(){pBody.innerHTML='';showStatesGBA();}
 async function showStates(){
  openPanel('ETATS');pBody.innerHTML='';
  if(gba&&G&&loaded){return showStatesGBA();}
+ if(n64&&loaded){if(!n64ready){pBody.appendChild(el('div','note','Patiente : le jeu démarre…'));return;}return showStatesN64();}
  if(!loaded||!curId){pBody.appendChild(el('div','note','Lance d\'abord un jeu depuis JEUX.'));return;}
  if(bugCap&&diag){const r=el('div','row');const t=el('div','t','⚠ ANOMALIE CAPTURÉE');t.appendChild(el('small',null,bugCap.reason+' · '+Math.round((bugCap.to-bugCap.from)/60)+' s avant'));r.appendChild(t);pBody.appendChild(r);
   const b64=await exportBug();pBody.appendChild(partButtons(b64,'NEURBUG2'));}
@@ -2020,20 +2158,21 @@ async function showStates(){
 function showOpt(){
  openPanel('REGLAGES');pBody.innerHTML='';
  const items=[
-  (gg||nes||snes)&&loaded?null:(cgb||gba)&&loaded?['CHASSIS',SHELLS[shellI].n,()=>{shellI=(shellI+1)%SHELLS.length;try{localStorage.setItem('np_shell',shellI);}catch(e){}applyShell();showOpt();}]
+  (gg||nes||snes||n64)&&loaded?null:(cgb||gba)&&loaded?['CHASSIS',SHELLS[shellI].n,()=>{shellI=(shellI+1)%SHELLS.length;try{localStorage.setItem('np_shell',shellI);}catch(e){}applyShell();showOpt();}]
    :['COULEURS',PALS_N[palI],()=>{setPal((palI+1)%PALS.length);if(loaded)blit();showOpt();}],
-  ['SON',sound?'OUI':'NON',()=>{sound=!sound;initAudio();if(G)try{G.setVolume(sound?100:0);}catch(e){}showOpt();}],
-  ['PAUSE',paused?'OUI':'NON',()=>{if(loaded)paused=!paused;if(gba&&G)try{paused?G.pauseGame():null;}catch(e){}showOpt();}],
+  ['SON',sound?'OUI':'NON',()=>{sound=!sound;initAudio();if(G)try{G.setVolume(sound?100:0);}catch(e){}if(n64)try{n64E().setVolume(sound?1:0);}catch(e){}showOpt();}],
+  ['PAUSE',paused?'OUI':'NON',()=>{if(loaded)paused=!paused;if(gba&&G)try{paused?G.pauseGame():null;}catch(e){}if(n64)try{paused?n64E().pause():null;}catch(e){}showOpt();}],
   ['CLAVIER','PERSONNALISER LES TOUCHES',showKeys],
+  ['DOUBLES APPUIS',combos?'ACTIVES':'DESACTIVES',()=>{combos=!combos;try{localStorage.setItem('np_combo',combos?'1':'0');}catch(e){}applyCombo();showOpt();}],
   ['MODE DIAGNOSTIC',diag?'OUI':'NON',()=>{diag=!diag;try{localStorage.setItem('np_diag',diag?'1':'0');}catch(e){}if(diag&&bugCap)info.textContent='⚠ Anomalie capturée — ETATS > ENVOYER À CLAUDE';showOpt();}],
-  ['REDEMARRER LE JEU','',()=>{if(snes&&loaded){SN.np_reset();rewBuf.clear();closePanel();return;}if(nes&&loaded){NESC.reset();rewBuf.clear();closePanel();return;}if(gg&&loaded){GGC.reset();rewBuf.clear();closePanel();return;}if(gba&&G){try{G.quickReload();}catch(e){}closePanel();return;}if(loaded){saveRam();reset();rewBuf.clear();closePanel();}}]
+  ['REDEMARRER LE JEU','',()=>{if(n64&&loaded){try{n64gm().restart();}catch(e){}closePanel();return;}if(snes&&loaded){SN.np_reset();rewBuf.clear();closePanel();return;}if(nes&&loaded){NESC.reset();rewBuf.clear();closePanel();return;}if(gg&&loaded){GGC.reset();rewBuf.clear();closePanel();return;}if(gba&&G){try{G.quickReload();}catch(e){}closePanel();return;}if(loaded){saveRam();reset();rewBuf.clear();closePanel();}}]
  ];
  for(const it of items){if(!it)continue;const[a,v,fn]=it;const row=el('div','row');const t=el('div','t',a);if(v)t.appendChild(el('small',null,v));const b=el('button','sb',v?'CHANGER':'OK');b.onclick=fn;row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
  const vr=el('div','row');const vt=el('div','t','VERSION');vt.appendChild(el('small',null,'Neur Pocket '+VERSION));vt.appendChild(el('small',null,'Moteur GBA : mGBA (MPL 2.0) — '+(self.crossOriginIsolated?'disponible':'version installée uniquement')));vr.appendChild(vt);pBody.appendChild(vr);
  pBody.appendChild(el('div','note',(cgb&&loaded?'CHASSIS change la couleur de la console (jeux Game Boy Color). ':'COULEURS change les teintes de l\'écran (jeux Game Boy). ')+'Appuie entre A et B pour presser les deux à la fois.'));
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.4.0';
+const VERSION='2.5.0';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
@@ -2043,9 +2182,9 @@ const SHELLS=[
  {n:'FRAISE',s:'#de3a57',s2:'#b4243f',ink:'#fff0f3'}];
 let shellI=0;try{shellI=(+localStorage.getItem('np_shell')||0)%SHELLS.length;}catch(e){}
 function applyShell(){
- const app=document.getElementById('app'),st=app.style;app.classList.toggle('gbc',(cgb||gba||gg||nes||snes)&&loaded);app.classList.toggle('gba',gba&&loaded);app.classList.toggle('gg',gg&&loaded);app.classList.toggle('nes',nes&&loaded);app.classList.toggle('snes',snes&&loaded);updKeyHelp();
+ const app=document.getElementById('app'),st=app.style;app.classList.toggle('gbc',(cgb||gba||gg||nes||snes||n64)&&loaded);app.classList.toggle('gba',gba&&loaded);app.classList.toggle('gg',gg&&loaded);app.classList.toggle('nes',nes&&loaded);app.classList.toggle('snes',snes&&loaded);app.classList.toggle('n64',n64&&loaded);updKeyHelp();
  const props=['--shell','--shell2','--btn','--btnSh','--btnOn','--ink'];
- if((cgb||gba||gg||nes||snes)&&loaded){const c=snes?{s:'#d6d5db',s2:'#bcbbc4',ink:'#4b3f86'}:nes?{s:'#cfcdca',s2:'#b4b2ae',ink:'#2b2b2e'}:gg?{s:'#2c2c31',s2:'#1c1c20',ink:'#c9cbd6'}:SHELLS[shellI];
+ if((cgb||gba||gg||nes||snes||n64)&&loaded){const c=n64?{s:'#c9c9ce',s2:'#adadb4',ink:'#2f2f36'}:snes?{s:'#d6d5db',s2:'#bcbbc4',ink:'#4b3f86'}:nes?{s:'#cfcdca',s2:'#b4b2ae',ink:'#2b2b2e'}:gg?{s:'#2c2c31',s2:'#1c1c20',ink:'#c9cbd6'}:SHELLS[shellI];
   st.setProperty('--shell',c.s);st.setProperty('--shell2',c.s2);st.setProperty('--btn','#34343b');st.setProperty('--btnSh','#141418');st.setProperty('--btnOn','#26262c');st.setProperty('--ink',c.ink);
   st.backgroundImage=c.glass?'repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 5px,transparent 5px 11px),radial-gradient(circle at 30% 20%,rgba(255,255,255,.35),transparent 60%),linear-gradient('+c.s+','+c.s2+')':'';
   document.querySelector('meta[name=theme-color]').content=c.s;}
@@ -2056,12 +2195,12 @@ document.getElementById('bLib').onclick=showLib;
 document.getElementById('bState').onclick=showStates;
 document.getElementById('bOpt').onclick=showOpt;
 const bFast=document.getElementById('bFast'),bRew=document.getElementById('bRew');
-function setFast(v){fast=v;bFast.classList.toggle('act',fast);if(G)try{G.setFastForwardMultiplier(fast?2:1);}catch(e){}}
+function setFast(v){fast=v;bFast.classList.toggle('act',fast);if(n64){const g=n64gm();if(g)try{g.setFastForwardRatio(2);g.toggleFastForward(fast?1:0);}catch(e){}}if(G)try{G.setFastForwardMultiplier(fast?2:1);}catch(e){}}
 bFast.onclick=()=>setFast(!fast);
-function setRew(v){rewinding=v&&loaded;bRew.classList.toggle('act',rewinding);if(gba&&G)try{G.toggleRewind(!!rewinding);}catch(e){}}
+function setRew(v){if(n64){if(v)info.textContent='Retour arrière indisponible sur N64';rewinding=false;return;}rewinding=v&&loaded;bRew.classList.toggle('act',rewinding);if(gba&&G)try{G.toggleRewind(!!rewinding);}catch(e){}}
 bRew.addEventListener('pointerdown',e=>{e.preventDefault();try{bRew.setPointerCapture(e.pointerId);}catch(_){}setRew(true);});
 for(const ev of['pointerup','pointercancel','lostpointercapture'])bRew.addEventListener(ev,()=>setRew(false));
-updKeyHelp();addEventListener('DOMContentLoaded',updKeyHelp);
+updKeyHelp();addEventListener('DOMContentLoaded',updKeyHelp);applyCombo();
 function fit(){
  const app=document.getElementById('app');const desk=!(gba&&loaded)&&matchMedia('(hover:hover) and (pointer:fine)').matches&&innerHeight>=520&&innerWidth>=560;
  document.documentElement.classList.toggle('desk',desk);
@@ -2069,6 +2208,7 @@ function fit(){
  const W=desk?app.clientWidth:innerWidth,H=desk?app.clientHeight:innerHeight;let aw,ah;
  const pz=(land&&matchMedia('(hover:hover) and (pointer:fine)').matches)?Math.max(1,Math.min(2.2,H/420)):1;document.getElementById('pad').style.zoom=pz>1?pz:'';for(const id of['bar','info'])document.getElementById(id).style.zoom=pz>1?Math.min(1.6,pz):'';
  if(land){aw=W-2*180*pz-44;ah=H-34-90*(pz>1?Math.min(1.6,pz):1);}else{aw=W-44-16;ah=H*0.5-34-30;}
+ if(n64&&loaded&&n64f){let s=Math.min((aw+20)/320,ah/240);n64f.style.width=Math.round(320*s)+'px';n64f.style.height=Math.round(240*s)+'px';return;}
  if((nes||snes)&&loaded){let s=Math.max(1,Math.min((aw+20)/256,ah/224));ncv.style.width=Math.round(256*s)+'px';ncv.style.height=Math.round(224*s)+'px';return;}
  if(gba){let s=Math.max(1,Math.min((aw+20)/240,ah/160));const gc=document.getElementById('gcv');gc.style.width=Math.round(240*s)+'px';gc.style.height=Math.round(160*s)+'px';return;}
  let s=Math.max(1,Math.min(aw/160,ah/144));if(s>=3)s=Math.floor(s);
@@ -2091,7 +2231,7 @@ function idleScreen(){
  ctx.font='8px "Press Start 2P", monospace';ctx.textBaseline='top';
  const t=(s,y)=>ctx.fillText(s,80-s.length*4,y);
  t('NEUR POCKET',30);t('APPUIE SUR',70);t('« JEUX » POUR',82);t('CHOISIR UN JEU',94);
- ctx.fillStyle=PALS[palI][2];t('GB GBC GBA GG',118);t('NES SNES',132);
+ ctx.fillStyle=PALS[palI][2];t('GB GBC GBA GG',118);t('NES SNES N64',132);
 }
 function runFrame(){
  if(gg){GGC.frame();return;}
@@ -2104,7 +2244,7 @@ let last=0,accT=0,rewT=0;const FRAME=1000/59.7275;
 function loop(ts){
  requestAnimationFrame(loop);
  if(!loaded){if(!gba)idleScreen();return;}
- if(gba)return;
+ if(gba||n64)return;
  if(!last)last=ts;let dt=ts-last;last=ts;if(dt>100)dt=FRAME;
  if(rewinding&&!panelOpen){rewT+=dt;while(rewT>=FRAME*1.5){rewT-=FRAME*1.5;const s=rewBuf.pop();if(s){restore(s);blit();}}if(crashed){crashed=false;stall=0;info.textContent=title+' · reprise';}apos=0;accT=0;return;}
  if(paused||panelOpen){apos=0;return;}

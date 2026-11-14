@@ -1,5 +1,5 @@
 // Neur Pocket — service worker : hors ligne + isolation cross-origin (requise par le moteur GBA)
-const CACHE='neurpocket-2.4.0';
+const CACHE='neurpocket-2.5.0';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./mgba.js','./mgba.wasm','./snes9x.wasm'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).catch(()=>{}));self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n!==CACHE).map(n=>caches.delete(n)))).then(()=>self.clients.claim()));});
@@ -17,7 +17,7 @@ self.addEventListener('fetch',e=>{
   if(r.cache==='only-if-cached'&&r.mode!=='same-origin')return;
   const same=new URL(r.url).origin===self.location.origin;
   if(!same)return;
-  const heavy=/(mgba\.(js|wasm)|snes9x\.wasm)$/.test(r.url);
+  const heavy=/(mgba\.(js|wasm)|snes9x\.wasm|\/ejs\/.*)$/.test(r.url);
   e.respondWith((async()=>{
     const cache=await caches.open(CACHE);
     if(heavy){const c=await cache.match(r);if(c)return isolate(c);}

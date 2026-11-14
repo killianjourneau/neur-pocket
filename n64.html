@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neur Pocket N64</title>
+<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}#game{width:100%;height:100%}
+.ejs_virtualGamepad_open,.ejs_menu_bar,.ejs_menu_button,.ejs_start_button,.ejs_setting_menu,.ejs_virtualGamepad_parent,.ejs_context_menu,.ejs_settings_parent,.ejs_popup_container,.ejs_menu_bar_hidden{display:none!important}
+.ejs_parent{background:#000!important}</style></head><body><div id="game"></div>
+<script>
+(function(){const gc=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(t,a){if(/webgl/.test(t))a=Object.assign({},a||{},{preserveDrawingBuffer:true});return gc.call(this,t,a);};})();
+/* Neur Pocket — moteur N64 : EmulatorJS (GPL-3.0) + cœur mupen64plus-next (libretro) */
+window.npStart=function(buf,id){
+ const url=URL.createObjectURL(new Blob([buf]));
+ Object.assign(window,{EJS_player:'#game',EJS_core:'n64',EJS_gameUrl:url,EJS_gameName:'np_'+id,EJS_pathtodata:'ejs/',
+  EJS_startOnLoaded:true,EJS_DEBUG_XX:true,EJS_threads:false,EJS_language:'en-US',EJS_disableAutoLang:true,EJS_noAutoFocus:true,
+  EJS_volume:1,EJS_color:'#4b3f86',EJS_backgroundColor:'#000',
+  EJS_defaultControls:{0:{},1:{},2:{},3:{}},
+  EJS_paths:{'mupen64plus_next-wasm.data':'ejs/cores/mupen64plus_next-core.wasm','mupen64plus_next-legacy-wasm.data':'ejs/cores/mupen64plus_next-legacy-core.wasm'},
+  EJS_Buttons:{playPause:false,restart:false,mute:false,settings:false,fullscreen:false,saveState:false,loadState:false,screenRecord:false,gamepad:false,cheat:false,volume:false,saveSavFiles:false,loadSavFiles:false,quickSave:false,quickLoad:false,screenshot:false,cacheManager:false,exitEmulation:false,netplay:false,diskButton:false,contextMenu:false},
+  EJS_onGameStart:()=>{try{parent.npN64Started&&parent.npN64Started();}catch(e){}}});
+ const s=document.createElement('script');s.src='ejs/loader.js';document.body.appendChild(s);};
+</script></body></html>
