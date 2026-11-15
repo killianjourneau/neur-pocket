@@ -27,6 +27,9 @@ Sources : https://github.com/EmulatorJS/EmulatorJS et https://github.com/Emulato
 Fichiers : n64.html et dossier ejs/ (seule modification : la vérification de mise à jour en ligne est désactivée).
 
 ----------------------------------------------------------------
-Mode 2 joueurs : PeerJS 1.5.5 (licence MIT) — https://github.com/peers/peerjs
-Fichier : peerjs.min.js. La mise en relation des deux appareils passe par le service public gratuit de PeerJS ;
-ensuite les touches circulent directement d'un appareil à l'autre.
+Multijoueur en ligne : PeerJS 1.5.5 (licence MIT) — https://github.com/peers/peerjs
+Fichier : peerjs.min.js. La mise en relation des appareils passe par le service public gratuit de PeerJS ;
+ensuite tout circule directement d'un appareil à l'autre (WebRTC du navigateur) :
+- NES et Super Nintendo : les touches et l'état de la partie ;
+- Nintendo 64 : l'image et le son du jeu du joueur 1 vers les autres joueurs, et leurs touches en retour.
+Aucune ROM n'est jamais transmise.
