@@ -22,9 +22,14 @@ Licence Snes9x : utilisation et distribution gratuites, usage NON COMMERCIAL uni
 (voir le fichier "copyright" du dépôt source). Neur Pocket n'est pas vendu.
 
 ----------------------------------------------------------------
-Moteur Nintendo 64 : EmulatorJS 4.2.3 (licence GPL-3.0) avec le cœur mupen64plus-next (libretro, GPL-2.0)
-Sources : https://github.com/EmulatorJS/EmulatorJS et https://github.com/EmulatorJS/mupen64plus-libretro-nx
-Fichiers : n64.html et dossier ejs/ (seule modification : la vérification de mise à jour en ligne est désactivée).
+Moteurs Nintendo 64 : EmulatorJS 4.2.3 (licence GPL-3.0) avec, au choix dans REGLAGES > MOTEUR N64 :
+ - PRECIS : cœur mupen64plus-next 2.0.2 + rendu GLideN64 (libretro, GPL-2.0)
+ - RAPIDE : cœur parallel_n64 2.0.2 + rendu Glide64 (libretro, GPL-2.0)
+Sources : https://github.com/EmulatorJS/EmulatorJS, https://github.com/EmulatorJS/mupen64plus-libretro-nx
+et https://github.com/EmulatorJS/parallel-n64
+Fichiers : n64.html et dossier ejs/. Modifications apportées à ejs/src/emulator.js : vérification de mise à jour
+en ligne désactivée, journal console du cœur coupé, deux appels ajoutés autour de chaque image (mesure du temps
+et file d'attente des entrées de Neur Pocket).
 
 ----------------------------------------------------------------
 Multijoueur en ligne : PeerJS 1.5.5 (licence MIT) — https://github.com/peers/peerjs

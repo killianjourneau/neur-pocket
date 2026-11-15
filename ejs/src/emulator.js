@@ -946,16 +946,11 @@ class EmulatorJS {
             canvas: this.canvas,
             callbacks: {},
             parent: this.elements.parent,
-            print: (msg) => {
-                if (this.debug) {
-                    console.log(msg);
-                }
-            },
-            printErr: (msg) => {
-                if (this.debug) {
-                    console.log(msg);
-                }
-            },
+            /* Neur Pocket : pas de journal console à chaque image, et mesure du coût d'une itération */
+            print: (msg) => {},
+            printErr: (msg) => {},
+            preMainLoop: () => { const p = window.npPerf; if (p) p.t = performance.now(); },
+            postMainLoop: () => { const p = window.npPerf; if (p) { p.ms += performance.now() - p.t; p.n++; } if (window.npTick) window.npTick(); },
             totalDependencies: 0,
             locateFile: function (fileName) {
                 if (this.debug) console.log(fileName);

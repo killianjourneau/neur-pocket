@@ -1868,14 +1868,14 @@ function nsHostRecv(g,m){if(!m||typeof m!=='object')return;
  case 'hi':if(m.v!==NET_PROTO){try{g.conn.send({t:'ver'});}catch(e){}setTimeout(()=>nsDrop(g),300);break;}
   try{g.conn.send({t:'game',kind:'n64',title,slot:g.slot+1});}catch(e){}break;
  case 'rdy':if(!g.ok&&nsGame()){g.ok=true;netState='run';nsCall(g);info.textContent='Le joueur '+(g.slot+1)+' a rejoint la partie';nsRosterSend();}break;
- case 'p':if(typeof m.q==='number'&&m.q>g.q&&Array.isArray(m.s)){g.q=m.q;g.lastP=performance.now();nsApply(g,m.s);}break;
+ case 'p':if(typeof m.q==='number'&&m.q>g.q&&Array.isArray(m.s)){if(g.q>=0&&m.q>g.q+1&&Array.isArray(m.p))nsApply(g,m.p);g.q=m.q;g.lastP=performance.now();nsApply(g,m.s);}break;
  case 'pg':if(typeof m.r==='number')g.rtt=m.r;try{g.conn.send({t:'po',s:m.s});}catch(e){}break;
  case 'bye':nsDrop(g);break;
  }}
 function nsApply(g,a){const gm=n64gm();if(!gm)return;
  for(let k=0;k<NSI.length;k++){const idx=NSI[k];let v=a[k]|0;v=v<0?0:v>0x7fff?0x7fff:v;if(idx<16&&v)v=1;
-  if((g.st[idx]|0)!==v){g.st[idx]=v;try{gm.simulateInput(g.slot,idx,v);}catch(e){}}}}
-function nsRelease(g){const gm=n64gm();for(const k in g.st)if(g.st[k]){g.st[k]=0;if(gm)try{gm.simulateInput(g.slot,+k,0);}catch(e){}}}
+  if((g.st[idx]|0)!==v){g.st[idx]=v;n64In(g.slot,idx,v);}}}
+function nsRelease(g){const gm=n64gm();for(const k in g.st)if(g.st[k]){g.st[k]=0;if(gm)n64In(g.slot,+k,0);}}
 function nsDrop(g){const i=nsGuests.indexOf(g);if(i<0)return;nsGuests.splice(i,1);nsRelease(g);
  try{g.call&&g.call.close();}catch(e){}try{g.conn.send({t:'bye'});}catch(e){}const c=g.conn;setTimeout(()=>{try{c.close();}catch(e){}},200);
  if(g.ok)info.textContent='Le joueur '+(g.slot+1)+' a quitté la partie';
@@ -1905,10 +1905,13 @@ setInterval(()=>{if(netRole!=='host'||!nsMode||!nsGuests.length)return;
  const now=performance.now();for(const g of nsGuests)if(g.lastP&&now-g.lastP>1500&&Object.values(g.st).some(v=>v))nsRelease(g); // manette muette : on relâche tout
 },400);
 // --- invité ---
+let nsPrev=null;
 function nsPadSend(force){ // envoie l'état complet de la manette ; le plus récent l'emporte
  const now=performance.now();
  if(!force&&now-nsLastSend<8){if(!nsPadT)nsPadT=setTimeout(()=>{nsPadT=null;nsPadSend(true);},8);return;}
- nsLastSend=now;netSend({t:'p',q:++nsSeq,s:NSI.map(i=>n64st[i]|0)});}
+ nsLastSend=now;const cur=NSI.map(i=>n64st[i]|0),m={t:'p',q:++nsSeq,s:cur,p:nsPrev};nsPrev=cur;netSend(m);
+ /* canal sans retransmission : chaque paquet rappelle l'état précédent et le dernier part deux fois — un paquet perdu ne coûte ni un appui ni un relâchement */
+ setTimeout(()=>{if(n64Remote&&netConnOpen&&m.q===nsSeq)netSend(m);},14);}
 setInterval(()=>{if(n64Remote&&netConnOpen&&NSI.some(i=>n64st[i]))nsPadSend(true);},250);
 function nsGuestStart(m){
  if(gba)gbaStop();saveRam();autoSave();n64Stop();
@@ -2026,14 +2029,37 @@ function snesRestore(s){const p=SN.np_malloc(s.st.length);snesHeap(p,s.st.length
  if(s.fb){nimg32.set(s.fb);nctx.putImageData(nimg,0,0);}}
 function snesSaveRam(){if(!SN||!curId)return;const n=SN.np_sram_size();if(!n)return;const d=snesHeap(SN.np_sram(),n).slice();const h=sum32(d);
  if(h===snesSramSum)return;if(snesSramSum===-1&&!d.some(x=>x))return;snesSramSum=h;dbPut('sram',{id:curId,data:d});}
-/* ---------- Nintendo 64 : EmulatorJS (GPL-3.0) + cœur mupen64plus-next, dans un cadre n64.html ---------- */
+/* ---------- Nintendo 64 : EmulatorJS (GPL-3.0) + cœur mupen64plus-next ou parallel_n64, dans un cadre n64.html ---------- */
 let n64=false,n64f=null,n64ready=false,n64st={},n64SramSum=0,n64Stick=false;
+/* Deux moteurs au choix : 'm' = mupen64plus-next + GLideN64 (précis), 'p' = parallel_n64 + Glide64 (rapide). Image : 640x480 ou 320x240. */
+let n64Eng='m',n64Res='640',n64Run='m',n64Keep=null,n64Vs=true,n64Lag=0,n64Ms=0,n64Slow=0,n64Tip=false;
+try{n64Eng=localStorage.getItem('np_n64eng')==='p'?'p':'m';n64Res=localStorage.getItem('np_n64res')==='320'?'320':'640';}catch(e){}
+function n64Cfg(){if(window.__n64o)return window.__n64o;const lo=n64Res==='320';
+ if(n64Eng==='p')return {core:'parallel_n64',opt:{'parallel-n64-screensize':lo?'320x240':'640x480','parallel-n64-pak1':'memory'}};
+ /* la copie de l'image vers la mémoire N64 n'a jamais abouti en WebGL (lecture de tampon refusée) : on économise la recopie à chaque image */
+ const o={'mupen64plus-EnableCopyColorToRDRAM':'Off','mupen64plus-43screensize':lo?'320x240':'640x480'};
+ if(lo){o['mupen64plus-EnableCopyDepthToRDRAM']='Off';o['mupen64plus-HybridFilter']='False';}
+ return {opt:o};}
+function n64K(slot){return slot+'#'+curId+(n64Run==='p'?'~p':'');}
+/* Entrées : file d'attente par touche. Chaque appui ET chaque relâchement reste visible au moins N64K images émulées ;
+   sans cela un appui bref, ou le creux entre deux appuis, tombe entre deux lectures de la manette dès que l'émulation ralentit. */
+const N64K=2;let n64Q={},n64QT=0,n64QF=-1,n64QW=0,n64QP=false;
+function n64In(p,idx,val){const g=n64gm();if(!g)return;const k=p*32+idx,s=n64Q[k]||(n64Q[k]={cur:0,f:-9,q:[]});
+ const last=s.q.length?s.q[s.q.length-1]:s.cur;if(last===val)return;
+ if(val&&last){if(s.q.length)s.q[s.q.length-1]=val;else{s.cur=val;try{g.simulateInput(p,idx,val);}catch(e){}}return;}
+ s.q.push(val);if(s.q.length>6)s.q.splice(0,2);n64Pump();}
+function n64Pump(){if(n64QT){clearTimeout(n64QT);n64QT=0;}const g=n64gm();if(!g){n64Q={};return;}let f=-1;try{f=g.getFrameNum();}catch(e){}
+ const now=performance.now();if(f!==n64QF){n64QF=f;n64QW=now;}const stall=now-n64QW>250;let pend=false;
+ for(const k in n64Q){const s=n64Q[k];
+  while(s.q.length){if(!stall&&f-s.f<N64K){pend=true;break;}
+   const v=s.q.shift();s.cur=v;s.f=stall?-9:f;try{g.simulateInput(k>>5,k&31,v);}catch(e){}}}
+ n64QP=pend;if(pend)n64QT=setTimeout(n64Pump,60);}
 function isN64(u){if(u.length<0x40)return false;const a=u[0],b=u[1],c=u[2],d=u[3];
  return (a===0x80&&b===0x37&&c===0x12&&d===0x40)||(a===0x37&&b===0x80&&c===0x40&&d===0x12)||(a===0x40&&b===0x12&&c===0x37&&d===0x80);}
 function n64Title(u){const x=u[0]===0x37?1:u[0]===0x40?3:0;let t='';for(let i=0x20;i<0x34;i++){const c=u[i^x];t+=(c>=0x20&&c<0x7F)?String.fromCharCode(c):' ';}return t.trim().replace(/\s+/g,' ');}
 function n64E(){try{return n64f&&n64f.contentWindow&&n64f.contentWindow.EJS_emulator||null;}catch(e){return null;}}
 function n64gm(){const E=n64E();return n64ready&&E&&E.gameManager?E.gameManager:null;}
-function n64Set(idx,val){if(n64Remote){if(n64st[idx]!==val){n64st[idx]=val;nsPadSend();}return;}const g=n64gm();if(!g)return;if(n64st[idx]===val)return;n64st[idx]=val;try{g.simulateInput(0,idx,val);}catch(e){}}
+function n64Set(idx,val){if(n64Remote){if(n64st[idx]!==val){n64st[idx]=val;nsPadSend();}return;}if(!n64gm())return;if(n64st[idx]===val)return;n64st[idx]=val;n64In(0,idx,val);}
 const N64B={nA:[0,1],nB:[1,1],nST:[3,1],nL:[10,1],nR:[11,1],nZ:[12,1],nCR:[20,0x7fff],nCL:[21,0x7fff],nCD:[22,0x7fff],nCU:[23,0x7fff]};
 function n64Btn(id,on){const m=N64B[id];if(!m)return;n64Set(m[0],on?m[1]:0);const e=document.getElementById(id);if(e)e.classList.toggle('on',!!on);}
 function n64StickSet(x,y){n64Set(16,x>0?Math.round(x*0x7fff):0);n64Set(17,x<0?Math.round(-x*0x7fff):0);n64Set(18,y>0?Math.round(y*0x7fff):0);n64Set(19,y<0?Math.round(-y*0x7fff):0);
@@ -2041,49 +2067,73 @@ function n64StickSet(x,y){n64Set(16,x>0?Math.round(x*0x7fff):0);n64Set(17,x<0?Ma
 function n64FromJoy(){if(!n64)return;
  if(!n64Stick){const x=(!(joyDir&1)?1:0)-(!(joyDir&2)?1:0),y=(!(joyDir&8)?1:0)-(!(joyDir&4)?1:0);const n=(x&&y)?0.7071:1;n64StickSet(x*n,y*n);}
  n64Btn('nA',!(joyBtn&1));n64Btn('nB',!(joyBtn&2));n64Btn('nST',!(joyBtn&8));}
-function n64Thumb(){try{const E=n64E(),cv=E&&E.canvas;if(!cv||!cv.width)return Promise.resolve(null);
- const c=document.createElement('canvas');c.width=128;c.height=96;const w=cv.width,h=cv.height,a=4/3;let sw=w,sh=h,sx=0,sy=0;
+/* Vignette : prise à la fin d'une image juste avant la pause (le tampon WebGL n'est plus conservé d'une image à l'autre : une recopie plein écran de moins à chaque image) */
+let n64ThC=null,n64ThT=null,n64ThOk=false,n64ThReq=0,n64ThTm=0;
+function n64Grab(){try{const E=n64E(),cv=E&&E.canvas;if(!cv||!cv.width)return false;
+ if(!n64ThT){n64ThT=document.createElement('canvas');n64ThT.width=128;n64ThT.height=96;}
+ const x=n64ThT.getContext('2d',{willReadFrequently:true}),w=cv.width,h=cv.height,a=4/3;let sw=w,sh=h,sx=0,sy=0;
  if(w/h>a){sw=h*a;sx=(w-sw)/2;}else{sh=w/a;sy=(h-sh)/2;}
- c.getContext('2d').drawImage(cv,sx,sy,sw,sh,0,0,128,96);return Promise.resolve(c.toDataURL('image/jpeg',0.7));}catch(e){return Promise.resolve(null);}}
-function n64SaveRam(){const g=n64gm();if(!g||!curId)return;try{g.saveSaveFiles();const d=g.getSaveFile(false);if(d&&d.length){const h=sum32(d);if(h!==n64SramSum){n64SramSum=h;dbPut('sram',{id:curId,data:new Uint8Array(d)});}}}catch(e){}}
+ x.drawImage(cv,sx,sy,sw,sh,0,0,128,96);const d=x.getImageData(0,0,128,96).data;let k=0;for(let i=0;i<d.length;i+=52)k+=d[i]+d[i+1]+d[i+2];
+ if(k<=0)return false;const o=n64ThC;n64ThC=n64ThT;n64ThT=o;n64ThOk=true;return true;}catch(e){return false;}}
+function n64Thumb(){try{return Promise.resolve(n64ThOk?n64ThC.toDataURL('image/jpeg',0.7):null);}catch(e){return Promise.resolve(null);}}
+function n64PauseNow(){if(n64&&(paused||panelOpen||document.hidden||document.body.classList.contains('editing')))try{n64E().pause();}catch(e){}}
+function n64PauseSoon(){const E=n64E();if(!E)return;if(!n64ready||n64Remote){try{E.pause();}catch(e){}return;}
+ n64ThReq=8;clearTimeout(n64ThTm);n64ThTm=setTimeout(()=>{if(n64ThReq>0){n64ThReq=0;n64PauseNow();}},350);}
+function n64Tick(){if(n64QP)n64Pump();if(n64ThReq>0&&(n64Grab()||--n64ThReq<=0)){n64ThReq=0;clearTimeout(n64ThTm);n64PauseNow();}}
+function n64SaveRam(){const g=n64gm();if(!g||!curId)return;try{g.saveSaveFiles();const d=g.getSaveFile(false);if(d&&d.length){const h=sum32(d);if(h!==n64SramSum){n64SramSum=h;dbPut('sram',{id:curId,data:new Uint8Array(d),eng:n64Run});}}}catch(e){}}
 async function n64SaveAuto(withThumb){const g=n64gm();if(!g||!curId)return;let st=null;try{st=g.getState();}catch(e){}if(!st)return;
- const old=await dbGet('states','auto#'+curId);const th=withThumb?await n64Thumb():(old&&old.thumb)||null;
- await dbPut('states',{key:'auto#'+curId,id:curId,slot:'auto',date:Date.now(),thumb:th,state:{n64:true,st}});}
-function n64Stop(){if(n64f){if(n64ready){n64SaveRam();try{const g=n64gm(),st=g.getState();dbGet('states','auto#'+curId).then(o=>dbPut('states',{key:'auto#'+curId,id:curId,slot:'auto',date:Date.now(),thumb:o&&o.thumb||null,state:{n64:true,st}}));}catch(e){}}
- n64f.remove();n64f=null;}n64ready=false;n64st={};}
+ const K=n64K('auto'),old=await dbGet('states',K);const th=withThumb?await n64Thumb():(old&&old.thumb)||null;
+ await dbPut('states',{key:K,id:curId,slot:'auto',date:Date.now(),thumb:th,state:{n64:true,st}});}
+function n64Stop(){if(n64f){if(n64ready){n64SaveRam();try{const g=n64gm(),st=g.getState(),K=n64K('auto'),id=curId;dbGet('states',K).then(o=>dbPut('states',{key:K,id,slot:'auto',date:Date.now(),thumb:o&&o.thumb||null,state:{n64:true,st}}));}catch(e){}}
+ n64f.remove();n64f=null;}n64ready=false;n64st={};n64Q={};}
 async function startN64(bytes,id,name){
  if(gba)gbaStop();saveRam();autoSave();n64Stop();
- n64=true;nes=false;gg=false;snes=false;cgb=false;ramUsable=false;battery=false;n64st={};n64SramSum=0;
+ n64=true;nes=false;gg=false;snes=false;cgb=false;ramUsable=false;battery=false;n64st={};n64SramSum=0;n64Q={};n64Run=window.__n64o?(window.__n64o.core?'p':'m'):n64Eng;n64Vs=true;n64Lag=0;n64Ms=0;n64Slow=0;n64Tip=false;n64ThOk=false;n64ThReq=0;
  {const x=bytes[0]===0x37?1:bytes[0]===0x40?3:0,c=String.fromCharCode(bytes[0x3E^x]);n64Pal='DFIPSUXY'.includes(c);}
  curId=id;curName=name||'';title=(n64Title(bytes)||cleanName(name)||'NINTENDO 64').toUpperCase().slice(0,26);
  loaded=true;paused=false;crashed=false;bugCap=null;rewBuf.clear();frameN=0;led.classList.add('on');
  const f=document.createElement('iframe');f.id='n64f';f.src='n64.html';f.setAttribute('allow','autoplay; gamepad; fullscreen');f.setAttribute('tabindex','-1');
  document.getElementById('bezel').appendChild(f);n64f=f;
- const buf=bytes.slice().buffer;f.onload=()=>{try{f.contentWindow.npStart(buf,id);}catch(e){info.textContent='MOTEUR N64 INTROUVABLE';}};
- applyShell();info.textContent='Chargement du moteur Nintendo 64…';
+ const buf=bytes.slice().buffer;f.onload=()=>{try{f.contentWindow.npStart(buf,id,n64Cfg());}catch(e){info.textContent='MOTEUR N64 INTROUVABLE';}};
+ applyShell();info.textContent='Chargement du moteur Nintendo 64'+(n64Run==='p'?' rapide':'')+'…';
  const r=await dbGet('roms',id);if(r){r.last=Date.now();dbPut('roms',r);}
 }
-window.npN64Started=async function(){n64ready=true;const g=n64gm();
- try{const sr=await dbGet('sram',curId);if(sr&&sr.data){const d=new Uint8Array(sr.data),p=g.getSaveFilePath(),parts=p.split('/');let cp='';
+window.npN64Started=async function(){n64ready=true;const g=n64gm();try{n64f.contentWindow.npTick=n64Tick;}catch(e){}
+ try{const sr=await dbGet('sram',curId);if(sr&&sr.data){if((sr.eng||'m')!==n64Run)dbPut('sram',{id:curId+'~'+(sr.eng||'m'),data:sr.data,eng:sr.eng||'m',date:Date.now()});
+  const d=new Uint8Array(sr.data),p=g.getSaveFilePath(),parts=p.split('/');let cp='';
   for(let i=0;i<parts.length-1;i++){if(!parts[i])continue;cp+='/'+parts[i];if(!g.FS.analyzePath(cp).exists)g.FS.mkdir(cp);}
   if(g.FS.analyzePath(p).exists)g.FS.unlink(p);g.FS.writeFile(p,d);g.loadSaveFiles();n64SramSum=sum32(d);}}catch(e){}
  const E=n64E();try{n64Vol();if(fast){g.setFastForwardRatio(2);g.toggleFastForward(1);}if(paused||panelOpen)E.pause();}catch(e){}
- const au=await dbGet('states','auto#'+curId);info.textContent=title+' · NINTENDO 64'+(au?' · ETATS > AUTO pour reprendre':'');};
+ if(n64Keep){try{g.loadState(n64Keep);}catch(e){}n64Keep=null;info.textContent=title+' · NINTENDO 64';return;}
+ const au=await dbGet('states',n64K('auto'));info.textContent=title+' · NINTENDO 64'+(au?' · ETATS > AUTO pour reprendre':'');};
+async function n64Relaunch(keep){if(!n64||!loaded||!n64ready||n64Remote||netState!=='off')return;
+ let st=null;if(keep){try{st=n64gm().getState();}catch(e){}}
+ const r=await dbGet('roms',curId);if(!r||!r.data)return;n64Keep=st;await startN64(new Uint8Array(r.data),curId,curName);}
+{let f0=-1,t0=0,p0=null;setInterval(()=>{if(!n64||!n64ready||n64Remote){f0=-1;n64Ms=0;return;}
+ const g=n64gm();let n=-1,p=null;try{n=g.getFrameNum();}catch(e){}try{p=n64f.contentWindow.npPerf;}catch(e){}const t=performance.now();
+ if(f0>=0&&n>f0&&!paused&&!panelOpen){const fps=(n-f0)*1000/(t-t0);if(p&&p0!==null)n64Ms=(p.ms-p0)/(n-f0);
+  /* la boucle calée sur l'écran arrondit chaque image au rafraîchissement suivant : dès que ça rame, on tourne sans attendre l'écran (la vitesse reste bornée par le son) */
+  if(n64Vs&&!fast&&!document.hidden){if(fps<(n64Pal?50:60)*0.9){if(++n64Lag>=3){n64Vs=false;try{g.setVSync(false);}catch(e){}}}else n64Lag=0;}
+  if(!fast&&!document.hidden&&netState==='off'&&!n64Tip&&(n64Run!=='p'||n64Res!=='320')){if(fps<(n64Pal?50:60)*0.8){if(++n64Slow>=8){n64Tip=true;info.textContent=n64Run!=='p'?'Jeu ralenti ? REGLAGES > MOTEUR N64 : RAPIDE':'Jeu ralenti ? REGLAGES > IMAGE N64 : LEGERE';}}else n64Slow=0;}}
+ else n64Ms=0;
+ f0=n;t0=t;p0=p?p.ms:null;},1000);}
 setInterval(()=>{if(n64&&n64ready&&!paused&&!panelOpen){n64SaveRam();}},20000);
 setInterval(()=>{if(n64&&n64ready&&!paused&&!panelOpen&&!document.hidden)n64SaveAuto(false);},60000);
 document.addEventListener('pointerdown',()=>{if(!n64)return;try{const al=n64E().Module.AL;if(al&&al.currentCtx&&al.currentCtx.audioCtx.state!=='running')al.currentCtx.audioCtx.resume();}catch(e){}},true);
 async function showStatesN64(){
  pBody.appendChild(el('div','note',title+' — sauvegarde instantanée, à tout moment.'));
  for(const slot of['auto',1,2,3]){
-  const r=await dbGet('states',slot+'#'+curId);
+  const r=await dbGet('states',n64K(slot));
   const row=el('div','row');const im=el('img','thumb');im.style.width='80px';im.style.height='60px';if(r&&r.thumb)im.src=r.thumb;row.appendChild(im);
   const t=el('div','t',slot==='auto'?'AUTO':'EMPLACEMENT '+slot);t.appendChild(el('small',null,r?fmtDate(r.date):(slot==='auto'?'Enregistré régulièrement et quand tu quittes':'Vide')));
   const bs=el('div','btns');
   if(slot!=='auto'){const sv=el('button','sb','SAUVER');sv.onclick=async()=>{const g=n64gm();const th=await n64Thumb();let st=null;try{st=g&&g.getState();}catch(e){}if(!st){info.textContent='Sauvegarde impossible';return;}
-   await dbPut('states',{key:slot+'#'+curId,id:curId,slot,date:Date.now(),thumb:th,state:{n64:true,st}});info.textContent='Etat '+slot+' sauvé';pBody.innerHTML='';showStatesN64();};bs.appendChild(sv);}
+   await dbPut('states',{key:n64K(slot),id:curId,slot,date:Date.now(),thumb:th,state:{n64:true,st}});info.textContent='Etat '+slot+' sauvé';pBody.innerHTML='';showStatesN64();};bs.appendChild(sv);}
   if(r){const ld=el('button','sb alt','CHARGER');ld.onclick=()=>{const g=n64gm();try{g.loadState(r.state.st);info.textContent='Etat '+(slot==='auto'?'auto':slot)+' chargé';}catch(e){info.textContent='Chargement impossible';}closePanel();};bs.appendChild(ld);}
   row.appendChild(t);row.appendChild(bs);pBody.appendChild(row);}
  pBody.appendChild(el('div','note','Sur N64, le retour arrière n\'est pas disponible (trop lourd pour un téléphone).'));
+ {const o=n64Run==='p'?'':'~p';let has=false;for(const slot of['auto',1,2,3])if(await dbGet('states',slot+'#'+curId+o)){has=true;break;}
+  if(has)pBody.appendChild(el('div','note','Les états du moteur '+(n64Run==='p'?'PRECIS':'RAPIDE')+' sont gardés : ils reviennent en repassant sur ce moteur. La sauvegarde du jeu, elle, est commune.'));}
 }
 let gg=false;
 const GGC=GGSys(Z80,{joy:()=>({dir:joyDir,btn:joyBtn}),sample:s=>pushSample(s),rate:()=>AC?AC.sampleRate:0});
@@ -2508,7 +2558,7 @@ let paused=false;
 /* ---------- panneaux ---------- */
 const panel=document.getElementById('panel'),pBody=document.getElementById('pBody'),pTitle=document.getElementById('pTitle');
 let panelOpen=false;
-function openPanel(t){gdEv('menu '+t);pTitle.textContent=t;panel.classList.add('show');panelOpen=true;if(gba&&G)try{G.pauseGame();}catch(e){}if(n64)try{n64E().pause();}catch(e){}}
+function openPanel(t){gdEv('menu '+t);pTitle.textContent=t;panel.classList.add('show');panelOpen=true;if(gba&&G)try{G.pauseGame();}catch(e){}if(n64)n64PauseSoon();}
 function closePanel(){panel.classList.remove('show');panelOpen=false;if(gba&&G&&!paused)try{G.resumeGame();}catch(e){}if(n64&&!paused)try{n64E().play();}catch(e){}}
 document.getElementById('pClose').onclick=closePanel;
 panel.addEventListener('pointerdown',e=>{if(e.target===panel)closePanel();});
@@ -2556,7 +2606,7 @@ async function showLib(){
   const bs=el('div','btns');const play=el('button','sb',curId===r.id?'EN COURS':'JOUER');
   play.onclick=async()=>{closePanel();if(curId!==r.id)await startRom(new Uint8Array(r.data),r.id,r.name);};
   bs.appendChild(play);
-  bs.appendChild(confirmBtn('SUPPR.',async()=>{await dbDel('roms',r.id);await dbDel('sram',r.id);for(const s of['auto',1,2,3])await dbDel('states',s+'#'+r.id);if(G&&kind(r)==='gba'){try{G.FS.unlink(G.filePaths().gamePath+'/'+r.id+'.gba');gbaSync();}catch(e){}}showLib();}));
+  bs.appendChild(confirmBtn('SUPPR.',async()=>{await dbDel('roms',r.id);await dbDel('sram',r.id);for(const s of['auto',1,2,3]){await dbDel('states',s+'#'+r.id);await dbDel('states',s+'#'+r.id+'~p');}await dbDel('sram',r.id+'~m');await dbDel('sram',r.id+'~p');if(G&&kind(r)==='gba'){try{G.FS.unlink(G.filePaths().gamePath+'/'+r.id+'.gba');gbaSync();}catch(e){}}showLib();}));
   row.appendChild(t);row.appendChild(bs);pBody.appendChild(row);
  }
  pBody.appendChild(el('div','note','Les ROMs restent dans ce navigateur, sur cet appareil. Rien n\'est envoyé en ligne.'));
@@ -2612,6 +2662,8 @@ function showOpt(){
   ['DISPOSITION','DEPLACER / REDIMENSIONNER LES COMMANDES',startLayout],
   ['CLAVIER','PERSONNALISER LES TOUCHES',showKeys],
   ['DOUBLES APPUIS',combos?'ACTIVES':'DESACTIVES',()=>{combos=!combos;try{localStorage.setItem('np_combo',combos?'1':'0');}catch(e){}applyCombo();showOpt();}],
+  !(n64&&loaded&&!n64Remote&&netState==='off')?null:['MOTEUR N64',n64Eng==='p'?'RAPIDE':'PRECIS',()=>{n64Eng=n64Eng==='p'?'m':'p';try{localStorage.setItem('np_n64eng',n64Eng);}catch(e){}showOpt();n64Relaunch(false);}],
+  !(n64&&loaded&&!n64Remote&&netState==='off')?null:['IMAGE N64',n64Res==='320'?'LEGERE · 320 x 240':'FINE · 640 x 480',()=>{n64Res=n64Res==='320'?'640':'320';try{localStorage.setItem('np_n64res',n64Res);}catch(e){}showOpt();n64Relaunch(true);}],
   ['INDICATEUR FPS',showFps?'AFFICHE':'MASQUE',()=>{showFps=!showFps;try{localStorage.setItem('np_fps',showFps?'1':'0');}catch(e){}applyFps();showOpt();}],
   diag?['RETOUR ARRIERE GBA (TEST)',gbaRewOn?'ACTIF':'COUPE',()=>{gbaRewOn=!gbaRewOn;try{localStorage.setItem('np_gbarew',gbaRewOn?'1':'0');}catch(e){}
    if(G)try{G.setCoreSettings({rewindEnable:gbaRewOn});}catch(e){}gdEv('retour arrière '+(gbaRewOn?'activé':'coupé'));showOpt();}]:null,
@@ -2622,11 +2674,11 @@ function showOpt(){
  const vr=el('div','row');const vt=el('div','t','VERSION');vt.appendChild(el('small',null,'Neur Pocket '+VERSION));for(const l of['GB, GBC, Game Gear, NES : moteurs Neur Pocket',
   'GBA : mGBA wasm 2.6.0 (MPL 2.0) — '+(self.crossOriginIsolated?'disponible':'version installée uniquement'),
   'Super NES : snes9x2005 libretro a79dfe9 (non commercial)',
-  'N64 : EmulatorJS 4.2.3 + mupen64plus-next 4.2.3 (GPL)',
+  'N64 : EmulatorJS 4.2.3 (GPL) + mupen64plus-next 2.0.2 (précis) ou parallel_n64 2.0.2 (rapide)',
   'Multijoueur : PeerJS 1.5.5 (MIT) + WebRTC du navigateur'])vt.appendChild(el('small',null,l));vr.appendChild(vt);pBody.appendChild(vr);
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.9.0';
+const VERSION='2.10.0';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
@@ -2649,7 +2701,7 @@ document.getElementById('bLib').onclick=showLib;
 document.getElementById('bState').onclick=showStates;
 document.getElementById('bOpt').onclick=showOpt;
 const bFast=document.getElementById('bFast'),bRew=document.getElementById('bRew');
-function setFast(v){if(n64Remote){if(v)info.textContent='Vitesse x2 : réservée au joueur 1';fast=false;bFast.classList.remove('act');return;}if(netOn){if(v)info.textContent='Vitesse x2 indisponible à 2 joueurs';fast=false;bFast.classList.remove('act');return;}fast=v;bFast.classList.toggle('act',fast);if(n64){const g=n64gm();if(g)try{g.setFastForwardRatio(2);g.toggleFastForward(fast?1:0);}catch(e){}}if(G)try{G.setFastForwardMultiplier(fast?2:1);}catch(e){}}
+function setFast(v){if(n64Remote){if(v)info.textContent='Vitesse x2 : réservée au joueur 1';fast=false;bFast.classList.remove('act');return;}if(netOn){if(v)info.textContent='Vitesse x2 indisponible à 2 joueurs';fast=false;bFast.classList.remove('act');return;}fast=v;bFast.classList.toggle('act',fast);if(n64){const g=n64gm();if(g)try{g.setFastForwardRatio(2);g.toggleFastForward(fast?1:0);if(!fast&&!n64Vs)g.setVSync(false);}catch(e){}}if(G)try{G.setFastForwardMultiplier(fast?2:1);}catch(e){}}
 bFast.onclick=()=>setFast(!fast);
 function setRew(v){if(gba&&!gbaRewOn){if(v)info.textContent='Retour arrière GBA coupé (REGLAGES)';rewinding=false;return;}if(netOn){if(v)info.textContent='Retour arrière indisponible à 2 joueurs';rewinding=false;return;}if(n64){if(v)info.textContent='Retour arrière indisponible sur N64';rewinding=false;return;}rewinding=v&&loaded;bRew.classList.toggle('act',rewinding);if(gba&&G)try{G.toggleRewind(!!rewinding);}catch(e){}}
 bRew.addEventListener('pointerdown',e=>{e.preventDefault();try{bRew.setPointerCapture(e.pointerId);}catch(_){}setRew(true);});
@@ -2682,7 +2734,7 @@ let showFps=false;try{showFps=localStorage.getItem('np_fps')==='1';}catch(e){}
   if(paused||panelOpen||document.body.classList.contains('editing')){box.textContent='PAUSE';return;}
   const base=n64?(n64Pal?50:60):snes&&snesPal?(1000/FRAME)*5/6:1000/FRAME;
   const pct=Math.round(100*ef/base);
-  box.textContent=Math.round(df)+' FPS · '+pct+' %';
+  box.textContent=Math.round(df)+' FPS · '+pct+' %'+(n64&&n64Ms>=0.5?' · '+Math.round(n64Ms)+' ms':'');
   const nominal=fast?200:100;if(pct<nominal*0.85)box.classList.add('low');else if(pct<nominal*0.97)box.classList.add('mid');
  },500);})();
 
