@@ -13,3 +13,34 @@ Composants tiers :
 
 Les émulateurs Game Boy et Game Boy Color sont écrits pour Neur Pocket.
 Aucune ROM n'est fournie : chaque utilisateur charge ses propres fichiers.
+
+----------------------------------------------------------------
+Moteur Super Nintendo : snes9x2005 (libretro)
+Source : https://github.com/libretro/snes9x2005 (commit a79dfe9), compilé en WebAssembly
+(snes9x.wasm) pour Neur Pocket avec une petite enveloppe d'appel.
+Licence Snes9x : utilisation et distribution gratuites, usage NON COMMERCIAL uniquement
+(voir le fichier "copyright" du dépôt source). Neur Pocket n'est pas vendu.
+
+----------------------------------------------------------------
+Moteurs Nintendo 64 : EmulatorJS 4.2.3 (licence GPL-3.0) avec, au choix dans REGLAGES > MOTEUR N64 :
+ - PRECIS : cœur mupen64plus-next 2.0.2 + rendu GLideN64 (libretro, GPL-2.0)
+ - RAPIDE : cœur parallel_n64 2.0.2 + rendu Glide64 (libretro, GPL-2.0)
+Sources : https://github.com/EmulatorJS/EmulatorJS, https://github.com/EmulatorJS/mupen64plus-libretro-nx
+et https://github.com/EmulatorJS/parallel-n64
+Fichiers : n64.html et dossier ejs/. Modifications apportées à ejs/src/emulator.js : vérification de mise à jour
+en ligne désactivée, journal console du cœur coupé, deux appels ajoutés autour de chaque image (mesure du temps
+et file d'attente des entrées de Neur Pocket).
+
+----------------------------------------------------------------
+Multijoueur en ligne : PeerJS 1.5.5 (licence MIT) — https://github.com/peers/peerjs
+Fichier : peerjs.min.js. La mise en relation des appareils passe par le service public gratuit de PeerJS ;
+ensuite tout circule directement d'un appareil à l'autre (WebRTC du navigateur) :
+- NES et Super Nintendo : les touches et l'état de la partie ;
+- Nintendo 64 : l'image et le son du jeu du joueur 1 vers les autres joueurs, et leurs touches en retour.
+Aucune ROM n'est jamais transmise.
+
+Moteurs Nintendo DS : EmulatorJS 4.2.3 (licence GPL-3.0) avec, au choix dans REGLAGES > MOTEUR DS :
+ - PRECIS : cœur melonDS (libretro, GPL-3.0) — https://github.com/EmulatorJS/melonDS
+ - RAPIDE : cœur DeSmuME 2015 (libretro, GPL-2.0) — https://github.com/libretro/desmume2015
+Fichiers : ds.html et ejs/cores/melonds-*.wasm, ejs/cores/desmume2015-*.wasm (archives d'origine renommées).
+Aucun BIOS ni firmware Nintendo n'est fourni : les deux moteurs utilisent leur remplacement libre intégré.
