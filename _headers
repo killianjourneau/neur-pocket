@@ -1,0 +1,27 @@
+# En-têtes HTTP lus par Cloudflare (GitHub Pages ne les prend pas en charge,
+# c'est pour ça que sw.js les ajoute lui-même là-bas).
+
+# Isolation de l'origine : obligatoire pour le moteur GBA (mémoire partagée).
+# Ici elle est servie directement par Cloudflare, dès le premier chargement.
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Resource-Policy: same-origin
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# Les fichiers ne portent pas de numéro de version dans leur adresse :
+# le navigateur doit toujours vérifier s'ils ont changé (réponse 304 si non,
+# donc presque gratuit). Sinon une mise à jour n'arriverait jamais.
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+/*.html
+  Cache-Control: no-cache
+/ejs/*
+  Cache-Control: no-cache
+/*.js
+  Cache-Control: no-cache
+/*.wasm
+  Cache-Control: no-cache

@@ -2526,7 +2526,7 @@ let kbind={},klabel={},kcap=null,klayout=null;
 try{const j=JSON.parse(localStorage.getItem('np_keys')||'null');if(j){kbind=j.b||{};klabel=j.l||{};}}catch(e){}
 for(const k in KDEF)if(!(k in kbind))kbind[k]=KDEF[k];
 try{navigator.keyboard&&navigator.keyboard.getLayoutMap&&navigator.keyboard.getLayoutMap().then(m=>{klayout=m;updKeyHelp();}).catch(()=>{});}catch(e){}
-const KN={ArrowUp:'FLECHE HAUT',ArrowDown:'FLECHE BAS',ArrowLeft:'FLECHE GAUCHE',ArrowRight:'FLECHE DROITE',Enter:'ENTREE',NumpadEnter:'ENTREE (PAVE)',ShiftLeft:'MAJ GAUCHE',ShiftRight:'MAJ DROITE',ControlLeft:'CTRL GAUCHE',ControlRight:'CTRL DROITE',AltLeft:'ALT',AltRight:'ALT GR',Space:'ESPACE',Tab:'TAB',Backspace:'RETOUR ARR.',Escape:'ECHAP',CapsLock:'VERR. MAJ',Delete:'SUPPR'};
+const KN={Mouse0:'CLIC GAUCHE',Mouse1:'CLIC MOLETTE',Mouse2:'CLIC DROIT',Mouse3:'SOURIS PRECEDENT',Mouse4:'SOURIS SUIVANT',ArrowUp:'FLECHE HAUT',ArrowDown:'FLECHE BAS',ArrowLeft:'FLECHE GAUCHE',ArrowRight:'FLECHE DROITE',Enter:'ENTREE',NumpadEnter:'ENTREE (PAVE)',ShiftLeft:'MAJ GAUCHE',ShiftRight:'MAJ DROITE',ControlLeft:'CTRL GAUCHE',ControlRight:'CTRL DROITE',AltLeft:'ALT',AltRight:'ALT GR',Space:'ESPACE',Tab:'TAB',Backspace:'RETOUR ARR.',Escape:'ECHAP',CapsLock:'VERR. MAJ',Delete:'SUPPR'};
 function keyName(code){if(!code)return '—';if(klabel[code])return klabel[code];if(KN[code])return KN[code];
  if(klayout&&klayout.get(code))return klayout.get(code).toUpperCase();
  return code.replace(/^Key/,'').replace(/^Digit/,'').replace(/^Numpad/,'PAVE ').toUpperCase();}
@@ -2543,18 +2543,31 @@ function doAct(a,on){const d=KACT.find(x=>x[0]===a);if(!d)return;
 addEventListener('keydown',e=>{
  if(e.target&&e.target.tagName==='INPUT')return;
  if(kcap){e.preventDefault();if(e.code==='Escape'){kcap=null;showKeys();return;}
-  const old=actOf(e.code);if(old&&old!==kcap)kbind[old]=null;kbind[kcap]=e.code;
-  if(e.key&&e.key.length===1&&e.key!==' ')klabel[e.code]=e.key.toUpperCase();
-  kcap=null;saveKeys();showKeys();return;}
+  kAssign(e.code,e.key&&e.key.length===1&&e.key!==' '?e.key.toUpperCase():null);return;}
  initAudio();const a=actOf(e.code);if(!a)return;e.preventDefault();if(e.repeat)return;doAct(a,true);});
+/* Boutons de souris : affectables comme des touches (hors menus) */
+function kAssign(code,lbl){const old=actOf(code);if(old&&old!==kcap)kbind[old]=null;kbind[kcap]=code;if(lbl)klabel[code]=lbl;kcap=null;saveKeys();showKeys();}
+let mHeld={};
+addEventListener('mousedown',e=>{const code='Mouse'+e.button,onUi=e.target&&e.target.closest&&e.target.closest('button,#panel,.panel');
+ if(kcap){if(e.target&&e.target.closest&&e.target.closest('button'))return;e.preventDefault();kAssign(code);return;}
+ if(panelOpen||onUi)return;const a=actOf(code);if(!a)return;e.preventDefault();initAudio();mHeld[e.button]=a;doAct(a,true);},true);
+addEventListener('mouseup',e=>{const a=mHeld[e.button];if(a){delete mHeld[e.button];doAct(a,false);}},true);
+addEventListener('contextmenu',e=>{if(actOf('Mouse2')&&!panelOpen)e.preventDefault();});
 addEventListener('keyup',e=>{if(e.target&&e.target.tagName==='INPUT')return;const a=actOf(e.code);if(a&&!kcap)doAct(a,false);});
-function showKeys(){openPanel('CLAVIER');pBody.innerHTML='';
- const KL=gg?{a:'BOUTON 2 (A)',b:'BOUTON 1 (B)',select:'SELECT (GB/GBA)',l:'L (GBA)',r:'R (GBA)'}:{a:'A (GG : 2)',b:'B (GG : 1)'};
- for(const[a,lab0]of KACT){const lab=KL[a]||lab0;const row=el('div','row');const t=el('div','t',lab);t.appendChild(el('small',null,kcap===a?'APPUIE SUR UNE TOUCHE… (ECHAP = ANNULER)':keyName(kbind[a])));
+/* actions proposées selon la console du jeu ouvert (sans jeu : toutes) */
+function keyCon(){if(!loaded)return null;return nds?'nds':n64?'n64':snes?'snes':nes?'nes':gba?'gba':gg?'gg':'gb';}
+const KCON={gb:'up down left right a b start select fast rew fs',gg:'up down left right a b start fast rew fs',gba:'up down left right a b l r start select fast rew fs',
+ nes:'up down left right a b start select fast rew fs',snes:'up down left right a b x y l r start select fast rew fs',
+ n64:'up down left right a b z l r cu cd cl cr start fast fs',nds:'up down left right a b x y l r start select fast fs'};
+const KCN={gb:'GAME BOY',gg:'GAME GEAR',gba:'GAME BOY ADVANCE',nes:'NES',snes:'SUPER NES',n64:'NINTENDO 64',nds:'NINTENDO DS'};
+function showKeys(){openPanel('CLAVIER');pBody.innerHTML='';const con=keyCon(),only=con?KCON[con].split(' '):null;
+ if(con)pBody.appendChild(el('div','note','Touches de la '+KCN[con]+'. Ferme le jeu pour voir celles des autres consoles.'));
+ const KL=!con?{a:'A (GG : 2)',b:'B (GG : 1)'}:con==='gg'?{a:'BOUTON 2',b:'BOUTON 1'}:con==='n64'?{up:'STICK HAUT',down:'STICK BAS',left:'STICK GAUCHE',right:'STICK DROITE',z:'Z',cu:'C HAUT',cd:'C BAS',cl:'C GAUCHE',cr:'C DROITE',l:'L',r:'R'}:{x:'X',y:'Y',l:'L',r:'R'};
+ for(const[a,lab0]of KACT){if(only&&!only.includes(a))continue;const lab=KL[a]||lab0;const row=el('div','row');const t=el('div','t',lab);t.appendChild(el('small',null,kcap===a?'APPUIE SUR UNE TOUCHE OU UN BOUTON DE SOURIS… (ECHAP = ANNULER)':keyName(kbind[a])));
   const b=el('button','sb'+(kcap===a?' alt':''),kcap===a?'…':'CHANGER');b.onclick=()=>{kcap=a;showKeys();};row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
  const r=el('div','row');const t=el('div','t','TOUCHES PAR DEFAUT');const b=el('button','sb warn','RETABLIR');b.onclick=()=>{kbind={...KDEF};klabel={};kcap=null;saveKeys();showKeys();};r.appendChild(t);r.appendChild(b);pBody.appendChild(r);
  const back=el('button','sb alt add','RETOUR AUX REGLAGES');back.onclick=()=>{kcap=null;showOpt();};pBody.appendChild(back);
- pBody.appendChild(el('div','note','Touche CHANGER puis appuie sur la touche voulue du clavier. Une touche déjà utilisée est retirée de son ancienne action.'));}
+ pBody.appendChild(el('div','note','Touche CHANGER puis appuie sur la touche voulue du clavier, ou clique avec le bouton de souris voulu (gauche, droit, molette, boutons latéraux). Une touche déjà utilisée est retirée de son ancienne action.'));}
 function updKeyHelp(){const h=document.getElementById('deskHelp');if(!h)return;
  const g=a=>keyName(kbind[a]);
  const ar=kbind.up==='ArrowUp'&&kbind.down==='ArrowDown'&&kbind.left==='ArrowLeft'&&kbind.right==='ArrowRight';
@@ -2591,7 +2604,7 @@ function showDpad(){const st={R:!(joyDir&1),L:!(joyDir&2),U:!(joyDir&4),D:!(joyD
   const[i,di]=d[0],[j,dj]=d[1];
   if(combos&&ADJ[i+j]&&dj-di<18&&di<64){r[i]=1;r[j]=1;}else if(di<(combos?48:58))r[i]=1;return r;}
  function hit(e){
-  if(snes)return hitSnes(e);
+  if(snes||nds)return hitSnes(e);
   // Axe B -> A : début = B, fin = A, tiers central = A+B (un seul pouce)
   const zr=zone.getBoundingClientRect(),k=zr.width/(zone.offsetWidth||1);
   const ax=zr.left+(bA.offsetLeft+30)*k,ay=zr.top+(bA.offsetTop+30)*k,bx=zr.left+(bB.offsetLeft+30)*k,by=zr.top+(bB.offsetTop+30)*k;
@@ -2604,7 +2617,7 @@ function showDpad(){const st={R:!(joyDir&1),L:!(joyDir&2),U:!(joyDir&4),D:!(joyD
   if(t<0.37)return{a:0,b:1};if(t>0.63)return{a:1,b:0};return{a:1,b:1};
  }
  function apply(){let a=0,b=0,x=0,y=0;for(const v of ptr.values()){a|=v.a;b|=v.b;x|=v.x||0;y|=v.y||0;}if((a&&joyBtn&1)||(b&&joyBtn&2)||(x&&!snX)||(y&&!snY))buzz();setKey(['b',0],a);setKey(['b',1],b);bA.classList.toggle('on',!!a);bB.classList.toggle('on',!!b);abmid.classList.toggle('on',!!(a&&b));
-  if(snes){snX=x;snY=y;bX.classList.toggle('on',!!x);bY.classList.toggle('on',!!y);for(const[k,p,q]of[['xa',x,a],['ab',a,b],['by',b,y],['yx',y,x]])document.getElementById('dm'+k).classList.toggle('on',!!(p&&q));}}
+  if(snes||nds){snX=x;snY=y;if(nds)dsFromJoy();bX.classList.toggle('on',!!x);bY.classList.toggle('on',!!y);for(const[k,p,q]of[['xa',x,a],['ab',a,b],['by',b,y],['yx',y,x]])document.getElementById('dm'+k).classList.toggle('on',!!(p&&q));}}
  zone.addEventListener('pointerdown',e=>{e.preventDefault();initAudio();try{zone.setPointerCapture(e.pointerId);}catch(_){}ptr.set(e.pointerId,hit(e));apply();});
  zone.addEventListener('pointermove',e=>{if(ptr.has(e.pointerId)){ptr.set(e.pointerId,hit(e));apply();}});
  const end=e=>{ptr.delete(e.pointerId);apply();};zone.addEventListener('pointerup',end);zone.addEventListener('pointercancel',end);
@@ -2759,7 +2772,7 @@ function showOpt(){
   'Multijoueur : PeerJS 1.5.5 (MIT) + WebRTC du navigateur'])vt.appendChild(el('small',null,l));vr.appendChild(vt);pBody.appendChild(vr);
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.12.0';
+const VERSION='2.12.1';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
