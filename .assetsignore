@@ -1,0 +1,7 @@
+# Ce qui ne doit pas être publié en ligne.
+.git
+.github
+node_modules
+wrangler.jsonc
+.assetsignore
+README.md
