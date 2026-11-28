@@ -2246,10 +2246,12 @@ async function gbaGlRecover(){ // l'affichage est perdu mais le jeu tourne encor
  try{sessionStorage.setItem('np_resume',curId);sessionStorage.setItem('np_gdlog',JSON.stringify(gdLog));}catch(e){}
  location.reload();}
 try{const o=JSON.parse(sessionStorage.getItem('np_gdlog')||'null');if(o){sessionStorage.removeItem('np_gdlog');for(const l of o)gdLog.push(l);gdLog.push('— page relancée après perte de l\'affichage —');}}catch(e){}
-function gbaSuspend(){if(!(gba&&G&&loaded)||gbaSusp)return;gdEv('mise en veille');if(lnk)gbaLinkStop(true,true);
+let lnkSusp=false;
+function gbaSuspend(){if(!(gba&&G&&loaded)||gbaSusp)return;gdEv('mise en veille');
+ if(lnk){if(!lnkSusp){lnkSusp=true;try{G.pauseGame();}catch(e){}try{G.FSSync().catch(()=>{});}catch(e){}}return;}
  try{G.forceAutoSaveState();}catch(e){}gbaSusp=G.filePaths().gamePath+'/'+curId+'.gba';
  try{G.quitGame();}catch(e){}try{G.FSSync().catch(()=>{});}catch(e){}try{sessionStorage.setItem('np_resume',curId);}catch(e){}}
-function gbaWake(){if(!gbaSusp)return;gdEv('réveil');gdGl=null;const p=gbaSusp;gbaSusp=null;
+function gbaWake(){if(lnkSusp){lnkSusp=false;if(lnk&&!panelOpen&&!paused)try{G.resumeGame();}catch(e){}return;}if(!gbaSusp)return;gdEv('réveil');gdGl=null;const p=gbaSusp;gbaSusp=null;
  if(glLost){gdEv('relance (affichage perdu pendant la veille)');(G.FSSync?G.FSSync():Promise.resolve()).catch(()=>{}).then(()=>{try{sessionStorage.setItem('np_gdlog',JSON.stringify(gdLog));}catch(e){}location.reload();});return;}
  setTimeout(()=>{try{if(!G.loadGame(p))throw 0;gbaCb();G.setVolume(sound?100:0);G.setFastForwardMultiplier(fast?2:1);if(panelOpen||paused)G.pauseGame();}catch(e){location.reload();}},60);}
 addEventListener('pagehide',gbaSuspend);addEventListener('freeze',gbaSuspend);
@@ -2490,12 +2492,18 @@ function gbaLinkStop(keepActive,sync){if(!lnk)return;const L=lnk;lnk=null;gbaRel
  curId=back.id;title=back.t;try{dbGet('roms',back.id).then(r=>{if(r)curName=r.name||'';});}catch(e){}
  if(panelOpen||paused)try{G.pauseGame();}catch(e){}gbaLoud();lnkLabel();info.textContent=title+' · ADVANCE · câble débranché';gbaSync();};
  if(sync)fin();else setTimeout(fin,80);}
+function showLinkOff(){openPanel('CABLE LINK');pBody.innerHTML='';
+ pBody.appendChild(el('div','netmsg','Avant de débrancher, sauvegarde DANS LE JEU sur chaque console qui a progressé (menu du jeu, pas ETATS). Câble branché, les états ne peuvent pas être enregistrés : ce qui n\'est pas sauvegardé dans le jeu sera perdu.'));
+ const r=el('div','row');const t=el('div','t','DEBRANCHER LE CABLE');t.appendChild(el('small',null,'Tu reprends seul le jeu affiché : '+(lnk.p===1?lnk.t1:lnk.t2)));r.appendChild(t);
+ r.appendChild(confirmBtn('DEBRANCHER',()=>{gbaLinkStop(true);closePanel();}));pBody.appendChild(r);
+ const back=el('button','sb alt add','GARDER LE CABLE');back.onclick=closePanel;pBody.appendChild(back);}
 async function showLinkPick(){openPanel('CABLE LINK');pBody.innerHTML='';
  pBody.appendChild(el('div','note','Choisis le jeu de la 2e console. Les deux jeux tournent en même temps sur cet appareil, reliés par un câble. Le bouton VERS J2 (à la place de RETOUR) passe d\'une console à l\'autre.'));
  const L=(await dbAll('roms')).filter(r=>r.id!==curId&&r.data&&isGBA(new Uint8Array(r.data,0,Math.min(0x200,r.data.byteLength)))).sort((a,b)=>(b.last||0)-(a.last||0));
  if(!L.length)pBody.appendChild(el('div','note','Aucun autre jeu GBA dans la bibliothèque. Ajoute-le d\'abord avec JEUX.'));
  for(const r of L){const row=el('div','row');const t=el('div','t',r.title||cleanName(r.name));t.appendChild(el('small',null,r.name||''));const b=el('button','sb','BRANCHER');
   b.onclick=async()=>{closePanel();info.textContent='Branchement du câble…';await gbaLinkStart(r);};row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
+ pBody.appendChild(el('div','note','Important : câble branché, les états (ETATS) ne marchent pas. Avant de débrancher, sauvegarde dans chaque jeu.'));
  pBody.appendChild(el('div','note','Golden Sun → L\'Âge Perdu : Golden Sun en J1 (partie terminée), L\'Âge Perdu en J2. Sur J2 : nouvelle partie, accepte le transfert par câble. Sur J1 : au menu de départ, maintiens R + GAUCHE et appuie sur B pour faire apparaître ENVOYER.'));
  const back=el('button','sb alt add','RETOUR AUX REGLAGES');back.onclick=showOpt;pBody.appendChild(back);}
 function gbaStop(){if(lnk)gbaLinkStop(false,true);try{sessionStorage.removeItem('np_resume');}catch(e){}if(gba&&G){try{G.forceAutoSaveState();}catch(e){}try{G.quitGame();}catch(e){}gbaSync();}gba=false;}
@@ -2919,7 +2927,7 @@ function showOpt(){
    if(G)try{G.setCoreSettings({rewindEnable:gbaRewOn});}catch(e){}gdEv('retour arrière '+(gbaRewOn?'activé':'coupé'));showOpt();}]:null,
   ['MODE DIAGNOSTIC',diag?'OUI':'NON',()=>{diag=!diag;try{localStorage.setItem('np_diag',diag?'1':'0');}catch(e){}if(diag&&bugCap)info.textContent='⚠ Anomalie capturée — ETATS > ENVOYER À CLAUDE';showOpt();}],
   (loaded&&!gba&&!gg&&!nes&&!snes&&!n64&&netState==='off')?['CABLE LINK',gbl?'BRANCHE · J1 '+gbl.t1+' · J2 '+gbl.t2:'RELIER UNE 2E GAME BOY',()=>{if(gbl){gbLinkStop();closePanel();}else showGbLinkPick();}]:null,
-  !(gba&&G&&loaded)?null:['CABLE LINK',lnk?'BRANCHE · J1 '+lnk.t1+' · J2 '+lnk.t2:'RELIER UN 2E JEU GBA',()=>{if(lnk){gbaLinkStop(true);closePanel();}else showLinkPick();}],
+  !(gba&&G&&loaded)?null:['CABLE LINK',lnk?'BRANCHE · J1 '+lnk.t1+' · J2 '+lnk.t2:'RELIER UN 2E JEU GBA',()=>{if(lnk)showLinkOff();else showLinkPick();}],
   ['REDEMARRER LE JEU','',()=>{if(n64Remote){info.textContent='Seul le joueur 1 peut redémarrer le jeu';closePanel();return;}if(n64&&loaded){try{n64gm().restart();}catch(e){}closePanel();return;}if(snes&&loaded){if(netOn&&netRole!=='host'){info.textContent='A 2 joueurs, seul le joueur 1 peut redémarrer';closePanel();return;}SN.np_reset();rewBuf.clear();if(netOn)netSync();closePanel();return;}if(nes&&loaded){if(netOn&&netRole!=='host'){info.textContent='A 2 joueurs, seul le joueur 1 peut redémarrer';closePanel();return;}NESC.reset();rewBuf.clear();if(netOn)netSync();closePanel();return;}if(gg&&loaded){GGC.reset();rewBuf.clear();closePanel();return;}if(gba&&G){try{G.quickReload();}catch(e){}closePanel();return;}if(loaded){saveRam();reset();rewBuf.clear();closePanel();}}]
  ];
  for(const it of items){if(!it)continue;const[a,v,fn]=it;const row=el('div','row');const t=el('div','t',a);if(v)t.appendChild(el('small',null,v));const b=el('button','sb'+(a==='FIN DE LA PARTIE A PLUSIEURS'?' warn':''),a==='FIN DE LA PARTIE A PLUSIEURS'?'QUITTER':(fn===showNet||fn===showKeys)?'OUVRIR':fn===startLayout?'MODIFIER':v?'CHANGER':'OK');b.onclick=fn;row.appendChild(t);row.appendChild(b);pBody.appendChild(row);}
@@ -2931,7 +2939,7 @@ function showOpt(){
   'Multijoueur : PeerJS 1.5.5 (MIT) + WebRTC du navigateur'])vt.appendChild(el('small',null,l));vr.appendChild(vt);pBody.appendChild(vr);
 }
 const PALS_N=['CLASSIQUE','POCKET','NUAGE','COUCHANT','GLACE'];
-const VERSION='2.15.0';
+const VERSION='2.15.1';
 const SHELLS=[
  {n:'PRUNE',s:'#6b3f92',s2:'#4f2c70',ink:'#f1ecff'},
  {n:'CRISTAL',s:'#a596cf',s2:'#6f619f',ink:'#ffffff',glass:1},
